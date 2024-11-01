@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=sans-serif:wght@100;300;400;500&display=swap');
+
 
 * {
     margin: 0;
@@ -10,16 +11,36 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.navbar-brand {
+    display: flex; /* Ensure that the logo and text align correctly */
+    align-items: center; /* Center items vertically */
+    text-decoration: none; /* Remove underline from the link */
+}
+
+.navbar-brand-text {
+    font-size: 1.5rem; /* Adjust font size as needed */
+    color: black; /* Set text color (can be changed) */
+    text-transform: uppercase; /* Optional: keep text uppercase */
+    margin-left: 10px; /* Add space between the logo and text */
+    font-weight: bold;
+}
+
+
+
+
+
+
+
 .navbar {
     font-size: 16px;
-    padding: 1.5rem 2rem; /* Adjust padding for better appearance */
+    padding: 1.5rem 2rem; 
     top: 0;
     left: 0;
     width: 100%;
 }
 
 .navbar-brand img {
-    border-radius: 50%; /* Makes the logo circular */
+    border-radius: 50%; 
     object-fit: cover;
 }
 
@@ -41,17 +62,64 @@ body {
 }
 
 .nav-buttons {
-    margin-left: 60%;
+    margin-left: auto; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 
-.nav-item i {
+.navbar-nav {
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+}
+
+.nav-item {
+    margin: 0 10px; 
+}
+
+.nav-link {
+    font-weight: bold;
     color: #000;
+    text-align: center;
     transition: color 0.3s ease;
 }
 
-.nav-item i:hover {
-    color: red;
+.nav-link:hover {
+    color: #003da1;
+}
+
+.search-bar {
+    position: relative; /* Position the search bar relative to its normal position */
+    display: flex; /* Make the search bar a flex container */
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space elements evenly */
+    width: 250px; /* Adjust width as needed */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow */
+}
+
+.search-bar input[type="search"] {
+    flex: 1; /* Make input take up most of the space */
+    border: none; /* Remove input border */
+    outline: none; /* Remove input outline */
+    padding: 5px; /* Add padding */
+    font-size: 16px; /* Set font size */
+}
+
+.search-bar button {
+    background-color: transparent; /* Make button background transparent */
+    border: none; /* Remove button border */
+    padding: 10px; /* Add padding */
+    cursor: pointer;
+    color: #333; /* Set button text color */
+    font-size: 16px; /* Set button font size */
+}
+
+.search-bar button:hover {
+    background-color: #0654c4; /* Change background on hover */
 }
 
 .login-icon, .bi {
@@ -70,15 +138,6 @@ body {
 .bi:hover {
     color: blue; 
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -212,36 +271,74 @@ body {
 
 /* Banner */
 
+/* Styling for the banner section */
 .banner {
-    text-align: center;
-    padding: 150px 30px;
-    background-size: cover;
-    background-color: #002a6b;
-    color: #fff;
+    background-image: url('/assets/images/SAMPLE-BANNER-BG\ \(1\).png');
+    padding: 100px 50px;
+    display: flex;
+    justify-content: space-between; /* Ensures left and right alignment */
+    align-items: center;
+    color: white;
+    height: 100vh; /* Ensures full screen height (optional) */
+    box-sizing: border-box;
 }
 
+/* Left-aligned content */
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 50%;
+}
+
+/* Styling for the h1 text */
 .banner h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    
+    font-family: 'Impact', sans-serif;
+    font-size: 7rem;
+    align-self: center;
+    line-height: 1.2;
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+    margin: 0;
 }
 
-.banner button {
-    margin-top: 20px;
-    padding: 10px 30px; 
-    border-radius: 20px; 
-    background: #fff;
-    color: #333;
+/* Right-aligned text content */
+.banner-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 40%;
+}
+
+.banner-text p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.banner-text button {
+    padding: 10px 20px;
+    width: 50%;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #000;
+    background-color: #fff;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    align-self: center; /* Ensures the button itself is centered */
+}
+
+
+.banner-text button:hover {
+    background-color: #001f5f;
+    color: #fff;
     font-weight: bold;
 }
 
-.banner button:hover {
-    background-color: #003da1;
-    color: #fff; /* optional: change text color on hover */
-}
 
 /* Featured Products */
 .featured-products {
