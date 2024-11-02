@@ -273,13 +273,14 @@ body {
 
 /* Styling for the banner section */
 .banner {
-    background-image: url('/assets/images/SAMPLE-BANNER-BG\ \(1\).png');
+    background-image: url('/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
+    background-color: rgba(255, 0, 0, 0.5);
     padding: 100px 50px;
     display: flex;
-    justify-content: space-between; /* Ensures left and right alignment */
+    justify-content: space-between; 
     align-items: center;
     color: white;
-    height: 100vh; /* Ensures full screen height (optional) */
+    height: 100vh; 
     box-sizing: border-box;
 }
 
