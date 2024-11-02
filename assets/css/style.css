@@ -273,7 +273,7 @@ body {
 
 /* Styling for the banner section */
 .banner {
-    background-image: url('/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
+    background-image: url('https://tamakiqt.github.io/QCU-MERCHMART/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
     background-color: rgba(255, 0, 0, 0.5);
     padding: 100px 50px;
     display: flex;
