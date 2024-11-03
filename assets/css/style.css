@@ -73,9 +73,10 @@ body {
 
 
 .navbar-nav {
-    width: 100%;
-    display: flex;
-    justify-content: center; 
+    flex-direction: column;
+    width: auto; /* Adjust width if needed */
+    align-items: flex-start; /* Align items to the left */
+    padding-left: 2rem; /* Add padding to push it away from the edge */
 }
 
 .nav-item {
@@ -165,17 +166,28 @@ body {
     top: 40px; 
 }
 
+
+
 /* Ensure the collapsed navbar fills the entire width */
 @media (max-width: 990px) {
+
     .navbar-collapse {
-        background-color: #ffffff; /* Background color for dropdown */
+        display: none;
         position: absolute;
-        top: 40px; /* Adjust based on your fixed header */
-        left: 0;
         width: 100%;
-        text-align: left; /* Center align menu items */
-        padding: 1rem 0; /* Add padding to the dropdown */
+        top: 100%;
+        left: 0;
+        background-color: #ffffff;
+        transition: transform 0.3s ease;
+        transform: translateY(-100%);
+        z-index: 1000;
     }
+
+    .navbar-collapse.show {
+        display: block;
+        transform: translateY(0);
+    }
+    
 
     .navbar-nav {
         flex-direction: column; /* Stack links vertically */
@@ -183,29 +195,35 @@ body {
     }
 
     .nav-link {
-        padding: 10px 0; /* Space around each link */
+        padding: 10px 0; 
         color: #000;
         font-weight: bold;
     }
-
-    .navbar-brand{
-        display: none;
+     
+    .navbar-collapse .search-bar,
+    .navbar-collapse .login-icon,
+    .navbar-collapse .bi {
+        display: none !important;
     }
+
 }
 
 /* Banner */
 
 .banner {
     background-image: url('https://tamakiqt.github.io/QCU-MERCHMART/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
-   
+    background-size: cover;         /* Ensures the image covers the entire banner */
+    background-position: center;    /* Centers the image */
+    background-repeat: no-repeat;   /* Prevents the image from repeating */
     padding: 100px 50px;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     color: white;
-    height: 100vh; 
+    height: 100vh;
     box-sizing: border-box;
 }
+
 
 
 .banner-content {
@@ -258,37 +276,40 @@ body {
 
 
 .banner-text button:hover {
-    background-color: #001f5f;
+    background-color: #a10202;
     color: #fff;
     font-weight: bold;
 }
 
 
 .featured-products {
-    padding: 50px 20px;
+    padding: 50px 20px 70px 20px; /* Increased bottom padding */
     text-align: center;
 }
 
 .featured-products h2 {
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+    margin-left: 160px;
 }
 
 .product-list {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 2rem;
     flex-wrap: wrap;
 }
 
 .product {
-    width: 200px;
-    padding: 20px;
-    background: #f9f9f9;
+    width: 250px;
+    padding: 20px 20px 30px 20px; /* Adjust bottom padding if needed */
+    background: #717171;
     text-align: center;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px; /* Increased margin-bottom to create more spacing */
 }
 
 .product img {
@@ -301,7 +322,6 @@ body {
     font-size: 1.2rem;
     margin-bottom: 5px;
 }
-
 
 @media (max-width: 768px) {
     header nav ul {
@@ -318,6 +338,7 @@ body {
         align-items: center;
     }
 }
+
 
 
 /* Login css */
@@ -453,6 +474,14 @@ h2.form-weight-bold {
     color: #a50000;
 }
 
+.terms-text {
+    color: #000;
+    font-weight: bold;
+    font-size: 11px;
+    text-decoration: underline;
+    text-align: center;      /* Centers text horizontally within the container */
+    letter-spacing: 1px;     /* Adjust this value to control the stretch effect */
+}
 #login-form #register-url {
     color: #000;
     font-weight: bold;
@@ -498,6 +527,135 @@ h2.form-weight-bold {
     text-decoration: underline;
 }
 
+
+/* Footer styling */
+.footer {
+    background-color: #2c2c2c; /* Dark background color */
+    color: #fff;            /* White text color */
+    min-height: 150px;    /* Padding around the footer */
+    margin-top: 50px;       /* Space above the footer */
+    text-align: center;     /* Center text alignment for the entire footer */
+}
+
+.footer .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Center horizontally */
+    justify-content: center;
+    gap: 20px;              /* Space between each footer column */
+}
+
+@media (min-width: 768px) {
+    .footer .row {
+        flex-direction: row; /* Horizontal layout for larger screens */
+    }
+}
+
+.footer h5 {
+    color: #fff;         /* Gold color for headings */
+    font-size: 18px;        /* Larger font size for headings */
+    margin-bottom: 10px;    /* Space below each heading */
+    text-align: center;     /* Center the headings */
+}
+
+.footer-one {
+    max-width: 300px;       /* Optional: Limit width to make it look balanced */
+    margin-bottom: 20px;    /* Space between footer columns */
+}
+
+.footer p {
+    font-size: 14px;        /* Smaller font size for paragraph text */
+    line-height: 1.5;       /* Improved readability */
+}
+
+
+/* Categories Section */
+.category {
+    text-align: center;
+}
+
+.category h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 0;
+    text-align: left; /* or 'right' to align right */
+    margin-left: 160px;
+}
+
+.category .category-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem; /* Spacing between each category */
+    margin-top: 1rem;
+    margin-bottom: 120px;
+}
+
+.category .category-links a {
+    font-size: 1.1rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.3rem 0.6rem;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.category .category-links a:hover {
+    color: #a10202; /* Change to desired hover color */
+    transform: scale(1.1); /* Slight zoom effect */
+    text-decoration: underline;
+}
+
+/* For Daily Discoveries */
+
+.dailydiscoveries-products {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.dailydiscoveries-products h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: left; /* or 'right' to align right */
+    margin-left: 160px;
+}
+
+
+.product-list1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers the products horizontally */
+    gap: 2rem; /* Space between each product */
+}
+
+.product {
+    background-color: #717171;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 100px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a light shadow for better visual separation */
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    
+}
+
+@media (max-width: 768px) {
+    
+    .product-list1 {
+        flex-direction: column;
+        align-items: center;
+    }
+}
 
 
 
