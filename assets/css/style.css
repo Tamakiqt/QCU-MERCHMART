@@ -20,6 +20,15 @@ body {
     left: 0;
 }
 
+.navbar-collapse {
+    background-color: #ffffff; /* Change to your desired color */
+    opacity: 1; /* Ensure the background is fully opaque */
+    padding: 1rem; /* Optional: adjust padding as needed */
+}
+
+
+
+
 .navbar-brand {
     display: flex;
     align-items: center;
@@ -154,6 +163,34 @@ body {
 
 .navbar.fixed-top {
     top: 40px; 
+}
+
+/* Ensure the collapsed navbar fills the entire width */
+@media (max-width: 990px) {
+    .navbar-collapse {
+        background-color: #ffffff; /* Background color for dropdown */
+        position: absolute;
+        top: 40px; /* Adjust based on your fixed header */
+        left: 0;
+        width: 100%;
+        text-align: left; /* Center align menu items */
+        padding: 1rem 0; /* Add padding to the dropdown */
+    }
+
+    .navbar-nav {
+        flex-direction: column; /* Stack links vertically */
+        width: 100%; /* Full width for better alignment */
+    }
+
+    .nav-link {
+        padding: 10px 0; /* Space around each link */
+        color: #000;
+        font-weight: bold;
+    }
+
+    .navbar-brand{
+        display: none;
+    }
 }
 
 /* Banner */
@@ -416,14 +453,6 @@ h2.form-weight-bold {
     color: #a50000;
 }
 
-
-
-
-
-
-
-
-
 #login-form #register-url {
     color: #000;
     font-weight: bold;
@@ -439,65 +468,35 @@ h2.form-weight-bold {
 
 
 /* Register Form Styling */
-#register-form {
-    width: 50%;
-    font-weight: bold;
-    margin: 5px auto;
-    text-align: center;
-    padding: 20px;
-    border-top: 1px solid #0654c4;
-}
 
-#register-form label {
-    font-size: 18px; 
-    color: #333; 
-    margin-bottom: 5px;
-    display: block; 
-}
-
-#register-form input {
-    width: 50%;
-    margin: 10px auto;
-    padding: 12px; 
-    font-size: 16px; 
-    border: 2px solid #0654c4; 
-    border-radius: 8px; 
-    outline: none; 
-    transition: border-color 0.3s ease; 
-}
-
-#register-form input:focus {
-    border-color: #003da1; 
-    box-shadow: 0 0 5px rgba(0, 61, 161, 0.5); 
-}
-
-#register-form #register-btn {
-    background-color: #0654c4;
-    color: white;
-    font-weight: bold;
-    padding: 12px 20px; 
+#register-btn {
+    background-color: #8B0000; /* Dark red */
+    color: #fff;
+    width: 100%;
     border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
     transition: background-color 0.3s ease;
 }
 
-#register-form #register-btn:hover {
-    background-color: #003da1; 
+#register-btn:hover {
+    background-color: #a50000; /* Slightly lighter red */
 }
 
 #register-form #login-url {
-    color: #0654c4;
+    color: #000;
     font-weight: bold;
+    text-align: center;
     text-decoration: none;
     font-size: 16px;
 }
 
+
 #register-form #login-url:hover {
+    color: #a10202;
     text-decoration: underline;
 }
-
 
 
 
