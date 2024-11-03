@@ -11,33 +11,27 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.navbar {
+    font-size: 16px;
+    padding: 1rem 2rem; 
+    height: 75px; 
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
 .navbar-brand {
-    display: flex; /* Ensure that the logo and text align correctly */
-    align-items: center; /* Center items vertically */
-    text-decoration: none; /* Remove underline from the link */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .navbar-brand-text {
-    font-size: 1.5rem; /* Adjust font size as needed */
-    color: black; /* Set text color (can be changed) */
-    text-transform: uppercase; /* Optional: keep text uppercase */
-    margin-left: 10px; /* Add space between the logo and text */
+    font-size: 1.2rem; 
+    margin-left: 10px; 
     font-weight: bold;
 }
 
-
-
-
-
-
-
-.navbar {
-    font-size: 16px;
-    padding: 1.5rem 2rem; 
-    top: 0;
-    left: 0;
-    width: 100%;
-}
 
 .navbar-brand img {
     border-radius: 50%; 
@@ -58,7 +52,7 @@ body {
 } 
 
 .navbar-nav .nav-link:hover {
-    color: #003da1;
+    color: #a10202;
 }
 
 .nav-buttons {
@@ -91,31 +85,43 @@ body {
 }
 
 .search-bar {
-    position: relative; /* Position the search bar relative to its normal position */
-    display: flex; /* Make the search bar a flex container */
-    align-items: center; /* Align items vertically */
-    justify-content: space-between; /* Space elements evenly */
-    width: 250px; /* Adjust width as needed */
-    border: 1px solid #ccc; /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    overflow: hidden; /* Hide overflow */
+    position: relative; 
+    display: flex; 
+    align-items: center;
+    justify-content: space-between; 
+    width: 250px; 
+    height: 35px; /* Set the height of the search bar */
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    overflow: hidden; 
 }
 
 .search-bar input[type="search"] {
-    flex: 1; /* Make input take up most of the space */
-    border: none; /* Remove input border */
-    outline: none; /* Remove input outline */
-    padding: 5px; /* Add padding */
-    font-size: 16px; /* Set font size */
+    flex: 1; 
+    text-align: left; 
+    margin-bottom: 0; 
+    border: none; 
+    outline: none; 
+    padding: 10px 12px; 
+    font-size: 16px; 
+    height: 100%; 
+    box-sizing: border-box; 
+    line-height: normal;
 }
 
+.search-bar i {
+    padding: 0 10px; /* Add padding around the icon */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+
 .search-bar button {
-    background-color: transparent; /* Make button background transparent */
-    border: none; /* Remove button border */
-    padding: 10px; /* Add padding */
+    background-color: transparent; 
+    border: none;
+    padding: 10px;
     cursor: pointer;
-    color: #333; /* Set button text color */
-    font-size: 16px; /* Set button font size */
+    color: #333;
+    font-size: 16px; 
 }
 
 .search-bar button:hover {
@@ -136,75 +142,298 @@ body {
 }
 
 .bi:hover {
-    color: blue; 
+    color: #a10202; 
 }
 
-
-
-
-
-
-
-
-
-
-#login-form {
-    width: 50%;
-    font-weight: bold;
-    margin: 5px auto;
+.top-header {
+    height: 40px; 
+    background-color: #000; 
+    color: white;
     text-align: center;
-    padding: 20px;
-    border-top: 1px solid #0654c4;
 }
 
-#login-form label {
-    font-size: 18px; 
-    color: #333;
-    margin-bottom: 5px;
-    display: block; 
+.navbar.fixed-top {
+    top: 40px; 
 }
 
-#login-form input {
+/* Banner */
+
+.banner {
+    background-image: url('https://tamakiqt.github.io/QCU-MERCHMART/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
+   
+    padding: 100px 50px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    color: white;
+    height: 100vh; 
+    box-sizing: border-box;
+}
+
+
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 50%;
+}
+
+
+.banner h1 {
+    font-family: 'Impact', sans-serif;
+    font-size: 7rem;
+    align-self: center;
+    line-height: 1.2;
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+
+.banner-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 40%;
+}
+
+.banner-text p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.banner-text button {
+    padding: 10px 20px;
     width: 50%;
-    margin: 10px auto;
     font-weight: bold;
-    padding: 12px; 
-    font-size: 16px; 
-    border: 2px solid #0654c4;
-    border-radius: 8px;
-    outline: none; 
-    transition: border-color 0.3s ease; 
-}
-
-#login-form input:focus {
-    border-color: #003da1; 
-    box-shadow: 0 0 5px rgba(0, 61, 161, 0.5);
-}
-
-#login-form #login-btn {
-    background-color: #0654c4;
-    color: #fff;
-    padding: 12px 20px;
+    font-size: 1rem;
+    color: #000;
+    background-color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 18px; 
-    box-shadow: 0 0 5px rgba(0, 61, 161, 0.5);
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: center; 
+}
+
+
+.banner-text button:hover {
+    background-color: #001f5f;
+    color: #fff;
+    font-weight: bold;
+}
+
+
+.featured-products {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.featured-products h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.product-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.product {
+    width: 200px;
+    padding: 20px;
+    background: #f9f9f9;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.product h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+
+@media (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .banner h1 {
+        font-size: 2rem;
+    }
+
+    .product-list {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+/* Login css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light gray background */
+    color: #333;
+}
+
+/* Header Styling */
+.header {
+    background-color: #a10202; /* Dark red */
+    color: #fff;
+    padding: 70px;
+    text-align: left;
+    font-size: 1.5em;
+}
+
+/* Container for Login Form */
+.container {
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+/* Form Title */
+h2.form-weight-bold {
+    font-weight: bold;
+    align-self: left;
+    color: #000;
+}
+
+/* Form Input Styling */
+.form-control {
+    margin-bottom: 1em;
+    border-radius: 0;
+}
+
+
+
+/* Login Button Styling */
+#login-btn {
+    background-color: #8B0000; /* Dark red */
+    color: #fff;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
     transition: background-color 0.3s ease;
 }
 
-#login-form #login-btn:hover {
-    background-color: #003da1; 
+#login-btn:hover {
+    background-color: #a50000; /* Slightly lighter red */
 }
 
+/* styles.css */
+
+/* Styles for the line and text */
+.line-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem; /* Add some space below the line */
+}
+
+.line {
+    flex: 1; /* Make the line take up the remaining space */
+    height: 1px; /* Line height */
+    background-color: #ccc; /* Line color */
+    margin: 0 10px; /* Space between the line and text */
+}
+
+.or-text {
+    margin: 0; /* Remove default margin for the paragraph */
+    font-weight: bold; /* Make the text bold */
+    color: #333; /* Text color */
+}
+
+/* styles.css */
+
+/* Styles for the social buttons container */
+.social-buttons {
+    border: 1px solid #ccc; /* Border around the button container */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f8f9fa; /* Light background color for contrast */
+}
+
+/* Social button styles */
+.social-buttons .btn {
+    flex: 1; /* Allow buttons to take equal space */
+    margin: 0 5px; /* Space between the buttons */
+    text-align: center; /* Center text in buttons */
+}
+
+/* Adjust button styles for better appearance */
+.btn-outline-primary {
+    border: 2px solid #a10202; /* Facebook border */
+    color: #3b5998;
+}
+
+.btn-outline-danger {
+    border: 2px solid #db4437; /* Google border */
+    color: #db4437;
+}
+
+
+/* Sign Up Link Button */
+#register-url {
+    display: block;
+    margin-top: 1em;
+    text-align: center;
+    background: none;
+    color: #8B0000;
+    font-weight: bold;
+    border: none;
+    text-decoration: none;
+}
+
+#register-url:hover {
+    color: #a50000;
+}
+
+/* "Forgot password?" Link */
+.form-group a {
+    display: block;
+    text-align: right;
+    color: #8B0000;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.form-group a:hover {
+    color: #a50000;
+}
+
+
+
+
+
+
+
+
+
 #login-form #register-url {
-    color: #0654c4;
+    color: #000;
     font-weight: bold;
     text-decoration: none;
     font-size: 16px;
 }
 
+
 #login-form #register-url:hover {
+    color: #a10202;
     text-decoration: underline;
 }
 
@@ -269,135 +498,12 @@ body {
     text-decoration: underline;
 }
 
-/* Banner */
-
-/* Styling for the banner section */
-.banner {
-    background-image: url('https://tamakiqt.github.io/QCU-MERCHMART/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
-   
-    padding: 100px 50px;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    color: white;
-    height: 100vh; 
-    box-sizing: border-box;
-}
-
-/* Left-aligned content */
-.banner-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 50%;
-}
-
-/* Styling for the h1 text */
-.banner h1 {
-    font-family: 'Impact', sans-serif;
-    font-size: 7rem;
-    align-self: center;
-    line-height: 1.2;
-    color: white;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-    margin: 0;
-}
-
-/* Right-aligned text content */
-.banner-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 40%;
-}
-
-.banner-text p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: white;
-}
-
-.banner-text button {
-    padding: 10px 20px;
-    width: 50%;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #000;
-    background-color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: center; /* Ensures the button itself is centered */
-}
 
 
-.banner-text button:hover {
-    background-color: #001f5f;
-    color: #fff;
-    font-weight: bold;
-}
 
 
-/* Featured Products */
-.featured-products {
-    padding: 50px 20px;
-    text-align: center;
-}
 
-.featured-products h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
 
-.product-list {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.product {
-    width: 200px;
-    padding: 20px;
-    background: #f9f9f9;
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.product img {
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-.product h3 {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    header nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .banner h1 {
-        font-size: 2rem;
-    }
-
-    .product-list {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-/* For login */
 
 
 
