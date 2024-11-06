@@ -13,6 +13,280 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
+    <style>
+                        /*Lanyard section */
+
+                    .login-icon, .bi {
+                        font-size: 24px; 
+                        color: #333; 
+                    }
+
+                    .login-icon {
+                        margin-right: 5px;
+                    }
+
+                    .bi {
+                        margin-left: 5px;
+                    }
+
+                    .bi:hover {
+                        color: #a10202; 
+                    }
+
+                    .top-header {
+                        height: 40px; 
+                        background-color: #000; 
+                        color: white;
+                        text-align: center;
+                    }
+
+                    .navbar.fixed-top {
+                        top: 40px; 
+                    }
+
+
+                        .container1 {
+                            max-width: 1200px;
+                        }
+
+                        .product-main-image {
+                            position: relative;
+                            width: 100%;
+                            height: 400px;
+                            display: flex;
+                            border: 2px solid #ddd;
+                            border-radius: 6px;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .product-main-image img {
+                            max-width: 100%;
+                            max-height: 100%;
+                        }
+
+                        .favorite-btn {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            background: none;
+                            border: none;
+                            font-size: 20px;
+                            color: #333;
+                            cursor: pointer;
+                        }
+
+                        .product-thumbnails .thumbnail {
+                            width: 80px;
+                            height: 80px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            transition: transform 0.2s ease;
+                        }
+
+                        .product-thumbnails .thumbnail:hover {
+                            transform: scale(1.05);
+                        }
+
+                        .product-name {
+                            font-weight: bold;
+                            font-size: 1.5rem;
+                        }
+
+                        .quantity-section .input-group {
+                            width: auto; /* Adjust as needed */
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .quantity-section .btn {
+                            width: 35px;           
+                            height: 35px;          
+                            font-size: 1rem;        
+                            padding: 5px 10px;      
+                        }
+
+                        .quantity-section .form-control {
+                            max-width: 35px;        
+                            height: 35px;          
+                            font-size: 1rem;        
+                            margin-bottom: 2.5px;
+                            text-align: center;     
+                            padding: 5px;           
+                        }
+
+                        .quantity-section .btn:hover{
+                            background-color: #940202;
+                            color: #fff;
+                        }
+
+
+
+                        .price {
+                            color: #000;
+                            font-size: 1.2rem;
+                        }
+
+                        .category{
+                            text-align: left;
+                        }
+
+                        .button-group button {
+                            width: 120px;
+                            color: #000;
+                            font-size: 1rem;
+                            gap: 100px;
+                        }
+
+                        .button-group button:hover{
+                            background-color: #940202;
+                            color: #fff;
+                        }
+
+                        /* Notification for add to cart */
+                        .cartnotification {
+                            position: fixed;
+                            top: 70%; 
+                            left: 50%;
+                            transform: translate(-50%, -70%); 
+                            background-color: #940202; 
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            font-size: 16px;
+                            display: none; 
+                            opacity: 0;
+                            transition: opacity 0.5s ease, top 0.5s ease;
+                        }
+
+                        .cartnotification.show {
+                            display: block;
+                            opacity: 1; 
+                            top: 25%; 
+                        }
+
+                        .cartnotification.hide {
+                            opacity: 0;
+                            top: 50%; 
+                        }
+
+                        .add-to-favorites {
+                            display: block;
+                            font-size: 0.9rem;
+                            padding: 8px 65px;
+                            border-radius: 4px;
+                            background-color: #fff; 
+                            color: #000; 
+                            text-align: center; 
+                            transition: background-color 0.3s ease; 
+                        }
+
+                        .add-to-favorites:hover {
+                            background-color: #940202; 
+                            color: #fff; 
+                        }
+
+                        /* Notification for favorites */
+                        .notification {
+                            position: fixed;
+                            top: 70%; 
+                            left: 50%;
+                            transform: translate(-50%, -70%); 
+                            background-color: #940202; 
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            font-size: 16px;
+                            display: none; 
+                            opacity: 0;
+                            transition: opacity 0.5s ease, top 0.5s ease;
+                        }
+
+                        .notification.show {
+                            display: block;
+                            opacity: 1; 
+                            top: 25%; 
+                        }
+
+                        .notification.hide {
+                            opacity: 0;
+                            top: 50%; 
+                        }
+
+
+
+                        /* Small Thumbnail */
+                        .thumbnail {
+                            width: 80px;
+                            height: 80px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            transition: transform 0.2s ease;
+                        }
+
+                        .product-thumbnails {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            overflow-x: auto; /* Allow horizontal scrolling if needed */
+                        }
+
+                        .thumbnail:hover {
+                            background-color: #940202;
+                            color: #fff;
+                            transform: scale(1.05);
+                        }
+
+                        .container{
+                            max-width: 1200px;
+                        }
+                        .slider-btn {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            font-size: 1.5rem;
+                            color: #000;
+                            background-color: #fff;
+                            padding: 8px 12px;
+                            border: none;
+                            cursor: pointer;
+                            border-radius: 50%;
+                        }
+
+                        .slider-btn.left {
+                            left: 20px;
+                        }
+
+                        .slider-btn.right {
+                            right: 20px;
+                        }
+
+                        .slider-btn:hover{
+                            background-color: #940202;
+                            color: #fff;
+                        }
+
+                        @media (max-width: 768px) {
+                            .product-main-image {
+                                height: 250px;
+                            }
+                            .product-thumbnails .thumbnail {
+                                width: 60px;
+                                height: 60px;
+                            }
+                            .quantity-section .input-group {
+                                width: 100%; /* Full width on mobile */
+                            }
+                            .button-group button, .add-to-favorites {
+                                width: 100%; /* Full width for buttons on mobile */
+                                padding: 10px;
+                            }
+                        }
+                            </style>
+
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
