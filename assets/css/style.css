@@ -598,24 +598,29 @@ h2.form-weight-bold {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 3rem; /* Spacing between each category */
+    gap: 3rem; 
+    box-sizing: border-box;
     margin-top: 1rem;
     margin-bottom: 120px;
 }
 
 .category .category-links a {
     font-size: 1.1rem;
-    color: #333;
+    color: #fff;
     text-decoration: none;
     font-weight: 500;
     padding: 0.3rem 0.6rem;
-    transition: color 0.3s, transform 0.3s;
+    border: 2px solid #fff; 
+    border-radius: 10px; 
+    background-color: #a10202;
+    transition: color 0.3s, transform 0.3s, border-color 0.3s;
 }
 
 .category .category-links a:hover {
-    color: #a10202; /* Change to desired hover color */
+    color: #fff; /* Change text color on hover */
     transform: scale(1.1); /* Slight zoom effect */
     text-decoration: underline;
+    border-color: #a10202; /* Change border color on hover */
 }
 
 /* For Daily Discoveries */

@@ -14,8 +14,9 @@
 </head>
 <body>
 
+    <!----LANYARD CSS---->
     <style>
-                        /*Lanyard section */
+            /*Lanyard section */
 
                     .login-icon, .bi {
                         font-size: 24px; 
@@ -172,24 +173,22 @@
                             top: 50%; 
                         }
 
-                        .add-to-favorites {
-                            display: block;
-                            font-size: 0.9rem;
-                            padding: 8px 65px;
-                            border-radius: 4px;
-                            background-color: #fff; 
-                            color: #000; 
-                            text-align: center; 
-                            transition: background-color 0.3s ease; 
-                        }
+                        .favorite-btn {
+                            font-size: 24px;
+                            color: #333; 
+                            cursor: pointer;
+                            border: none;
+                            background: none;
+                            transition: color 0.3s ease;
+                            }
 
-                        .add-to-favorites:hover {
-                            background-color: #940202; 
-                            color: #fff; 
-                        }
+                            .favorite-btn.favorited {
+                             color: #a10202; 
+                            }
 
-                        /* Notification for favorites */
-                        .notification {
+                            /* Favorite notification */
+
+                            .notification {
                             position: fixed;
                             top: 70%; 
                             left: 50%;
@@ -214,6 +213,74 @@
                             opacity: 0;
                             top: 50%; 
                         }
+
+
+                        .add-to-favorites {
+                            display: block;
+                            font-size: 0.9rem;
+                            padding: 8px 65px;
+                            border-radius: 4px;
+                            background-color: #fff; 
+                            color: #000; 
+                            text-align: center; 
+                            transition: background-color 0.3s ease; 
+                        }
+
+                        .add-to-favorites:hover {
+                            background-color: #940202; 
+                            color: #fff; 
+                        }
+                        /* Notification for favorites */
+                        .notification-favorite {
+                            position: fixed;
+                            top: 70%; 
+                            left: 50%;
+                            transform: translate(-50%, -70%); 
+                            background-color: #940202; 
+                            color: white;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            font-size: 16px;
+                            display: none; 
+                            opacity: 0;
+                            transition: opacity 0.5s ease, top 0.5s ease;
+                        }
+
+                        .notification-favorite.show {
+                            display: block;
+                            opacity: 1; 
+                            top: 25%; 
+                        }
+
+                        .notification-favorite.hide {
+                            opacity: 0;
+                            top: 50%; 
+                        }
+
+                        /* Lanyard course choices style */
+                        .course-selection {
+                            margin-top: 20px;
+                            margin-bottom: 10px;
+                        }
+
+                        .course-selection label {
+                            font-weight: bold;
+                            margin-bottom: 5px;
+                        }
+
+                        .course-selection .form-select {
+                            max-width: 75%; /* Adjust the width as needed */
+                            padding: 8px;
+                            font-size: 1rem;
+                            border-radius: 4px;
+                            border: 1px solid #ddd;
+                        }
+
+                        .course-selection .form-select:hover, .course-selection .form-select:focus {
+                            border-color: #940202;
+                            box-shadow: none;
+                        }
+
 
 
 
@@ -344,24 +411,32 @@
         <div class="col-md-6">
             <div class="product-main-image bg-light">
                 <img id="main-image"  src="assets/images/IMG_0052.PNG" alt="Main Product Image" class="img-fluid">
-                <button class="favorite-btn">&#10084;</button>
+                <button class="favorite-btn" id="Favorite">&#10084;</button>
+
+                <!-- Notification for added to favorites -->
+                <div class="notification-favorite" id="favoriteNotification">Item added to Favorites!</div>
+
                 <button class="slider-btn left" onclick="changeSlide(-1)">&#10094;</button>
                 <button class="slider-btn right" onclick="changeSlide(1)">&#10095;</button>
+
             </div>
             <div class="product-thumbnails d-flex mt-3 gap-2 over">
-                <img src="assets/images/IMG_0041.PNG" alt="Thumbnail 1" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0042.PNG" alt="Thumbnail 2" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0043.PNG" alt="Thumbnail 3" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0044.PNG" alt="Thumbnail 4" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0045.PNG" alt="Thumbnail 5" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0046.PNG" alt="Thumbnail 6" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0047.PNG" alt="Thumbnail 7" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0048.PNG" alt="Thumbnail 8" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0049.PNG" alt="Thumbnail 4" class="thumbnail bg-light">
-                <img src="assets/images/IMG_0050.PNG" alt="Thumbnail 4" class="thumbnail bg-light">
+                <img id="thumbnail1" src="assets/images/bcs.PNG" alt="Thumbnail 1" class="thumbnail bg-light">
+                <img id="thumbnail2" src="assets/images/beced.PNG" alt="Thumbnail 2" class="thumbnail bg-light">
+                <img id="thumbnail3" src="assets/images/bis.PNG" alt="Thumbnail 3" class="thumbnail bg-light">
+                <img id="thumbnail4" src="assets/images/bsa.PNG" alt="Thumbnail 4" class="thumbnail bg-light">
+                <img id="thumbnail5" src="assets/images/bscpe.PNG" alt="Thumbnail 5" class="thumbnail bg-light">
+                <img id="thumbnail6" src="assets/images/bsece.PNG" alt="Thumbnail 6" class="thumbnail bg-light">
+                <img id="thumbnail7" src="assets/images/bsentrep.PNG" alt="Thumbnail 7" class="thumbnail bg-light">
+                <img id="thumbnail8" src="assets/images/bsie.PNG" alt="Thumbnail 8" class="thumbnail bg-light">
+                <img id="thumbnail9" src="assets/images/bsit.PNG" alt="Thumbnail 9" class="thumbnail bg-light">
+                <img id="thumbnail10" src="assets/images/bsma.PNG" alt="Thumbnail 10" class="thumbnail bg-light">
             </div>
+            
            
         </div>
+
+
 
           <!-- Product Details -->
           <div class="col-md-6">
@@ -369,6 +444,24 @@
             <p class="description">Descriptions</p>
             <h3 class="price">₱ 50.00</h3>
             <p class="category">Categories</p>
+
+             <!----Lanyard Course choices---->
+             <div class="course-selection mt-3">
+                <label for="courseSelect" class="form-label">Select Course</label>
+                <select class="form-select" id="courseSelect">
+                    <option value="bcs">Bachelor of Science Computer Science (BCS)</option>
+                    <option value="beced">Bachelor of Early Childhood Education (BECED)</option>
+                    <option value="bis">Bachelor of Science in Information Systems (BIS)</option>
+                    <option value="bsa">Bachelor of Science in Accountancy (BSA)</option>
+                    <option value="bscpe">Bachelor of Science in Computer Engineering (BSCPE)</option>
+                    <option value="bsece">Bachelor of Science in Electronics Engineering (BSECE)</option>
+                    <option value="bsentrep">Bachelor of Science in Entrepreneurship (BSENTREP)</option>
+                    <option value="bsie">Bachelor of Science in Industrial Engineering (BSIE)</option>
+                    <option value="bsit">Bachelor of Science in Information Technology (BSIT)</option>
+                    <option value="bsma">Bachelor of Science in Management Accounting (BSMA)</option>
+                    
+                </select>
+            </div>
 
 
             <div class="quantity-section mb-4">
