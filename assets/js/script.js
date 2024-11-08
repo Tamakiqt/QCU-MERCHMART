@@ -196,3 +196,115 @@ courseSelect.addEventListener('change', function() {
 });
 
 
+// Cart
+
+// Update the total price and quantity
+let totalPrice = 300; // Example initial price
+let quantityInputs = document.querySelectorAll('.quantity-input');
+let checkoutButton = document.querySelector('.checkout-btn');
+let totalDisplay = document.querySelector('.total-checkout span');
+
+function updateTotal() {
+    let newTotal = 0;
+    quantityInputs.forEach(input => {
+        const price = parseFloat(input.closest('tr').querySelector('td:nth-child(4)').textContent.replace('₱', '').trim());
+        const quantity = parseInt(input.value);
+        newTotal += price * quantity;
+    });
+    totalDisplay.textContent = 'Total: ₱' + newTotal.toFixed(2);
+}
+
+// Increase and decrease buttons
+document.querySelectorAll('.increase-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        let input = e.target.closest('tr').querySelector('.quantity-input');
+        input.value = parseInt(input.value) + 1;
+        updateTotal();
+    });
+});
+
+document.querySelectorAll('.decrease-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        let input = e.target.closest('tr').querySelector('.quantity-input');
+        if (input.value > 1) {
+            input.value = parseInt(input.value) - 1;
+            updateTotal();
+        }
+    });
+});
+
+// Remove item
+document.querySelectorAll('.remove-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.target.closest('tr').remove();
+        updateTotal();
+    });
+});
+
+
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    var password = document.getElementById('register-password').value;
+    var confirmPassword = document.getElementById('register-confirm-password').value;
+
+    if (password !== confirmPassword) {
+        e.preventDefault(); // Prevent form submission
+        alert('Passwords do not match!');
+    }
+});
+
+
+// Google sign in login 
+
+function onGoogleSignIn(googleUser) {
+    // Get the user’s profile information
+    var profile = googleUser.getBasicProfile();
+    var email = profile.getEmail();  // Get email
+    var id = profile.getId();  // Get Google ID
+
+    // Send this data to your server for processing
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'server/social_login.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.responseText === 'Success') {
+            window.location.href = 'index.html';  // Redirect on successful login
+        } else {
+            alert('Error: ' + xhr.responseText);
+        }
+    };
+    xhr.send('email=' + email + '&id=' + id + '&platform=google');
+}
+
+// Initialize Facebook SDK
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : 'YOUR_APP_ID',  // Replace with your Facebook app ID
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v12.0'
+    });
+};
+
+// Check the login state of the user
+function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            // User is logged in
+            FB.api('/me', {fields: 'id,email,name'}, function(response) {
+                // Send this data to your server
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'server/social_login.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function () {
+                    if (xhr.responseText === 'Success') {
+                        window.location.href = 'index.html';  // Redirect on successful login
+                    } else {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                };
+                xhr.send('email=' + response.email + '&id=' + response.id + '&platform=facebook');
+            });
+        }
+    });
+}
+
