@@ -151,6 +151,10 @@ body {
     background-color: #0654c4; /* Change background on hover */
 }
 
+#iconContainer {
+    justify-content: flex-start; /* Start by aligning items to the left */
+}
+
 .login-icon, .bi {
     font-size: 24px; 
     color: #333; 
@@ -196,6 +200,18 @@ body {
         z-index: 1000;
     }
 
+    #iconContainer {
+        justify-content: flex-start; /* Center the icons horizontally */
+        padding-left: 40px;
+    }
+
+    .login-icon, .bi-bag-heart {
+        font-size: 1.3rem; /* Adjust icon size for smaller screens */
+    }
+
+    .d-flex i {
+        margin-left: 10px; /* Reduce space between icons */
+    }
     .navbar-collapse.show {
         display: block;
         transform: translateY(0);
@@ -213,9 +229,7 @@ body {
         font-weight: bold;
     }
      
-    .navbar-collapse .search-bar,
-    .navbar-collapse .login-icon,
-    .navbar-collapse .bi {
+    .navbar-collapse .search-bar{
         display: none !important;
     }
 
@@ -619,8 +633,39 @@ h2.form-weight-bold {
 .category .category-links a:hover {
     color: #fff; /* Change text color on hover */
     transform: scale(1.1); /* Slight zoom effect */
-    text-decoration: underline;
     border-color: #a10202; /* Change border color on hover */
+}
+
+@media screen and (max-width: 768px) {
+    .category h2 {
+        font-size: 1.6rem; 
+    }
+
+    .category .category-links {
+        gap: 2rem; 
+        margin-bottom: 60px; 
+    }
+
+    .category .category-links a {
+        font-size: 1rem; 
+        padding: 0.4rem 0.8rem; 
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .category h2 {
+        font-size: 1.4rem; 
+    }
+
+    .category .category-links {
+        gap: 1.5rem; 
+        margin-bottom: 40px; 
+    }
+
+    .category .category-links a {
+        font-size: 0.9rem; 
+        padding: 0.3rem 0.6rem;
+    }
 }
 
 /* For Daily Discoveries */
