@@ -397,9 +397,10 @@ h2.form-weight-bold {
 }
 
 /* Form Input Styling */
-.form-control {
-    margin-bottom: 1em;
-    border-radius: 0;
+.form-control{
+    margin-bottom: 2em;
+    border-radius: 8px;
+    padding: .700rem 1rem;
 }
 
 
@@ -420,9 +421,8 @@ h2.form-weight-bold {
     background-color: #a50000; /* Slightly lighter red */
 }
 
-/* styles.css */
 
-/* Styles for the line and text */
+
 .line-container {
     display: flex;
     align-items: center;
@@ -487,10 +487,17 @@ h2.form-weight-bold {
     color: #a50000;
 }
 
+.form-control{
+    margin-bottom: 2em;
+    border-radius: 8px;
+    padding: .700rem 1rem;
+}
+
 /* "Forgot password?" Link */
 .form-group a {
     display: block;
     text-align: right;
+  
     color: #8B0000;
     text-decoration: none;
     font-size: 0.9em;

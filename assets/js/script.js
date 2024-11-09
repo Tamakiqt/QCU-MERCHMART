@@ -242,69 +242,84 @@ document.querySelectorAll('.remove-btn').forEach(button => {
 });
 
 
-document.getElementById('register-form').addEventListener('submit', function(e) {
-    var password = document.getElementById('register-password').value;
-    var confirmPassword = document.getElementById('register-confirm-password').value;
+// SMTPJS EMAIL SENDER 
 
+
+// Initialize EmailJS
+
+
+
+
+// Wait for the form submission
+document.getElementById("register-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get form data
+    var name = document.getElementById("register-name").value;
+    var email = document.getElementById("register-email").value;
+    var password = document.getElementById("register-password").value;
+    var confirmPassword = document.getElementById("register-confirm-password").value;
+
+    // Validate if the passwords match
     if (password !== confirmPassword) {
-        e.preventDefault(); // Prevent form submission
-        alert('Passwords do not match!');
+        alert("Passwords do not match.");
+        return;
     }
+
+    // Send email confirmation using EmailJS first
+    sendEmail(name, email, function(success) {
+        if (success) {
+            // Only if email is sent, register user in the database
+            registerUser(name, email, password);
+        } else {
+            alert("There was an error sending the confirmation email.");
+        }
+    });
 });
 
+// Function to send an email via EmailJS
+function sendEmail() {
+    // Get the form values
+    var name = document.getElementById("register-name").value;
+    var email = document.getElementById("register-email").value;
 
-// Google sign in login 
+    // Send the email using the EmailJS service and template
+    emailjs.send("service_ix6fx3v", "template_9m356og", {
+        from_name: name,
+        to_email: email,
+    }, "urk05-DC39haP5pMg")
 
-function onGoogleSignIn(googleUser) {
-    // Get the user’s profile information
-    var profile = googleUser.getBasicProfile();
-    var email = profile.getEmail();  // Get email
-    var id = profile.getId();  // Get Google ID
+    .then(response => {
+        console.log("Email sent successfully!", response.status, response.text);
+        alert("Registration successful! Email sent.");
+    })
+    .catch(error => {
+        console.error("Error sending email:", error);
+        alert("There was an issue sending the email.");
+    });
+}
 
-    // Send this data to your server for processing
+
+// Function to register user in the database after email is sent
+function registerUser(name, email, password) {
+    var formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'server/social_login.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.responseText === 'Success') {
-            window.location.href = 'index.html';  // Redirect on successful login
+    xhr.open("POST", "server/register.php", true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert("Registration successful! User has been registered.");
         } else {
-            alert('Error: ' + xhr.responseText);
+            alert("There was an issue with the registration.");
         }
     };
-    xhr.send('email=' + email + '&id=' + id + '&platform=google');
+
+    xhr.onerror = function() {
+        alert("There was an error processing the request.");
+    };
+
+    xhr.send(formData);
 }
-
-// Initialize Facebook SDK
-window.fbAsyncInit = function() {
-    FB.init({
-        appId      : 'YOUR_APP_ID',  // Replace with your Facebook app ID
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v12.0'
-    });
-};
-
-// Check the login state of the user
-function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-            // User is logged in
-            FB.api('/me', {fields: 'id,email,name'}, function(response) {
-                // Send this data to your server
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'server/social_login.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onload = function () {
-                    if (xhr.responseText === 'Success') {
-                        window.location.href = 'index.html';  // Redirect on successful login
-                    } else {
-                        alert('Error: ' + xhr.responseText);
-                    }
-                };
-                xhr.send('email=' + response.email + '&id=' + response.id + '&platform=facebook');
-            });
-        }
-    });
-}
-

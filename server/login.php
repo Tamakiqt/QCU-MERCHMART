@@ -1,61 +1,63 @@
 <?php
+session_start();
+
 // Database connection
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 $servername = "localhost";
-$username = "root"; // Update with your MySQL username
-$password = ""; // Update with your MySQL password
-$dbname = "qcu_merchmart"; // Update with your database name
+$username = "root";
+$password = "";
+$dbname = "qcu_merchmart";
 
-// Establish database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check if the connection was successful
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Check if 'email_or_name' and 'password' are set
-    if (isset($_POST['email_or_name']) && isset($_POST['password'])) {
-        $email_or_name = trim($_POST['email_or_name']); // Get email/username from the input
-        $password = $_POST['password']; // Get the password
+    if (empty($_POST['email_or_name']) || empty($_POST['password'])) {
+        $_SESSION['login_error'] = "Please fill in both fields.";
+    } else {
+        $email_or_name = trim($_POST['email_or_name']);
+        $password = $_POST['password'];
 
-        // Check if email/username exists in the database
+        // Query to check if email or username exists
         $check_user = "SELECT * FROM users WHERE email = ? OR name = ?";
         $stmt = $conn->prepare($check_user);
         $stmt->bind_param("ss", $email_or_name, $email_or_name);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // If email/username exists
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
-
-            // Verify the password
             if (password_verify($password, $user['password'])) {
-                // Password is correct, login successful
-                echo "Login successful!";
-                // Redirect to dashboard or home page
-                header("Location: index.html"); // Redirect to dashboard
+                // Store user data and success message in session
+                $_SESSION['user_id'] = $user['id'];
+                header("Location: ../index.php");  // Redirect to the homepage
                 exit();
             } else {
-                // Invalid password
-                echo "Invalid password.";
+                $_SESSION['login_error'] = "Invalid password.";
             }
         } else {
-            // Email/username does not exist
-            echo "No account found with that email or username.";
+            $_SESSION['login_error'] = "No account found with that email or username.";
         }
-    } else {
-        echo "Please fill out both fields.";
     }
-}
 
-// Close the database connection
-$conn->close();
+    // Redirect back to the login page if there's an error
+    header("Location: ../login.php");
+    exit();
+}
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
