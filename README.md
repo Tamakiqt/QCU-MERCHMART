@@ -43,4 +43,4 @@ npm run build
 
 # LICENSE
 
-[Apache] (https://github.com/Tamakiqt/QCU-MERCHMART/blob/master/LICENSE) LICENSE.
+[Apache](https://github.com/Tamakiqt/QCU-MERCHMART/blob/master/LICENSE) LICENSE.
