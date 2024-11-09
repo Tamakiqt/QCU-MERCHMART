@@ -24,7 +24,7 @@ Group 2 - SAD Group Project.
 
 # Clone it
 ```sh
-git clone https://github.com/qxb3/The-Coffee-Bean-Tea-Lea.git](https://github.com/Tamakiqt/QCU-MERCHMART.git
+git clone https://github.com/Tamakiqt/QCU-MERCHMART.git
 cd QCU-MERCHMART
 npm install
 ```
