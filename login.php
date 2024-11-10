@@ -15,17 +15,19 @@
 
 <?php
     session_start();
-    $login_error = '';
-    if (isset($_SESSION['login_error'])) {
-        $login_error = $_SESSION['login_error'];
-        unset($_SESSION['login_error']);
+    if (isset($_SESSION['status'])) {
+        echo '<div id="success-message" style="display: center; justify-content: center; align-items: center; background-color: #940202; color: white; padding: 10px 20px; border-radius: 8px; margin: 10px auto; width: fit-content; font-weight: bold; text-align: center;">' . $_SESSION['status'] . '</div>';
+        unset($_SESSION['status']);
     }
-    ?>
+?>
+
+
+
     
     <!---HEADER---->
     <div class="header py-3 text-white fixed-top">
         <div class="header py-3 text-white fixed-top">
-            <h2 class="mb-0"><a href="index.html" class="text-white text-decoration-none">Login</a></h2>
+            <h2 class="mb-0"><a href="index.php" class="text-white text-decoration-none">Login</a></h2>
         </div>
         
       </div>
@@ -36,18 +38,14 @@
     <div class="container text-center mt-3 pt-5">
         <h2 class="form-weight-bold">Login</h2>
 
-           <!-- Error Message Display -->
-           <?php if (!empty($login_error)): ?>
-                <div class="alert alert-danger">
-                    <?php echo htmlspecialchars($login_error); ?>
-                </div>
-            <?php endif; ?>
-        </div>
+           
 
 
         
 </div>
 <div class="mx-auto container">
+<div class="mx-auto" style="max-width: 400px;">
+<div style="border: 1px solid #940202;  padding: 30px;  border-radius: 12px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     <form method="POST" action="server/login.php">
         <div class="form-group">
             <input type="text" class="form-control" name="email_or_name" placeholder="Email or Username" required>
@@ -65,7 +63,7 @@
     
 
         <div class="form-group">
-            <a href="#" id="forgot-password" class="text-decoration-none text-center" style="padding: 10px;">
+            <a href="#" id="forgot-password" href="reset-password" class="text-decoration-none text-center" style="padding: 10px;">
                 Forgot Password?
             </a>
         </div>
