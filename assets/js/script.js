@@ -242,11 +242,25 @@ document.querySelectorAll('.remove-btn').forEach(button => {
 });
 
 
-// SMTPJS EMAIL SENDER 
+// My account upload profile picture 
 
+function updateProfileImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-// Initialize EmailJS
+    reader.onloadend = function() {
+        const profileImage = document.getElementById("profile-image");
+        const defaultIcon = document.getElementById("default-icon");
 
+        // Hide the default icon
+        defaultIcon.style.display = "none";
 
+        // Show the uploaded image
+        profileImage.src = reader.result;
+        profileImage.style.display = "inline-block"; // Make the uploaded image visible
+    };
 
-
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}

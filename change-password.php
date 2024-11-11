@@ -38,19 +38,21 @@
         <div class="mx-auto" style="max-width: 400px;">
             <div style="border: 1px solid #940202; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
             <form id="change-password-form" method="POST" action="reset-password-code.php">
-                <input type="hidden" name="password-token" value="<?php if(isset($_GET['token'])) {echo $_GET['token'];} ?>">
+            <input type="hidden" name="password_token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>">
+
                 <div class="form-group">
-                    <input type="email" class="form-control"  name="email" valur="<?php if(isset($_GET['email'])) {echo $_GET['email'];} ?>" placeholder="Email" required>
+                    <input type="email" class="form-control"  name="email" value="<?php if(isset($_GET['email'])) {echo $_GET['email'];} ?>" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control"  name="new-password" placeholder="New Password" required>
+                    <input type="password" class="form-control"  name="new_password" placeholder="New Password" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control"  name="confirm-password" placeholder="Confirm Password" required>
+                    <input type="password" class="form-control"  name="confirm_password" placeholder="Confirm Password" required>
                 </div>
-                        <button type="submit" name="update-password  class="btn w-100" style="background-color: #940202; color: white; font-weight: bold;">
+                <button type="submit" name="update-password" class="btn w-100" style="background-color: #940202; color: white; font-weight: bold; border: 1px; border-radius: 8px;">
                             Reset Password
                         </button>
+
                     </div>
                 </form>
             </div>

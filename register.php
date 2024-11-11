@@ -41,7 +41,7 @@
 </div>
 <div class="mx-auto container">
 <div class="mx-auto" style="max-width: 400px;">
-<div style="border: 1px solid #940202;  padding: 30px; border-radius: 12px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+<div style="border: 1px solid #940202;  padding: 30px;  border-radius: 12px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     <form id="register-form" method="POST" action="register-back.php">
         <div class="form-group">
             <input type="text" class="form-control" id="register-name" name="name" placeholder="Username / Email" required>

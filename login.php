@@ -60,13 +60,12 @@
         </div>
     </form>
     
-    
+                <div class="form-group">
+                <a id="forgot-password" href="reset-password.php" class="text-decoration-none text-center" style="padding: 10px;">
+                    Forgot Password?
+                </a>
+            </div>  
 
-        <div class="form-group">
-            <a href="#" id="forgot-password" href="reset-password" class="text-decoration-none text-center" style="padding: 10px;">
-                Forgot Password?
-            </a>
-        </div>
 
         <div class="form-group my-3 text-center">
             <div class="line-container">

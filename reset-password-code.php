@@ -32,7 +32,7 @@ function send_password_reset($get_name, $get_email, $token)
         $mail->Subject = 'Reset Your Password - QCUMerchMart';
 
         // Password reset link
-        $resetLink = "http://localhost:8000/reset-password.php?token=$token&email=$get_email";
+        $resetLink = "http://localhost:8000/change-password.php?token=$token&email=$get_email";
 
         // HTML email body for password reset
         $mail->Body = "
@@ -42,7 +42,7 @@ function send_password_reset($get_name, $get_email, $token)
             <p>Hello $get_name,</p>
             <p>We received a request to reset your password. You can reset your password by clicking the button below:</p>
             <div style='text-align: center; margin-top: 15px;'>
-                <a href='$resetLink' style='background-color: #940202; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px; font-weight: bold;'>Reset Password</a>
+                <a href='$resetLink' style='background-color: #940202; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px; font-weight: bold; color: white !important;'>Reset Password</a>
             </div>
             <br>
             <p>If you did not request a password reset, please ignore this email. Your password will remain unchanged.</p>
@@ -100,41 +100,36 @@ if(isset($_POST['password-reset-link']))
 if (isset($_POST['update-password'])) {
 
     $email = mysqli_real_escape_string($con, $_POST['email']);
-    $new_password = mysqli_real_escape_string($con, $_POST['new-password']);
-    $confirm_password = mysqli_real_escape_string($con, $_POST['confirm-password']);
-    $token = mysqli_real_escape_string($con, $_POST['password-token']);
+    $new_password = mysqli_real_escape_string($con, $_POST['new_password']);
+    $confirm_password = mysqli_real_escape_string($con, $_POST['confirm_password']);    
+    $token = mysqli_real_escape_string($con, $_POST['password_token']); 
 
-    // Check if the token is provided
     if (!empty($token)) {
 
-        // Ensure all fields are filled
         if (!empty($email) && !empty($new_password) && !empty($confirm_password)) {
-
-            // Check if the new password and confirm password match
-            if ($new_password !== $confirm_password) {
-                $_SESSION['status'] = "Password and confirm password do not match!";
-                header("Location: change-password.php?token=$token&email=$email");
-                exit(0);
-            }
 
             // Check if the token is valid
             $check_token = "SELECT verify_token FROM user WHERE verify_token='$token' LIMIT 1";
             $check_token_run = mysqli_query($con, $check_token);
 
             if (mysqli_num_rows($check_token_run) > 0) {
-                // Hash the new password before updating
-                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-                // Update the password in the database
-                $update_password = "UPDATE user SET password='$hashed_password' WHERE verify_token='$token' LIMIT 1";
-                $update_password_run = mysqli_query($con, $update_password);
+                if ($new_password == $confirm_password) {
+                    $update_password = "UPDATE user SET password='$new_password' WHERE verify_token='$token' LIMIT 1";
+                    $update_password_run = mysqli_query($con, $update_password);
 
-                if ($update_password_run) {
-                    $_SESSION['status'] = "New password successfully updated!";
-                    header("Location: login.php");
-                    exit(0);
+                    if ($update_password_run) {
+                        $_SESSION['status'] = "New password successfully updated!";
+                        header("Location: login.php");
+                        exit(0);
+
+                    } else {
+                        $_SESSION['status'] = "Did not update password. Something went wrong!";
+                        header("Location: change-password.php?token=$token&email=$email");
+                        exit(0);
+                    }
                 } else {
-                    $_SESSION['status'] = "Failed to update password. Something went wrong!";
+                    $_SESSION['status'] = "Password and confirm password do not match!";
                     header("Location: change-password.php?token=$token&email=$email");
                     exit(0);
                 }
@@ -143,22 +138,9 @@ if (isset($_POST['update-password'])) {
                 header("Location: change-password.php?token=$token&email=$email");
                 exit(0);
             }
+
         } else {
-            // If some fields are empty, show which one(s)
-            $missingFields = [];
-
-            if (empty($email)) {
-                $missingFields[] = "Email";
-            }
-            if (empty($new_password)) {
-                $missingFields[] = "New password";
-            }
-            if (empty($confirm_password)) {
-                $missingFields[] = "Confirm password";
-            }
-
-            // Join the missing fields into a string for the session message
-            $_SESSION['status'] = "The following fields are mandatory: " . implode(', ', $missingFields);
+            $_SESSION['status'] = "All fields are mandatory";
             header("Location: change-password.php?token=$token&email=$email");
             exit(0);
         }
@@ -168,8 +150,6 @@ if (isset($_POST['update-password'])) {
         exit(0);
     }
 }
-
-
 
 
 
