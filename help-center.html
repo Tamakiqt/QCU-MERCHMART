@@ -15,7 +15,63 @@
 </head>
 <body>
 
-     
+    <style>
+        body{
+            padding-top: 200px;
+        }
+        .container2{
+            max-width: 1200px;
+        }
+    
+        h2 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    
+        h3 {
+            font-size: 1rem;
+            font-weight: bold;
+            padding-bottom: 15px;
+        }
+    
+        .contact-text {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+    
+        ol {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+    
+        .faq-question {
+            font-weight: normal;
+            font-size: 1rem;
+        }
+    
+        ol li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+    
+        .bullet {
+            margin-left: 10px;
+            font-size: 1rem;
+            color: black;
+        }
+
+        .back-button i {
+            color: black;
+        }
+
+        .back-button:hover i {
+            color: white;
+        }
+
+    </style>
+    
 
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
@@ -72,98 +128,41 @@
 </nav>
 
 
-
-            
-
-<!-- Banner Section -->
-<section class="banner">
-    <div class="banner-content">
-        <h1>Gear Up <br> Stand Out</h1>
-    </div>
-    <div class="banner-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
-        <button>Shop Now</button>
-    </div>
-</section>
-
-<!-- Featured Products Section -->
-<section class="featured-products mt-5">
-    <h2>Featured Products</h2>
-    <div class="product-list">
-        <div class="product">
-            <img src="product1.jpg" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product2.jpg" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product3.jpg" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product4.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+<!-- Help center Header -->
+<div class="helpcenter-header py-3 fixed-top" style="top: 110px; background-color: #940202; border-bottom: 1px solid #ddd;">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Back Button and Title "My Cart" -->
+        <div class="d-flex align-items-center">
+            <a href="index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">Help Center</h5>
         </div>
     </div>
-</section>
+</div> 
 
-<!-- Categories Section -->
-<section class="category my-5">
-    <h2>Categories</h2>
-    <div class="category-links">
-        <a href="lanyard.html">Lanyards</a>
-        <a href="#">Uniforms</a>
-        <a href="#">Jackets</a>
-        <a href="#">Umbrella</a>
-        <a href="#">Tumbler</a>
-        <a href="#">T-shirts</a>
-        <a href="#">Accessories</a>
-    </div>
-</section>
+<!-- Main Help Center Content -->
 
-<!-- Daily Dicoveries Section -->
-<section class="dailydiscoveries-products">
-    <h2>Daily Discoveries</h2>
-    <div class="product-list1">
-        <div class="product">
-            <img src="product7.jpg" alt="Product 4">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product8.jpg" alt="Product 5">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product9.jpg" alt="Product 6">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product10.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-    </div>
-</section>
-
-
-
+<main class="container2 mt-4">
+    <section>
+        <h2>Help Center</h2>
+        <p>Welcome to our Help Center! We're here to assist you with any questions or concerns you may have regarding your experience with MerchMart. Below, you’ll find answers to some common inquiries. If you need further assistance, don’t hesitate to reach out to us.</p>
+        
+        <h3>Frequently Asked Questions (FAQs)</h3>
+        <ol>
+            <li><strong class="faq-question">1. How do I place an order?</strong><br><span class="bullet">&bull;</span> Simply browse our selection of school supplies, add your desired items to the cart, and proceed to checkout. Once you complete your order, you will receive an Order Number for pickup.</li>
+            <li><strong class="faq-question">2. What payment methods do you accept?</strong><br><span class="bullet">&bull;</span> We currently accept Gcash for online payments. Additionally, you can choose the On-Hand Payment Method, where you pay for your order upon pickup at our location.</li>
+            <li><strong class="faq-question">3. How do I pick up my order?</strong><br><span class="bullet">&bull;</span> After you've placed your order and received your Order Number, visit us at our location. Just present your Order Number, and our staff will have your items ready for you.</li>
+            <li><strong class="faq-question">4. Can I change or cancel my order?</strong><br><span class="bullet">&bull;</span> If you need to change or cancel your order, please contact us as soon as possible. We’ll do our best to accommodate your request before your order is processed.</li>
+            <li><strong class="faq-question">5. What should I do if I have a problem with my order?</strong><br><span class="bullet">&bull;</span> If you encounter any issues with your order, please contact our support team at merchmart@gmail.com. We’re here to help resolve any problems.</li>
+        </ol>
+        
+        
+        <h3>Contact Us</h3>
+        <p>If you have any issues or need assistance, feel free to contact our support team at <a href="mailto:qcumerchmart@gmail.com">qcumerchmart@gmail.com</a>.</p>
+        <p>Thank you for your order, and we look forward to serving you!</p>
+    </section>
+</main>
 
 <!----FOOTER------>
 <footer class="mt-5 py-5">
@@ -185,10 +184,10 @@
         </div>
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-         <h5 class="pb-2">ABOUT MerchMart</h5>
+         <h5 class="pb-2">PAYMENT</h5>
             <ul class="list-unstyled">
                 <li>
-                 <img src="https://via.placeholder.com/50" alt="Payment Icon" class="img-fluid">
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>

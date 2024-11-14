@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +14,63 @@
 </head>
 <body>
 
-     
+    <style>
+        body{
+            padding-top: 200px;
+        }
+        .container2{
+            max-width: 1200px;
+        }
+    
+        h2 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    
+        h3 {
+            font-size: 1rem;
+            font-weight: bold;
+            padding-bottom: 15px;
+        }
+    
+        .contact-text {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+    
+        ol {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+    
+        .payment-method {
+            font-weight: normal;
+            font-size: 1rem;
+            
+        }
+    
+        ol li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+    
+        .bullet {
+            margin-left: 10px;
+            font-size: 1rem;
+            color: black;
+        }
+
+        .back-button i {
+            color: black;
+        }
+
+        .back-button:hover i {
+            color: white;
+        }
+
+    </style>
 
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
@@ -30,7 +85,6 @@
                 <span class="text-blue">M</span><span class="text-black">ERCH</span><span class="text-red">M</span><span class="text-yellow">ART</span>
             </span>
         </a>
-
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,101 +125,45 @@
     </div>
 </nav>
 
-
-
-            
-
-<!-- Banner Section -->
-<section class="banner">
-    <div class="banner-content">
-        <h1>Gear Up <br> Stand Out</h1>
-    </div>
-    <div class="banner-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
-        <button>Shop Now</button>
-    </div>
-</section>
-
-<!-- Featured Products Section -->
-<section class="featured-products mt-5">
-    <h2>Featured Products</h2>
-    <div class="product-list">
-        <div class="product">
-            <img src="product1.jpg" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product2.jpg" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product3.jpg" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product4.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+<!-- Help center Header -->
+<div class="helpcenter-header py-3 fixed-top" style="top: 110px; background-color: #940202; border-bottom: 1px solid #ddd;">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Back Button and Title "My Cart" -->
+        <div class="d-flex align-items-center">
+            <a href="index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">Payment Method</h5>
         </div>
     </div>
-</section>
+</div> 
 
-<!-- Categories Section -->
-<section class="category my-5">
-    <h2>Categories</h2>
-    <div class="category-links">
-        <a href="lanyard.html">Lanyards</a>
-        <a href="#">Uniforms</a>
-        <a href="#">Jackets</a>
-        <a href="#">Umbrella</a>
-        <a href="#">Tumbler</a>
-        <a href="#">T-shirts</a>
-        <a href="#">Accessories</a>
-    </div>
-</section>
+<!-- Main Content -->
+<main class="container2 mt-4">
+    <section>
+        <h2>Payment Method: Gcash</h2>
+        <p>Welcome to our payment page! To complete your purchase, please use Gcash following these simple steps:</p>
+        
+        <ol>
+            <li><strong class="payment-method">1. Open the Gcash App</strong><br><span class="bullet">&bull;</span> Launch the Gcash app on your mobile device and log in to your account.</li>
+            <li><strong class="payment-method">2. Select "Send Money"</strong><br><span class="bullet">&bull;</span> Tap on "Send Money" from the main menu.</li>
+            <li><strong class="payment-method">3. Choose "Express Send"</strong><br><span class="bullet">&bull;</span> Enter our Gcash number: (e.g., 0912-345-6789)</li>
+            <li><strong class="payment-method">4. Enter the Amount</strong><br><span class="bullet">&bull;</span> Type in the total amount for your order.</li>
+            <li><strong class="payment-method">5. Review and Confirm</strong><br><span class="bullet">&bull;</span> Double-check the amount and confirm the transaction.</li>
+            <li><strong class="payment-method">6. Save a Screenshot</strong><br><span class="bullet">&bull;</span> Take a screenshot of the payment confirmation or save your transaction ID as proof.</li>
+        </ol>
 
-<!-- Daily Dicoveries Section -->
-<section class="dailydiscoveries-products">
-    <h2>Daily Discoveries</h2>
-    <div class="product-list1">
-        <div class="product">
-            <img src="product7.jpg" alt="Product 4">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product8.jpg" alt="Product 5">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product9.jpg" alt="Product 6">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="product10.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
-        </div>
-    </div>
-</section>
+        <h3>After Payment:</h3>
+        <p>Once you have sent the payment, please wait a moment for your unique Order Number to appear below. This order number will serve as proof that your payment was received.</p>
+        
+        <h3>Important Information</h3>
+        <p>Present this Order Number at the coop to confirm your purchase.</p>
+        <p>If you have any issues or need assistance, feel free to contact our support team at <a href="mailto:qcumerchmart@gmail.com">qcumerchmart@gmail.com</a>.</p>
+        <p>Thank you for your order, and we look forward to serving you!</p>
+    </section>
+</main>
 
-
-
-
-<!----FOOTER------>
+<!-- Footer -->
 <footer class="mt-5 py-5">
     <div class="row">
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
@@ -185,10 +183,10 @@
         </div>
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-         <h5 class="pb-2">ABOUT MerchMart</h5>
+         <h5 class="pb-2">PAYMENT</h5>
             <ul class="list-unstyled">
                 <li>
-                 <img src="https://via.placeholder.com/50" alt="Payment Icon" class="img-fluid">
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
@@ -209,9 +207,6 @@
 
     </div>
 </footer>
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>

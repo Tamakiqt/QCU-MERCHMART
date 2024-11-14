@@ -18,6 +18,7 @@ Group 2 - SAD Group Project.
 * Sumndad, Ryan
 * Torio, Vincent
 * Salimburat, Justin Karl
+* Apariz, John loulou
 
 
 # Development
