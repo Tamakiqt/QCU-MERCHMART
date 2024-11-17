@@ -319,7 +319,7 @@ function addToCart() {
         showNotification('Please login to add items to cart');
         
         setTimeout(() => {
-            window.location.href = 'login.php';
+            window.location.href = 'login.php';  // Redirect to login page
         }, 2000);
         return;
     }

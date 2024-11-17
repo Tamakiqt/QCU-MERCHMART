@@ -285,6 +285,10 @@ body {
 
 }
 
+
+
+
+
 /* Banner */
 
 .banner {
@@ -451,6 +455,122 @@ hr {
 }
 
 
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    width: fit-content;
+}
+
+.quantity-btn {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.quantity-btn:hover {
+    background-color: #a10202;
+}
+
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    border: none;
+    width: 60px;
+    text-align: center;
+    font-size: 1rem;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.quantity-btn:first-of-type {
+    border-right: 1px solid #ccc;
+}
+
+.quantity-input {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.quantity-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #007bff;
+}
+
+
+/* Modal Responsive Styles */
+.modal-dialog {
+    max-width: 800px;
+    margin: 1.75rem auto;
+}
+
+.modal-content {
+    border-radius: 12px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.product-preview-image {
+    background: #f8f9fa;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 15px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 1rem;
+    }
+    
+    .modal-body .row {
+        flex-direction: column;
+    }
+    
+    .modal-body .col-md-6 {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .product-preview-image {
+        height: 250px;
+    }
+    
+    .quantity-controls {
+        margin: 15px auto;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .modal-body {
+        padding: 15px;
+    }
+    
+    .product-preview-image {
+        height: 200px;
+    }
+    
+    #modalProductName {
+        font-size: 1.2rem;
+    }
+}
+
+
 
 
 .notification-container {
@@ -489,6 +609,8 @@ hr {
         opacity: 1;
     }
 }
+
+
 
 
 
@@ -910,4 +1032,38 @@ ol li strong {
 p {
     font-size: 0.95rem;
     color: #666;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.cart-item img {
+    width: 100%;
+    max-width: 75px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.quantity-controls button {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+.cart-footer {
+    border-top: 1px solid #dee2e6;
+    z-index: 1030;
+}
+
+#checkoutBtn {
+    background-color: #940202;
+    border: none;
+    font-weight: bold;
+}
+
+#checkoutBtn:hover {
+    background-color: #7a0202;
 }

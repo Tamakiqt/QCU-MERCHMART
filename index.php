@@ -92,37 +92,37 @@
 <section class="featured-products mt-5">
     <h2>Featured Products</h2>
     <div class="product-list">
-        <div class="product" onclick="showProductPreview(1, 'QCU Lanyard', '99.00', 'assets/images/bcs.PNG')">
+        <div class="product" onclick="showProductPreview(1, 'QCU Lanyard', '70.00', 'assets/images/bcs.PNG')">
             <div class="product-image">
                 <img src="assets/images/IMG_0052.PNG" alt="Product 1">
             </div>
             <hr>
-            <p class="price">₱99</p>
+            <p class="price">₱70</p>
             <p class="product-name">QCU Lanyard</p>
         </div>
-        <div class="product" onclick="showProductPreview(2, 'QCU Uniform', '599.00', 'assets/images/uniform.jpg')">
+        <div class="product" onclick="showProductPreview(2, 'Tumblers', '280.00', 'assets/images/tumblers.PNG')">
             <div class="product-image">
-                <img src="assets/images/uniform.jpg" alt="Product 2">
+                <img src="assets/images/tumblers.PNG" alt="Product 2">
             </div>
             <hr>
-            <p class="price">₱599</p>
-            <p class="product-name">QCU Uniform</p>
+            <p class="price">₱280</p>
+            <p class="product-name">Tumblers</p>
         </div>
-        <div class="product" onclick="showProductPreview(3, 'QCU Jacket', '799.00', 'assets/images/jacket.jpg')">
+        <div class="product" onclick="showProductPreview(3, 'Clips', '40.00', 'assets/images/clip.png')">
             <div class="product-image">
-                <img src="assets/images/jacket.jpg" alt="Product 3">
+                <img src="assets/images/clip.png" alt="Product 3">
             </div>
             <hr>
-            <p class="price">₱799</p>
-            <p class="product-name">QCU Jacket</p>
+            <p class="price">₱40</p>
+            <p class="product-name">Clips</p>
         </div>
-        <div class="product" onclick="showProductPreview(4, 'QCU Tumbler', '299.00', 'assets/images/tumbler.jpg')">
+        <div class="product" onclick="showProductPreview(4, 'T - Shirts', '250.00', 'assets/images/t-shirt.png')">
             <div class="product-image">
-                <img src="assets/images/tumbler.jpg" alt="Product 4">
+                <img src="assets/images/t-shirt.png" alt="Product 4">
             </div>
             <hr>
-            <p class="price">₱299</p>
-            <p class="product-name">QCU Tumbler</p>
+            <p class="price">₱250</p>
+            <p class="product-name">T - Shirts</p>
         </div>
     </div>
 </section>
@@ -144,13 +144,14 @@
                     <div class="col-md-6">
                         <h4 id="modalProductName"></h4>
                         <p id="modalProductPrice" class="text-danger fw-bold"></p>
-                        <div class="quantity-controls d-flex align-items-center gap-2 mb-3">
-                            <button class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity()">-</button>
-                            <input type="number" id="productQuantity" class="form-control form-control-sm w-25" value="1" min="1">
-                            <button class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity()">+</button>
+                        <div class="quantity-controls d-flex justify-content-center align-items-center mb-3">
+                                <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="productQuantity" class="quantity-input" value="1" min="1">
+                                <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+
+                            <button class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
                         </div>
-                        <button class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -184,7 +185,6 @@
     </div>
 </section>
 
-<!-- Daily Discoveries Section -->
 <!-- Daily Discoveries Section -->
 <section id="product-list1" class="dailydiscoveries-products mt-5">
     <h2>Daily Discoveries</h2>

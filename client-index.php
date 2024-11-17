@@ -1,3 +1,14 @@
+<?php
+session_start();
+include('server/dbcon.php');
+if(!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,16 +26,11 @@
 </head>
 <body>
 
-<?php
-if(isset($_SESSION['status'])) {
-    echo "<div class='alert alert-warning'>{$_SESSION['status']}</div>";
-    unset($_SESSION['status']);
-}
-?>
-
-
-     
-
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -48,10 +54,10 @@ if(isset($_SESSION['status'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                    <a class="nav-link" href="category-links">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Daily Discoveries</a>
+                    <a class="nav-link" href="daily-discoveries">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Shop</a>
@@ -68,10 +74,10 @@ if(isset($_SESSION['status'])) {
             </form>
 
             <div class="d-flex align-items-center" id="iconContainer"> 
-                <a href="login.html" class="login-icon" id="loginIcon">
+                <a href="my-account.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
                 </a>
-                <a href="cart.html" class="cart-icon" id="CartIcon">
+                <a href="cart.php" class="cart-icon" id="CartIcon">
                     <i class="bi bi-bag-heart"></i>
                 </a>
             </div>
@@ -94,39 +100,97 @@ if(isset($_SESSION['status'])) {
     </div>
 </section>
 
-<!-- Featured Products Section -->
+<!---Featured Products---->
+
 <section class="featured-products mt-5">
     <h2>Featured Products</h2>
     <div class="product-list">
-        <div class="product">
-            <img src="product1.jpg" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(1, 'QCU Lanyard', '70.00', 'assets/images/IMG_0052.PNG')">
+            <div class="product-image">
+                <img src="assets/images/IMG_0052.PNG" alt="QCU Lanyard">
+            </div>
+            <hr>
+            <p class="price">₱70</p>
+            <p class="product-name">QCU Lanyard</p>
         </div>
-        <div class="product">
-            <img src="product2.jpg" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(2, 'Tumblers', '280.00', 'assets/images/tumblers.PNG')">
+            <div class="product-image">
+                <img src="assets/images/tumblers.PNG" alt="Tumblers">
+            </div>
+            <hr>
+            <p class="price">₱280</p>
+            <p class="product-name">Tumblers</p>
         </div>
-        <div class="product">
-            <img src="product3.jpg" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(3, 'Clips', '40.00', 'assets/images/clip.png')">
+            <div class="product-image">
+                <img src="assets/images/clip.png" alt="Clips">
+            </div>
+            <hr>
+            <p class="price">₱40</p>
+            <p class="product-name">Clips</p>
         </div>
-        <div class="product">
-            <img src="product4.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(4, 'T - Shirts', '250.00', 'assets/images/t-shirt.png')">
+            <div class="product-image">
+                <img src="assets/images/t-shirt.png" alt="T-Shirts">
+            </div>
+            <hr>
+            <p class="price">₱250</p>
+            <p class="product-name">T - Shirts</p>
         </div>
     </div>
 </section>
 
+
+
+<!-- Product Preview Modal -->
+<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Item Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid product-preview-image" style="width: 100%; height: 300px; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div class="col-md-6">
+            <h4 id="modalProductName"></h4>
+            <p id="modalProductPrice" class="text-danger fw-bold"></p>
+            <div class="quantity-controls d-flex justify-content-center align-items-center mb-3">
+                <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                <input type="number" id="productQuantity" class="quantity-input" value="1" min="1">
+                <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
+            </div>
+            <button type="button" id="addToCartButton" class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Custom Notification -->
+<div id="custom-notification" class="notification-container" style="display: none;">
+    <div class="notification-content">
+        <i class="bi bi-cart"></i>
+        <span id="notification-message"></span>
+    </div>
+</div>
+
+
+
+
+
+
+
 <!-- Categories Section -->
-<section class="category my-5">
+<section id="category-links" class="category my-5">
     <h2>Categories</h2>
     <div class="category-links">
         <a href="lanyard.html">Lanyards</a>
@@ -139,33 +203,44 @@ if(isset($_SESSION['status'])) {
     </div>
 </section>
 
-<!-- Daily Dicoveries Section -->
-<section class="dailydiscoveries-products">
+<!-- Daily Discoveries Section -->
+<section id="product-list1" class="dailydiscoveries-products mt-5">
     <h2>Daily Discoveries</h2>
     <div class="product-list1">
-        <div class="product">
-            <img src="product7.jpg" alt="Product 4">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(5, 'QCU ID Lace', '50.00', 'assets/images/bcs.PNG')">
+            <div class="product-image">
+                <img src="assets/images/IMG_0052.PNG" alt="Product 1">
+            </div>
+            <hr>
+            <p class="price">₱50</p>
+            <p class="product-name">QCU ID Lace</p>
         </div>
-        <div class="product">
-            <img src="product8.jpg" alt="Product 5">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(6, 'QCU PE Uniform', '450.00', 'assets/images/beced.PNG')">
+            <div class="product-image">
+                <img src="assets/images/beced.PNG" alt="Product 2">
+            </div>
+            <hr>
+            <p class="price">₱450</p>
+            <p class="product-name">QCU PE Uniform</p>
         </div>
-        <div class="product">
-            <img src="product9.jpg" alt="Product 6">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(7, 'QCU Cap', '199.00', 'assets/images/bis.PNG')">
+            <div class="product-image">
+                <img src="assets/images/bis.PNG" alt="Product 3">
+            </div>
+            <hr>
+            <p class="price">₱199</p>
+            <p class="product-name">QCU Cap</p>
         </div>
-        <div class="product">
-            <img src="product10.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(8, 'QCU Mug', '149.00', 'assets/images/bsa.PNG')">
+            <div class="product-image">
+                <img src="assets/images/bsa.PNG" alt="Product 4">
+            </div>
+            <hr>
+            <p class="price">₱149</p>
+            <p class="product-name">QCU Mug</p>
         </div>
     </div>
 </section>
@@ -173,16 +248,19 @@ if(isset($_SESSION['status'])) {
 
 
 
+
+
 <!----FOOTER------>
 <footer class="mt-5 py-5">
     <div class="row">
-        <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-        <h5 class="pb-2">CUSTOMER SERVICE</h5>
-          <ul class="list-unstyled">
-             <li><a href="#">Help Center</a></li>
-             <li><a href="#">Payment Method</a></li>
-          </ul>    
-        </div>
+    <div class="footer-one col-lg-3 col-md-6 col-sm-12">
+    <h5 class="pb-2">CUSTOMER SERVICE</h5>
+    <ul class="list-unstyled">
+        <li><a href="help-center.html">Help Center</a></li>
+        <li><a href="payment-method.html">Payment Method</a></li>
+    </ul>    
+</div>
+
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">ABOUT MerchMart</h5>
@@ -193,10 +271,10 @@ if(isset($_SESSION['status'])) {
         </div>
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-         <h5 class="pb-2">ABOUT MerchMart</h5>
+         <h5 class="pb-2">PAYMENT</h5>
             <ul class="list-unstyled">
                 <li>
-                 <img src="https://via.placeholder.com/50" alt="Payment Icon" class="img-fluid">
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
@@ -223,5 +301,51 @@ if(isset($_SESSION['status'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
+
+<script>
+
+function showProductPreview(productId, name, price, image) {
+    const modal = document.getElementById('productPreviewModal');
+    modal.setAttribute('data-product-id', productId); // Store ID on modal itself
+    document.getElementById('modalProductName').textContent = name;
+    document.getElementById('modalProductPrice').textContent = '₱' + price;
+    document.getElementById('modalProductImage').src = image;
+    document.getElementById('productQuantity').value = 1;
+    
+    new bootstrap.Modal(modal).show();
+}
+
+function addToCart() {
+    const modal = document.getElementById('productPreviewModal');
+    const productId = modal.getAttribute('data-product-id'); // Get ID from modal
+    const quantity = document.getElementById('productQuantity').value;
+    const productName = document.getElementById('modalProductName').textContent;
+    const productPrice = document.getElementById('modalProductPrice').textContent.replace('₱', '').trim();
+    const productImage = document.getElementById('modalProductImage').src;
+
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('product_name', productName);
+    formData.append('price', productPrice);
+    formData.append('quantity', quantity);
+    formData.append('image_url', productImage);
+
+    fetch('add-to-cart.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        showNotification(`Added ${quantity} ${productName}(s) to cart`);
+        bootstrap.Modal.getInstance(modal).hide();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Error adding to cart');
+    });
+}
+
+</script>
+
 </body>
 </html>

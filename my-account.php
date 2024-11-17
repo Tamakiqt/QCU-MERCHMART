@@ -1,3 +1,10 @@
+<?php
+session_start();
+include('server/dbcon.php');  // Ensure session is started at the beginning
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +164,9 @@
     <li class="nav-item">
         <a class="nav-link text-dark nav-link-arrow" href="order-history.php" style="font-size: 1.1rem;">Order History</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark nav-link-arrow" href="order-history.php" style="font-size: 1.1rem;">Log Out</a>
+    </li>
 </ul>
 
         </div>
@@ -208,21 +218,113 @@
 
 
 
-<!-- Footer -->
-<footer class="mt-5 py-5 footer">
+<!----FOOTER------>
+<footer class="mt-5 py-5">
     <div class="row">
+    <div class="footer-one col-lg-3 col-md-6 col-sm-12">
+    <h5 class="pb-2">CUSTOMER SERVICE</h5>
+    <ul class="list-unstyled">
+        <li><a href="help-center.html">Help Center</a></li>
+        <li><a href="payment-method.html">Payment Method</a></li>
+    </ul>    
+</div>
+
+
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-            <h5 class="pb-2">About us</h5>
-            <p>Our company is committed to providing top-quality products and excellent customer service.</p>
+        <h5 class="pb-2">ABOUT MerchMart</h5>
+          <ul class="list-unstyled">
+             <li><a href="#">About us</a></li>
+             <li><a href="#">Privacy Policy</a></li>
+          </ul>    
         </div>
+
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-            <h5 class="pb-2">Contact Us</h5>
-            <p>Feel free to reach out to us via email or phone for any inquiries.</p>
+         <h5 class="pb-2">PAYMENT</h5>
+            <ul class="list-unstyled">
+                <li>
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
+                </li>
+            </ul>   
         </div>
+
+        <div class="footer-one col-lg-3 col-md-6 col-sm-12">
+        <h5 class="pb-2">FOLLOW US</h5>
+             <ul class="list-unstyled d-flex gap-2">
+                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-facebook"></i></a></li>
+                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-twitter"></i></a></li>
+                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-instagram"></i></a></li>
+             </ul>   
+        </div>
+
+        <hr class="footer-hr">
+            <div class="text-center py-3">
+                <p class="mb-0 text-white-50">&copy; MERCHMART ALL RIGHTS RESERVED 2024</p>
+            </div>
+
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
+
+<script>
+// Check if the user is logged in by checking the PHP session
+        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+        
+        function showNotification(message) {
+            const notification = document.getElementById('custom-notification');
+            const messageElement = document.getElementById('notification-message');
+            messageElement.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function addToCart() {
+            if (!isLoggedIn) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+                modal.hide();
+                
+                showNotification('Please login to add items to cart');
+                
+                setTimeout(() => {
+                    window.location.href = 'login.php';
+                }, 2000);
+                return;
+            }
+
+            const quantity = document.getElementById('productQuantity').value;
+            const productName = document.getElementById('modalProductName').textContent;
+
+            showNotification(`Added ${quantity} ${productName}(s) to cart`);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+            modal.hide();
+        }
+
+        function showProductPreview(productId, name, price, imageUrl) {
+            const modal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
+            
+            document.getElementById('modalProductName').textContent = name;
+            document.getElementById('modalProductPrice').textContent = `₱${price}`;
+            document.getElementById('modalProductImage').src = imageUrl;
+            document.getElementById('productQuantity').value = 1;
+            
+            modal.show();
+        }
+
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('productQuantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('productQuantity');
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        }
+    </script>
 </body>
 </html>
