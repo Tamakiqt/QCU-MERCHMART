@@ -15,8 +15,11 @@
 </head>
 <body>
 
-     
-
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -40,10 +43,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                    <a class="nav-link" href="category-links">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Daily Discoveries</a>
+                    <a class="nav-link" href="daily-discoveries">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Shop</a>
@@ -60,12 +63,10 @@
             </form>
 
             <div class="d-flex align-items-center" id="iconContainer"> 
-                <a href="login.html" class="login-icon" id="loginIcon">
+                <a href="login.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
                 </a>
-                <a href="cart.html" class="cart-icon" id="CartIcon">
-                    <i class="bi bi-bag-heart"></i>
-                </a>
+                
             </div>
         </div>
     </div>
@@ -86,39 +87,91 @@
     </div>
 </section>
 
-<!-- Featured Products Section -->
+<!---Featured Products---->
+
 <section class="featured-products mt-5">
     <h2>Featured Products</h2>
     <div class="product-list">
-        <div class="product">
-            <img src="product1.jpg" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(1, 'QCU Lanyard', '99.00', 'assets/images/bcs.PNG')">
+            <div class="product-image">
+                <img src="assets/images/IMG_0052.PNG" alt="Product 1">
+            </div>
+            <hr>
+            <p class="price">₱99</p>
+            <p class="product-name">QCU Lanyard</p>
         </div>
-        <div class="product">
-            <img src="product2.jpg" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(2, 'QCU Uniform', '599.00', 'assets/images/uniform.jpg')">
+            <div class="product-image">
+                <img src="assets/images/uniform.jpg" alt="Product 2">
+            </div>
+            <hr>
+            <p class="price">₱599</p>
+            <p class="product-name">QCU Uniform</p>
         </div>
-        <div class="product">
-            <img src="product3.jpg" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(3, 'QCU Jacket', '799.00', 'assets/images/jacket.jpg')">
+            <div class="product-image">
+                <img src="assets/images/jacket.jpg" alt="Product 3">
+            </div>
+            <hr>
+            <p class="price">₱799</p>
+            <p class="product-name">QCU Jacket</p>
         </div>
-        <div class="product">
-            <img src="product4.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(4, 'QCU Tumbler', '299.00', 'assets/images/tumbler.jpg')">
+            <div class="product-image">
+                <img src="assets/images/tumbler.jpg" alt="Product 4">
+            </div>
+            <hr>
+            <p class="price">₱299</p>
+            <p class="product-name">QCU Tumbler</p>
         </div>
     </div>
 </section>
 
+
+<!-- Product Preview Modal -->
+<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Item Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-6">
+                        <img id="modalProductImage" src="" alt="Product Image" class="img-fluid product-preview-image" style="width: 100%; height: 300px; object-fit: contain; border-radius: 8px;">
+                    </div>
+                    <div class="col-md-6">
+                        <h4 id="modalProductName"></h4>
+                        <p id="modalProductPrice" class="text-danger fw-bold"></p>
+                        <div class="quantity-controls d-flex align-items-center gap-2 mb-3">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity()">-</button>
+                            <input type="number" id="productQuantity" class="form-control form-control-sm w-25" value="1" min="1">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity()">+</button>
+                        </div>
+                        <button class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Notification -->
+<div id="custom-notification" class="notification-container" style="display: none;">
+    <div class="notification-content">
+        <i class="bi bi-exclamation-circle"></i>
+        <span id="notification-message"></span>
+    </div>
+</div>
+
+
+
+
+
+
 <!-- Categories Section -->
-<section class="category my-5">
+<section id="category-links" class="category my-5">
     <h2>Categories</h2>
     <div class="category-links">
         <a href="lanyard.html">Lanyards</a>
@@ -131,36 +184,50 @@
     </div>
 </section>
 
-<!-- Daily Dicoveries Section -->
-<section class="dailydiscoveries-products">
+<!-- Daily Discoveries Section -->
+<!-- Daily Discoveries Section -->
+<section id="product-list1" class="dailydiscoveries-products mt-5">
     <h2>Daily Discoveries</h2>
     <div class="product-list1">
-        <div class="product">
-            <img src="product7.jpg" alt="Product 4">
-            <h3>Product 1</h3>
-            <p>Category</p>
-            <p>Price</p>
+        <div class="product" onclick="showProductPreview(5, 'QCU ID Lace', '50.00', 'assets/images/bcs.PNG')">
+            <div class="product-image">
+                <img src="assets/images/IMG_0052.PNG" alt="Product 1">
+            </div>
+            <hr>
+            <p class="price">₱50</p>
+            <p class="product-name">QCU ID Lace</p>
         </div>
-        <div class="product">
-            <img src="product8.jpg" alt="Product 5">
-            <h3>Product 2</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(6, 'QCU PE Uniform', '450.00', 'assets/images/beced.PNG')">
+            <div class="product-image">
+                <img src="assets/images/beced.PNG" alt="Product 2">
+            </div>
+            <hr>
+            <p class="price">₱450</p>
+            <p class="product-name">QCU PE Uniform</p>
         </div>
-        <div class="product">
-            <img src="product9.jpg" alt="Product 6">
-            <h3>Product 3</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(7, 'QCU Cap', '199.00', 'assets/images/bis.PNG')">
+            <div class="product-image">
+                <img src="assets/images/bis.PNG" alt="Product 3">
+            </div>
+            <hr>
+            <p class="price">₱199</p>
+            <p class="product-name">QCU Cap</p>
         </div>
-        <div class="product">
-            <img src="product10.jpg" alt="Product 4">
-            <h3>Product 4</h3>
-            <p>Category</p>
-            <p>Price</p>
+
+        <div class="product" onclick="showProductPreview(8, 'QCU Mug', '149.00', 'assets/images/bsa.PNG')">
+            <div class="product-image">
+                <img src="assets/images/bsa.PNG" alt="Product 4">
+            </div>
+            <hr>
+            <p class="price">₱149</p>
+            <p class="product-name">QCU Mug</p>
         </div>
     </div>
 </section>
+
+
 
 
 
@@ -218,3 +285,5 @@
 <script src="assets/js/script.js"></script>
 </body>
 </html>
+
+

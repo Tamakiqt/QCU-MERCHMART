@@ -16,10 +16,10 @@
 <?php
     session_start();
     if (isset($_SESSION['status'])) {
-        echo '<div id="success-message" style="display: center; justify-content: center; align-items: center; background-color: #940202; color: white; padding: 10px 20px; border-radius: 8px; margin: 10px auto; width: fit-content; font-weight: bold; text-align: center;">' . $_SESSION['status'] . '</div>';
-        unset($_SESSION['status']);
+        echo '<div id="error-message" style="display: flex; justify-content: center; align-items: center; background-color: #940202; color: white; padding: 10px 20px; border-radius: 8px; margin: 10px auto; width: fit-content; font-weight: bold; text-align: center;">' . $_SESSION['status'] . '</div>'; 
+        unset($_SESSION['status']);  
     }
-?>
+    ?>
 
 
 
@@ -46,9 +46,9 @@
 <div class="mx-auto container">
 <div class="mx-auto" style="max-width: 400px;">
 <div style="border: 1px solid #940202;  padding: 30px;  border-radius: 12px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-    <form method="POST" action="server/login.php">
+    <form method="POST" action="logincode.php">
         <div class="form-group">
-            <input type="text" class="form-control" name="email_or_name" placeholder="Email or Username" required>
+            <input type="text" class="form-control" name="email" placeholder="Email or Username" required>
         </div>
     
         <div class="form-group">
@@ -56,7 +56,7 @@
         </div>
     
         <div class="form-group">
-            <input type="submit" class="btn" id="login-btn" value="Login">
+            <input type="submit" class="btn" name="login_btn" id="login-btn" value="Login">
         </div>
     </form>
     

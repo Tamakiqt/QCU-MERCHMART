@@ -264,3 +264,94 @@ function updateProfileImage(event) {
         reader.readAsDataURL(file);
     }
 }
+
+
+
+ 
+  // Wait for the DOM content to load before adding the event listeners
+  document.addEventListener("DOMContentLoaded", function () {
+      // Get all the navbar links
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      // Add click event listener for each link
+      navLinks.forEach(link => {
+          link.addEventListener('click', function(event) {
+              // Prevent default anchor link behavior
+              event.preventDefault();
+
+              // Get the target section's id from the href attribute
+              const targetId = link.getAttribute('href').substring(1); // Remove '#' from href
+
+              // Find the target element based on its ID
+              const targetElement = document.getElementById(targetId);
+
+              // If the target section exists, scroll to it
+              if (targetElement) {
+                  window.scrollTo({
+                      top: targetElement.offsetTop - document.querySelector('.navbar').offsetHeight, // Offset for navbar height
+                      behavior: 'smooth' // Smooth scroll
+                  });
+              }
+          });
+      });
+  });
+
+
+
+  function showNotification(message) {
+    const notification = document.getElementById('custom-notification');
+    const messageElement = document.getElementById('notification-message');
+    messageElement.textContent = message;
+    notification.style.display = 'block';
+    
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+function addToCart() {
+    const isLoggedIn = false;
+    
+    if (!isLoggedIn) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+        modal.hide();
+        
+        showNotification('Please login to add items to cart');
+        
+        setTimeout(() => {
+            window.location.href = 'login.php';
+        }, 2000);
+        return;
+    }
+    
+    const quantity = document.getElementById('productQuantity').value;
+    const productName = document.getElementById('modalProductName').textContent;
+    
+    showNotification(`Added ${quantity} ${productName}(s) to cart`);
+    const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+    modal.hide();
+}
+
+function showProductPreview(productId, name, price, imageUrl) {
+    const modal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
+    
+    document.getElementById('modalProductName').textContent = name;
+    document.getElementById('modalProductPrice').textContent = `₱${price}`;
+    document.getElementById('modalProductImage').src = imageUrl;
+    document.getElementById('productQuantity').value = 1;
+    
+    modal.show();
+}
+
+function increaseQuantity() {
+    const quantityInput = document.getElementById('productQuantity');
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+}
+
+function decreaseQuantity() {
+    const quantityInput = document.getElementById('productQuantity');
+    if (parseInt(quantityInput.value) > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+

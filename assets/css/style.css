@@ -84,6 +84,56 @@ body {
     gap: 10px;
 }
 
+.navbar-toggler {
+    border: none;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    background-image: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after,
+.navbar-toggler-icon {
+    width: 25px;
+    height: 2px;
+    background-color: #940202;
+    display: block;
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+    content: '';
+    transform: translateY(-8px);
+}
+
+.navbar-toggler-icon::after {
+    content: '';
+    transform: translateY(8px);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+    background-color: transparent;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+    transform: rotate(45deg);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+    transform: rotate(-45deg);
+}
+
+
 
 .navbar-nav {
     flex-direction: column;
@@ -239,32 +289,29 @@ body {
 
 .banner {
     background-image: url('https://tamakiqt.github.io/QCU-MERCHMART/assets/images/SAMPLE-BANNER-BG%20(2).jpg');
-    background-size: cover;         /* Ensures the image covers the entire banner */
-    background-position: center;    /* Centers the image */
-    background-repeat: no-repeat;   /* Prevents the image from repeating */
-    padding: 100px 50px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 100px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
+    flex-wrap: wrap;
 }
-
-
 
 .banner-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 50%;
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    text-align: left;
 }
-
 
 .banner h1 {
     font-family: 'Impact', sans-serif;
-    font-size: 7rem;
-    align-self: center;
+    font-size: clamp(3rem, 8vw, 7rem);
     line-height: 1.2;
     color: white;
     text-transform: uppercase;
@@ -272,24 +319,24 @@ body {
     margin: 0;
 }
 
-
 .banner-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
     text-align: center;
-    max-width: 40%;
 }
 
 .banner-text p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     margin-bottom: 20px;
     color: white;
+    max-width: 600px;
+    margin: 20px auto;
 }
 
 .banner-text button {
-    padding: 10px 20px;
-    width: 50%;
+    padding: 12px 30px;
+    width: min(200px, 80%);
     font-weight: bold;
     font-size: 1rem;
     color: #000;
@@ -297,20 +344,33 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: center; 
+    transition: all 0.3s ease;
+    margin-top: 20px;
 }
-
 
 .banner-text button:hover {
     background-color: #a10202;
     color: #fff;
-    font-weight: bold;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .banner {
+        padding: 80px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner-content, .banner-text {
+        max-width: 100%;
+        padding: 10px;
+    }
 }
 
 
+
 .featured-products {
-    padding: 50px 20px 70px 20px; /* Increased bottom padding */
+    padding: 50px 20px 70px 20px;
     text-align: center;
 }
 
@@ -318,7 +378,7 @@ body {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 30px;
-    text-align: center;
+    color: #000;
 }
 
 .product-list {
@@ -330,40 +390,106 @@ body {
 
 .product {
     width: 250px;
-    padding: 20px 20px 30px 20px; /* Adjust bottom padding if needed */
-    background: #717171;
+    padding: 20px;
+    background: #a10202;
     text-align: center;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 20px; /* Increased margin-bottom to create more spacing */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    color: #ffffff;
 }
 
-.product img {
+.product:hover {
+    transform: scale(1.05);
+}
+
+.product-image {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-list .product img {
     width: 100%;
-    height: auto;
+    height: 200px;
+    object-fit: contain;
     margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 10px;
 }
 
-.product h3 {
+.product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    background: #ffffff;
+    object-fit: contain;
+    
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #ffffff;
+    margin: 15px 0;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 5px 0;
+    color: #ffffff;
+}
+
+.product-name {
     font-size: 1.2rem;
-    margin-bottom: 5px;
+    margin: 5px 0;
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
-    header nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .banner h1 {
-        font-size: 2rem;
-    }
 
-    .product-list {
-        flex-direction: column;
-        align-items: center;
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.notification-content {
+    background-color: #940202;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification-content i {
+    font-size: 20px;
+    color: white;
+}
+
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
     }
 }
+
 
 
 
@@ -610,24 +736,25 @@ footer li a:hover{
 /* Categories Section */
 .category {
     text-align: center;
+    padding: 20px 0;
 }
 
 .category h2 {
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 0;
-    text-align: center; 
+    text-align: center;
 }
 
 .category .category-links {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 3rem; 
+    gap: 2rem;
     box-sizing: border-box;
     margin-top: 1rem;
-    margin-bottom: 120px;
+    margin-bottom: 40px;
 }
 
 .category .category-links a {
@@ -636,99 +763,102 @@ footer li a:hover{
     text-decoration: none;
     font-weight: 500;
     padding: 0.3rem 0.6rem;
-    border: 2px solid #fff; 
-    border-radius: 10px; 
+    border: 2px solid #fff;
+    border-radius: 10px;
     background-color: #a10202;
-    transition: color 0.3s, transform 0.3s, border-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .category .category-links a:hover {
-    color: #fff; 
-    transform: scale(1.1); 
-    border-color: #a10202; 
+    color: #fff;
+    transform: scale(1.1);
+    border-color: #a10202;
 }
 
 @media screen and (max-width: 768px) {
     .category h2 {
-        font-size: 1.6rem; 
+        font-size: 1.6rem;
     }
 
     .category .category-links {
-        gap: 2rem; 
-        margin-bottom: 60px; 
+        gap: 1.5rem;
+        margin-bottom: 30px;
     }
 
     .category .category-links a {
-        font-size: 1rem; 
-        padding: 0.4rem 0.8rem; 
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 
 @media screen and (max-width: 480px) {
     .category h2 {
-        font-size: 1.4rem; 
+        font-size: 1.4rem;
     }
 
     .category .category-links {
-        gap: 1.5rem; 
-        margin-bottom: 40px; 
+        gap: 1rem;
+        margin-bottom: 20px;
     }
 
     .category .category-links a {
-        font-size: 0.9rem; 
+        font-size: 0.9rem;
         padding: 0.3rem 0.6rem;
     }
 }
 
-/* For Daily Discoveries */
 
+/* For Daily Discoveries */
 .dailydiscoveries-products {
+    padding: 50px 20px 70px 20px;
     text-align: center;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
 }
 
 .dailydiscoveries-products h2 {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 30px;
-    text-align: center; /* or 'right' to align right */
-   
+    text-align: center;
 }
-
 
 .product-list1 {
     display: flex;
+    justify-content: center;
+    gap: 2rem;
     flex-wrap: wrap;
-    justify-content: center; /* Centers the products horizontally */
-    gap: 2rem; /* Space between each product */
 }
 
-.product {
-    background-color: #717171;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 100px;
-    width: 200px;
+.product-list1 .product {
+    width: 250px;
+    padding: 20px 20px 30px 20px;
+    background: #a10202;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a light shadow for better visual separation */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
 }
 
-.product img {
+.product-list1 .product img {
     width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 10px;
 }
 
-@media (max-width: 768px) {
-    
-    .product-list1 {
-        flex-direction: column;
-        align-items: center;
-    }
+.product-list1 .product h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #ffffff;
 }
+
+.product-list1 .product p {
+    color: #ffffff;
+}
+
 
 
 /* Main Product Image */

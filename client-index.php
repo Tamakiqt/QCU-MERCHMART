@@ -15,6 +15,14 @@
 </head>
 <body>
 
+<?php
+if(isset($_SESSION['status'])) {
+    echo "<div class='alert alert-warning'>{$_SESSION['status']}</div>";
+    unset($_SESSION['status']);
+}
+?>
+
+
      
 
 <!-- Top Header -->
