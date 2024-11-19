@@ -268,33 +268,7 @@ function updateProfileImage(event) {
 
 
  
-  // Wait for the DOM content to load before adding the event listeners
-  document.addEventListener("DOMContentLoaded", function () {
-      // Get all the navbar links
-      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-      
-      // Add click event listener for each link
-      navLinks.forEach(link => {
-          link.addEventListener('click', function(event) {
-              // Prevent default anchor link behavior
-              event.preventDefault();
-
-              // Get the target section's id from the href attribute
-              const targetId = link.getAttribute('href').substring(1); // Remove '#' from href
-
-              // Find the target element based on its ID
-              const targetElement = document.getElementById(targetId);
-
-              // If the target section exists, scroll to it
-              if (targetElement) {
-                  window.scrollTo({
-                      top: targetElement.offsetTop - document.querySelector('.navbar').offsetHeight, // Offset for navbar height
-                      behavior: 'smooth' // Smooth scroll
-                  });
-              }
-          });
-      });
-  });
+ 
 
 
 
@@ -353,5 +327,96 @@ function decreaseQuantity() {
     if (parseInt(quantityInput.value) > 1) {
         quantityInput.value = parseInt(quantityInput.value) - 1;
     }
+}
+
+// Edit and delete function fo my cart 
+
+function toggleEdit(itemId) {
+    const cartItem = document.getElementById('cartItem-' + itemId);
+    const editQuantityInput = document.getElementById('edit-quantity-' + itemId);
+    const displayQuantity = document.getElementById('display-quantity-' + itemId);
+    const decreaseButton = document.getElementById('decrease-' + itemId);
+    const increaseButton = document.getElementById('increase-' + itemId);
+
+    // Toggle edit mode
+    const isEditing = editQuantityInput.style.display === 'inline';
+
+    if (isEditing) {
+        // If it's already in editing mode, turn it off
+        editQuantityInput.style.display = 'none';
+        displayQuantity.style.display = 'inline';
+        decreaseButton.disabled = true;
+        increaseButton.disabled = true;
+    } else {
+        // If it's not in editing mode, enable editing
+        editQuantityInput.style.display = 'inline';
+        displayQuantity.style.display = 'none';
+        decreaseButton.disabled = false;
+        increaseButton.disabled = false;
+    }
+}
+
+// Function to update the quantity when clicked
+function updateQuantity(itemId, action) {
+    const editQuantityInput = document.getElementById('edit-quantity-' + itemId);
+    let currentQuantity = parseInt(editQuantityInput.value);
+
+    // Increase or decrease the quantity
+    if (action === 'increase') {
+        currentQuantity++;
+    } else if (action === 'decrease' && currentQuantity > 1) {
+        currentQuantity--;
+    }
+
+    // Update the quantity input field
+    editQuantityInput.value = currentQuantity;
+    const displayQuantity = document.getElementById('display-quantity-' + itemId);
+    displayQuantity.textContent = currentQuantity;
+
+    // Send AJAX request to update quantity in the database
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-update/edit_cart.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        let response = JSON.parse(xhr.responseText);
+        if (response.status === 'success') {
+            console.log('Quantity updated');
+        } else {
+            alert(response.message); // Show error message if failed
+        }
+    };
+    xhr.send('item_id=' + itemId + '&quantity=' + currentQuantity);
+}
+
+// Attach event listener to the edit button
+document.querySelectorAll('.edit-button').forEach(button => {
+    button.addEventListener('click', function () {
+        const itemId = this.closest('.cart-item1').getAttribute('data-item-id');
+        toggleEdit(itemId);
+    });
+});
+
+// Delete cart 
+
+function removeFromCart(itemId) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'cart-update/remove_cart.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Add an event listener to handle the response
+    xhr.onload = function () {
+        let response = JSON.parse(xhr.responseText);
+
+        if (response.status === 'success') {
+            // Remove the item from the DOM
+            document.getElementById('cartItem-' + itemId).remove();
+            alert('Item removed successfully');
+        } else {
+            alert(response.message || 'Failed to remove item');
+        }
+    };
+
+    // Send the request with item_id
+    xhr.send('item_id=' + itemId);
 }
 

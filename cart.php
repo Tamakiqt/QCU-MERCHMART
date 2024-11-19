@@ -10,7 +10,6 @@ if(!isset($_SESSION['user_id'])) {
 ?>
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +24,6 @@ if(!isset($_SESSION['user_id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
 </head>
 <body>
 
@@ -42,8 +40,6 @@ if(!isset($_SESSION['user_id'])) {
                 <span class="text-blue">M</span><span class="text-black">ERCH</span><span class="text-red">M</span><span class="text-yellow">ART</span>
             </span>
         </a>
-
-        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -83,96 +79,95 @@ if(!isset($_SESSION['user_id'])) {
     </div>
 </nav>
 
-
-
-
-
 <!-- Cart Header -->
 <div class="cart-header py-3 fixed-top" style="top: 110px; background-color: #940202; border-bottom: 1px solid #ddd;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-        <!-- Back Button and Title "My Cart" -->
         <div class="d-flex align-items-center">
-            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem;">
+            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem; color: black;">
                 <i class="bi bi-arrow-left"></i>
             </a>
             <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">MY CART</h5>
         </div>
-        
-        <!-- Edit Button with Icon -->
-        <button class="btn btn-link edit-button" aria-label="Edit">
-            <i class="bi bi-pencil-square"></i>
-        </button>
-        </button>
     </div>
 </div>
 
-
-
- 
 <!-- Cart Section -->
-<div class="cart-items" id="cartItemsContainer">
+<div class="cart-items" id="cartItemsContainer" style="margin-top: 150px;">
     <?php
     $user_id = $_SESSION['user_id'];
-    $query = "SELECT * FROM cart WHERE user_id = ?";
-    
+    $query = "SELECT 
+                id,
+                product_name,
+                price,
+                quantity,
+                total,
+                image_url
+              FROM cart 
+              WHERE user_id = ?";
+
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $total = 0;
 
-    while($item = $result->fetch_assoc()) {
-        $subtotal = $item['price'] * $item['quantity'];
-        $total += $subtotal;
-        ?>
-        <div class="cart-item mb-3 p-4 border rounded d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center" style="width: 60%;">
-                <img src="<?php echo htmlspecialchars($item['image_url']); ?>" 
-                     alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
-                     class="img-fluid me-4" 
-                     style="max-width: 100px; height: auto;">
-                
-                <h5 class="fw-bold mb-0"><?php echo htmlspecialchars($item['product_name']); ?></h5>
-            </div>
-            
-            <div class="price-section me-4">
-                <span class="fw-bold">₱<?php echo number_format($subtotal, 2); ?></span>
-            </div>
-            
-            <div class="quantity-controls mx-4">
-                <button onclick="updateQuantity(<?php echo $item['id']; ?>, 'decrease')" 
-                        class="btn btn-sm btn-outline-secondary">-</button>
-                <span class="mx-3 fw-bold"><?php echo $item['quantity']; ?></span>
-                <button onclick="updateQuantity(<?php echo $item['id']; ?>, 'increase')" 
-                        class="btn btn-sm btn-outline-secondary">+</button>
-            </div>
-            
-            <button onclick="removeFromCart(<?php echo $item['id']; ?>)" 
-                    class="btn btn-danger btn-sm">
-                <i class="bi bi-trash"></i> Remove
-            </button>
+    if ($result->num_rows > 0) {
+        while($item = $result->fetch_assoc()) {
+            $total += $item['total'];
+    ?>
+    <div class="cart-item1 mb-3 p-4 border rounded d-flex align-items-center justify-content-between" id="cartItem-<?php echo $item['id']; ?>" data-item-id="<?php echo $item['id']; ?>">
+        <div class="d-flex align-items-center" style="width: 40%;">
+            <img src="<?php echo htmlspecialchars($item['image_url']); ?>" 
+                 alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
+                 class="img-fluid me-4" 
+                 style="max-width: 100px; height: auto;">
+            <h5 class="fw-bold mb-0"><?php echo htmlspecialchars($item['product_name']); ?></h5>
+        </div>
+
+        <div class="price-section me-4">
+            <span class="fw-bold">₱<?php echo number_format($item['price'], 2); ?></span><br>
+        </div>
+
+        <div class="quantity-controls1 mx-4">
+            <button class="btn btn-sm btn-outline-secondary decrease-button" id="decrease-<?php echo $item['id']; ?>" disabled onclick="updateQuantity(<?php echo $item['id']; ?>, 'decrease')">-</button>
+            <span id="quantity-<?php echo $item['id']; ?>" class="mx-3 fw-bold">
+                <input type="number" id="edit-quantity-<?php echo $item['id']; ?>" value="<?php echo $item['quantity']; ?>" style="display: none;" min="1"/>
+                <span id="display-quantity-<?php echo $item['id']; ?>" style="display: inline;"><?php echo $item['quantity']; ?></span>
+            </span>
+            <button class="btn btn-sm btn-outline-secondary increase-button" id="increase-<?php echo $item['id']; ?>" disabled onclick="updateQuantity(<?php echo $item['id']; ?>, 'increase')">+</button>
+        </div>
+
+        <button class="btn btn-link edit-button" onclick="toggleEdit(<?php echo $item['id']; ?>)">
+            <i class="bi bi-pencil-square ml-3"></i>
+        </button>
+
+        <button onclick="removeFromCart(<?php echo $item['id']; ?>)" class="btn btn-danger btn-sm d-flex justify-content-center align-items-center" style="width: 100px;">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </div>
+    <?php } ?>
+    <?php } else { ?>
+        <div class="text-center p-5 font-weight-bold">
+            <h4>Your cart is empty</h4>
         </div>
     <?php } ?>
 </div>
 
-
-    <!-- Cart Summary Section -->
-        <div class="cart-summary py-4" style="background-color: #f3f3f3;">
-            <div class="container-fluid">
-            <div style="margin-right: 50px; display: flex; justify-content: flex-end;">
-                    <div class="d-flex align-items-center">
-                        <div class="total-section me-4">
-                            <h5 class="mb-0" style="font-weight: bold;">Total: <span class="text-danger">₱<?php echo number_format($total, 2); ?></span></h5>
-                        </div>
-                        <button class="btn px-4" id="checkoutBtn" style="background-color: #940202; color: white; border: none; font-weight: bold;">
-                            Checkout
-                        </button>
-                    </div>
+<!-- Cart Summary Section -->
+<div class="cart-summary py-4" style="background-color: #f3f3f3;">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-end">
+            <div class="d-flex align-items-right">
+                <div class="total-section me-4">
+                    <h5 class="mb-0" style="font-weight: bold;">Total: <span class="text-danger">₱<?php echo number_format($total, 2); ?></span></h5>
                 </div>
+                <button class="btn px-4" id="checkoutBtn" style="background-color: #940202; color: white; border: none; font-weight: bold;">
+                    Checkout
+                </button>
             </div>
         </div>
-
-
+    </div>
+</div> 
 
 
 
@@ -226,4 +221,5 @@ if(!isset($_SESSION['user_id'])) {
 <script src="assets/js/script.js"></script>
 </body>
 </html>
+
 

@@ -165,7 +165,7 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
         <a class="nav-link text-dark nav-link-arrow" href="order-history.php" style="font-size: 1.1rem;">Order History</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark nav-link-arrow" href="order-history.php" style="font-size: 1.1rem;">Log Out</a>
+        <a class="nav-link text-dark nav-link-arrow" href="login.php" style="font-size: 1.1rem;">Log Out</a>
     </li>
 </ul>
 

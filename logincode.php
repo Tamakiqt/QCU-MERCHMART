@@ -25,7 +25,7 @@ if(isset($_POST['login_btn'])) {
                     // If password is correct, start the session and set session variables
                     $_SESSION['user_id'] = $row['id'];
                     $_SESSION['user_email'] = $row['email'];
-                    $_SESSION['user_name'] = $row['name'];  // Use 'name' here
+                    $_SESSION['user_name'] = $row['name'];  
 
                     // Redirect to the client-index.php page with a success message
                     $_SESSION['status'] = "You are logged in successfully!";
