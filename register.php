@@ -44,7 +44,7 @@
 <div style="border: 1px solid #940202;  padding: 30px;  border-radius: 12px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     <form id="register-form" method="POST" action="register-back.php">
         <div class="form-group">
-            <input type="text" class="form-control" id="register-name" name="name" placeholder="Username / Email" required>
+            <input type="text" class="form-control" id="register-name" name="name" placeholder="Username" required>
         </div>
         <div class="form-group">
             <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
@@ -96,13 +96,14 @@
 <!----FOOTER------>
 <footer class="mt-5 py-5">
     <div class="row">
-        <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-        <h5 class="pb-2">CUSTOMER SERVICE</h5>
-          <ul class="list-unstyled">
-             <li><a href="#">Help Center</a></li>
-             <li><a href="#">Payment Method</a></li>
-          </ul>    
-        </div>
+    <div class="footer-one col-lg-3 col-md-6 col-sm-12">
+    <h5 class="pb-2">CUSTOMER SERVICE</h5>
+    <ul class="list-unstyled">
+        <li><a href="help-center.html">Help Center</a></li>
+        <li><a href="payment-method.html">Payment Method</a></li>
+    </ul>    
+</div>
+
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">ABOUT MerchMart</h5>
@@ -113,10 +114,10 @@
         </div>
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-         <h5 class="pb-2">ABOUT MerchMart</h5>
+         <h5 class="pb-2">PAYMENT</h5>
             <ul class="list-unstyled">
                 <li>
-                 <img src="https://via.placeholder.com/50" alt="Payment Icon" class="img-fluid">
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>

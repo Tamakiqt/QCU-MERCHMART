@@ -96,15 +96,16 @@
  </section>
  
  <!----FOOTER------>
- <footer class="mt-5 py-5">
+<footer class="mt-5 py-5">
     <div class="row">
-        <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-        <h5 class="pb-2">CUSTOMER SERVICE</h5>
-          <ul class="list-unstyled">
-             <li><a href="#">Help Center</a></li>
-             <li><a href="#">Payment Method</a></li>
-          </ul>    
-        </div>
+    <div class="footer-one col-lg-3 col-md-6 col-sm-12">
+    <h5 class="pb-2">CUSTOMER SERVICE</h5>
+    <ul class="list-unstyled">
+        <li><a href="help-center.html">Help Center</a></li>
+        <li><a href="payment-method.html">Payment Method</a></li>
+    </ul>    
+</div>
+
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">ABOUT MerchMart</h5>
@@ -115,10 +116,10 @@
         </div>
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
-         <h5 class="pb-2">ABOUT MerchMart</h5>
+         <h5 class="pb-2">PAYMENT</h5>
             <ul class="list-unstyled">
                 <li>
-                 <img src="https://via.placeholder.com/50" alt="Payment Icon" class="img-fluid">
+                 <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
