@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +19,8 @@
         html {
             scroll-behavior: smooth;
         }
+        
+
     </style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
@@ -48,7 +51,7 @@
                     <a class="nav-link" href="daily-discoveries">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Shop</a>
+                    <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Favorites</a>
@@ -91,8 +94,11 @@
                         <li class="category-item">
                             <a href="#" class="category-link" data-category="uniforms">School Uniforms</a>
                             <ul class="subcategory-menu">
-                                <li><a href="#" data-category="pe">PE Uniform</a></li>
+                                <li><a href="#" data-category="lace">QCU Lanyards</a></li>
                                 <li><a href="#" data-category="college">College Uniform</a></li>
+                                <li><a href="#" data-category="pe">PE Uniform</a></li>
+                                <li><a href="#" data-category="department">Department Shirts</a></li>
+                                <li><a href="#" data-category="department">Department Shirts</a></li>
                                 <li><a href="#" data-category="department">Department Shirts</a></li>
                             </ul>
                         </li>
@@ -121,11 +127,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Products Grid -->
         <div class="col-lg-10 col-md-9">
             <!-- Sort Options -->
-            <div class="sort-section">
+            <div class="sort-section mb-4">
                 Sort by: 
                 <select id="sortSelect" class="form-select d-inline-block w-auto ms-2">
                     <option value="popular">Popular</option>
@@ -137,44 +142,37 @@
             </div>
 
             <!-- Products Grid -->
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="products-container">
-                    
-             </div> 
+            <div class="row row-cols-md-3 row-cols-lg-5 g-3" id="products-container">
+                <!-- Products will be dynamically inserted here -->
             </div>
+        </div>
         </div>
     </div>
 </div>
 
+
 <!-- Product Preview Modal -->
-<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-labelledby="productPreviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header border-bottom">
-                <h5 class="modal-title" id="productPreviewModalLabel">Item Preview</h5>
+            <div class="modal-header">
+                <h5 class="modal-title">Item Preview</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-0">
-                <div class="row g-0">
-                    <!-- Left side - Image -->
-                    <div class="col-md-6">
-                        <div class="preview-image-container">
-                            <img id="previewImage" src="" alt="" class="img-fluid">
-                        </div>
-                    </div>
-                    <!-- Right side - Details -->
-                    <div class="col-md-6 p-4">
-                        <h5 id="previewName" class="mb-3"></h5>
-                        <p id="previewPrice" class="text-danger mb-4"></p>
-                        
-                        <div class="quantity-selector d-flex align-items-center mb-4">
-                            <button class="btn btn-quantity" onclick="updateQuantity(-1)">-</button>
-                            <input type="text" class="form-control quantity-input" id="quantityInput" value="1" min="1">
-                            <button class="btn btn-quantity" onclick="updateQuantity(1)">+</button>
-                        </div>
-                        
-                        <button class="btn btn-add-cart w-100" onclick="addToCart()">
-                            Add to Cart
-                        </button>
+            <div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid product-preview-image" style="width: 100%; height: 300px; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div class="col-md-6">
+            <h4 id="modalProductName"></h4>
+            <p id="modalProductPrice" class="text-danger fw-bold"></p>
+            <div class="quantity-controls d-flex justify-content-center align-items-center mb-3">
+                <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                <input type="number" id="productQuantity" class="quantity-input" value="1" min="1">
+                <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
+             </div>
+            <button type="button" id="addToCartButton" class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -243,7 +241,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
 <script src="assets/js/shop.js"></script>
-<script src="assets/js/productPreview.js"></script>
 </body>
 </html>
+
 

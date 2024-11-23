@@ -60,7 +60,7 @@ if(!isset($_SESSION['user_id'])) {
                     <a class="nav-link" href="daily-discoveries">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Shop</a>
+                    <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Favorites</a>

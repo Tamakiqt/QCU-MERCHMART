@@ -1,18 +1,88 @@
-// Shop
 
-document.addEventListener('DOMContentLoaded', function() {
     // Products array
     const products = [
         {
             id: 1,
-            name: "QCU PE Uniform",
-            price: 450,
-            originalPrice: 599,
-            image: "assets/images/beced.PNG",
-            category: "pe",
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
         },
+
         {
             id: 2,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 3,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 4,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 5,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 6,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 7,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 8,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+        
+        {
+            id: 9,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 10,
+            name: "QCU Lanyards",
+            price: 70,
+            image: "assets/images/bcs.PNG",
+            category: "lace",
+        },
+
+        {
+            id: 11,
             name: "QCU ID Lace",
             price: 50,
             originalPrice: 75,
@@ -23,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4.5
         },
         {
-            id: 3,
+            id: 12,
             name: "QCU Cap",
             price: 199,
             originalPrice: 299,
@@ -32,21 +102,89 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "accessories",
             sales: "300+ sold",
             rating: 4.6
-        },
-        {
-            id: 4,
-            name: "QCU Mug",
-            price: 149,
-            originalPrice: 199,
-            discount: "25%",
-            image: "assets/images/bsa.PNG",
-            category: "accessories",
-            sales: "200+ sold",
-            rating: 4.7
         }
+        
         // Add more products as needed
     ];
 
+// Move these functions outside the DOMContentLoaded event
+function handleProductClick(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        showProductPreview(product);
+    }
+}
+
+function updateQuantity(change) {
+    const input = document.getElementById('productQuantity');
+    let value = parseInt(input.value) + change;
+    if (value >= 1) {
+        input.value = value;
+    }
+}
+
+
+
+
+function showNotification(message) {
+    const notification = document.getElementById('custom-notification');
+    const messageElement = document.getElementById('notification-message');
+    messageElement.textContent = message;
+    notification.style.display = 'block';
+    
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+function addToCart() {
+    const isLoggedIn = false;
+    
+    if (!isLoggedIn) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+        modal.hide();
+        
+        showNotification('Please login to add items to cart');
+        
+        setTimeout(() => {
+            window.location.href = 'login.php';  // Redirect to login page
+        }, 2000);
+        return;
+    }
+    
+    const quantity = document.getElementById('productQuantity').value;
+    const productName = document.getElementById('modalProductName').textContent;
+    
+    showNotification(`Added ${quantity} ${productName}(s) to cart`);
+    const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+    modal.hide();
+}
+
+function showProductPreview(productId, name, price, imageUrl) {
+    const modal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
+    
+    document.getElementById('modalProductName').textContent = name;
+    document.getElementById('modalProductPrice').textContent = `₱${price}`;
+    document.getElementById('modalProductImage').src = imageUrl;
+    document.getElementById('productQuantity').value = 1;
+    
+    modal.show();
+}
+
+function increaseQuantity() {
+    const quantityInput = document.getElementById('productQuantity');
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+}
+
+function decreaseQuantity() {
+    const quantityInput = document.getElementById('productQuantity');
+    if (parseInt(quantityInput.value) > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+
+// DOM Content Loaded Event
+document.addEventListener('DOMContentLoaded', function() {
     // Display products function
     function displayProducts(filteredProducts = products) {
         const container = document.getElementById('products-container');
@@ -54,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Products container not found!');
             return;
         }
-
+    
         if (filteredProducts.length === 0) {
             container.innerHTML = `
                 <div class="no-products d-flex justify-content-center align-items-center text-center" style="height: 70vh; margin-left: 50px;">
@@ -65,10 +203,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>`;
             return;
         }
-
+    
         container.innerHTML = filteredProducts.map(product => `
             <div class="col">
-                <div class="card h-100">
+                <div class="card h-100" onclick="handleProductClick(${product.id})" style="cursor: pointer;">
                     ${product.discount ? `<div class="badge bg-danger position-absolute top-0 start-0 m-2">-${product.discount}</div>` : ''}
                     <div class="image-container position-relative">
                         <img src="${product.image}" 
@@ -89,9 +227,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `).join('');
- }
+    }
 
-    // Search functionality
+         // Search functionality
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('keyup', () => {
@@ -105,6 +243,12 @@ document.addEventListener('DOMContentLoaded', function() {
             displayProducts(filteredProducts);
         });
     }
+
+
+
+
+
+
 
     // Category filtering
     document.querySelectorAll('.category-link, .subcategory-menu a').forEach(link => {
@@ -143,6 +287,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Price js 
+
+
+
+
+
 
 
 

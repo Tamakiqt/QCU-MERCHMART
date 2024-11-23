@@ -394,7 +394,7 @@ body {
 
 .product {
     width: 250px;
-    padding: 20px;
+    padding: 25px;
     background: #a10202;
     text-align: center;
     border-radius: 8px;
@@ -952,7 +952,6 @@ footer li a:hover{
 
 .product-list1 .product {
     width: 250px;
-    padding: 20px 20px 30px 20px;
     background: #a10202;
     text-align: center;
     border-radius: 8px;
@@ -1411,3 +1410,33 @@ p {
     background-color: #940202 !important;
     color: #fff;
 }
+
+#products-container {
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 1rem;
+    min-height: auto; 
+    height: auto;
+    justify-content: space-around;
+}
+
+
+@media (min-width: 768px) {
+    #products-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    #products-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    #products-container {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
