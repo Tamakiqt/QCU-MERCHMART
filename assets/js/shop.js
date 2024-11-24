@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="no-products d-flex justify-content-center align-items-center text-center" style="height: 70vh; margin-left: 50px;">
                     <div>
                         <i class="fas fa-frown fa-3x text-muted"></i>
-                        <p class="text-muted mt-3">No products found <br> Try different or more general keywords</p>
+                        <p class="text-muted mt-2">No products found <br> Try different or more general keywords</p>
                     </div>
                 </div>`;
             return;

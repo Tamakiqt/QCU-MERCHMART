@@ -270,7 +270,7 @@ function updateProfileImage(event) {
  
  
 
-
+// Notif for client-index.php
 
   function showNotification(message) {
     const notification = document.getElementById('custom-notification');
@@ -421,94 +421,3 @@ function removeFromCart(itemId) {
 }
 
 
-// Shop 
-// Single DOMContentLoaded event handler
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded');
-
-    // Products array
-    const products = [
-        {
-            id: 1,
-            name: "QCU PE Uniform",
-            price: 599,
-            originalPrice: 999,
-            discount: "40%",
-            image: "assets/images/bcs.PNG",
-            category: "pe",
-            sales: "1K+ sold",
-            rating: 4.8
-        },
-        // Add more products here
-    ];
-
-    // Display function
-    function displayProducts(filteredProducts = products) {
-        const container = document.getElementById('products-container');
-        if (!container) {
-            console.error('Products container not found!');
-            return;
-        }
-        
-        container.innerHTML = filteredProducts.map(product => `
-            <div class="col">
-                <div class="card">
-                    <img src="${product.image}" 
-                         class="card-img-top" 
-                         alt="${product.name}"
-                         onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <div class="price-section">
-                            <span class="text-danger fw-bold">₱${product.price.toFixed(2)}</span>
-                            ${product.originalPrice ? `
-                                <small class="text-decoration-line-through text-muted ms-2">₱${product.originalPrice.toFixed(2)}</small>
-                            ` : ''}
-                        </div>
-                        <div class="mt-2">
-                            <small class="text-muted">⭐ ${product.rating} | ${product.sales}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Category event listeners
-    const categoryLinks = document.querySelectorAll('.category-link, .subcategory-menu a');
-    if (categoryLinks) {
-        categoryLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const category = e.target.dataset.category;
-                const filteredProducts = category === 'all' 
-                    ? products 
-                    : products.filter(product => product.category === category);
-                displayProducts(filteredProducts);
-            });
-        });
-    }
-
-    // Sort event listener
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
-            let sortedProducts = [...products];
-            switch(e.target.value) {
-                case 'priceLow':
-                    sortedProducts.sort((a, b) => a.price - b.price);
-                    break;
-                case 'priceHigh':
-                    sortedProducts.sort((a, b) => b.price - a.price);
-                    break;
-                case 'topSales':
-                    sortedProducts.sort((a, b) => parseInt(b.sales) - parseInt(a.sales));
-                    break;
-            }
-            displayProducts(sortedProducts);
-        });
-    }
-
-    // Initial display
-    displayProducts();
-});

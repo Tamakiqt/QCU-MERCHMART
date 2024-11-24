@@ -1440,3 +1440,116 @@ p {
     }
 }
 
+/* ABOUT US */
+
+.team-section {
+    padding: 0 auto;
+}
+
+
+.team-member {
+    margin-bottom: 30px;
+}
+
+
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+.team-member img:hover {
+    border-color: #940202;
+    cursor: pointer;
+}
+
+.member-name {
+    margin-top: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.member-position {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.about-header {
+    padding: 2rem 0;
+    margin-top: 50px;
+    width: 100%;
+}
+
+.letter-spaced {
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* If you want to ensure it's centered on all screen sizes */
+.about-header h2 {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* About us header */
+.container2 h2 {
+    margin-top: 25px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.container2 p {
+    text-align: center;
+    max-width: 1000px;
+    padding-bottom: 20px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: #333;
+}
+
+.about-divider {
+    border: 0;
+    height: 1px;
+    background-color: #000;
+    width: 100%;  
+    margin: 30px 0;  
+    padding: 0; 
+}
+
+/* Optional: If you need to control the line's container */
+.container2 {
+    max-width: 100%;  /* Allow container to be full width */
+    padding: 0;  /* Remove container padding if needed */
+}
+
+.about-text {
+    max-width: 90%;  /* For larger screens */
+    margin: 0 auto;
+    line-height: 1.6;
+    padding: 0 15px;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+    .about-text {
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 992px) {
+    .about-text {
+        max-width: 70%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .about-text {
+        max-width: 60%;
+    }
+}
