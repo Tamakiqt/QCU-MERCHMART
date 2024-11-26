@@ -421,3 +421,57 @@ function removeFromCart(itemId) {
 }
 
 
+
+// Password 
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('register-form');
+    const passwordInput = document.getElementById('register-password');
+    const confirmPasswordInput = document.getElementById('register-confirm-password');
+
+    function validatePassword(password) {
+        // Password requirements regex
+        const minLength = 8;
+        const maxLength = 12;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*]/.test(password);
+        
+        if (password.length < minLength || password.length > maxLength) {
+            return 'Password must be between 8 and 12 characters';
+        }
+        if (!hasUpperCase) {
+            return 'Password must contain at least one uppercase letter';
+        }
+        if (!hasLowerCase) {
+            return 'Password must contain at least one lowercase letter';
+        }
+        if (!hasNumbers) {
+            return 'Password must contain at least one number';
+        }
+        if (!hasSpecialChar) {
+            return 'Password must contain at least one special character (!@#$%^&*)';
+        }
+        return '';
+    }
+
+    form.addEventListener('submit', function(e) {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        // Validate password
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            e.preventDefault();
+            alert(passwordError);
+            return;
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match');
+            return;
+        }
+    });
+});

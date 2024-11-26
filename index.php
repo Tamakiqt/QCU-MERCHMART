@@ -40,7 +40,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse align-items-center" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
@@ -56,11 +56,6 @@
                 </li>
             </ul>
 
-            <!-- Search Bar -->
-            <form class="d-flex search-bar" role="search">
-                <input type="search" class="form-control me-2" placeholder="Search" aria-label="Search">
-                <i class="fas fa-search"></i>
-            </form>
 
             <div class="d-flex align-items-center" id="iconContainer"> 
                 <a href="login.php" class="login-icon" id="loginIcon">
@@ -170,23 +165,8 @@
 
 
 
-
-<!-- Categories Section -->
-<section id="category-links" class="category my-5">
-    <h2>Categories</h2>
-    <div class="category-links">
-        <a href="lanyard.html">Lanyards</a>
-        <a href="#">Uniforms</a>
-        <a href="#">Jackets</a>
-        <a href="#">Umbrella</a>
-        <a href="#">Tumbler</a>
-        <a href="#">T-shirts</a>
-        <a href="#">Accessories</a>
-    </div>
-</section>
-
 <!-- Daily Discoveries Section -->
-<section id="product-list1" class="dailydiscoveries-products mt-5">
+<section id="product-list1" class="dailydiscoveries-products">
     <h2>Daily Discoveries</h2>
     <div class="product-list1">
         <div class="product" onclick="showProductPreview(5, 'QCU ID Lace', '50.00', 'assets/images/bcs.PNG')">

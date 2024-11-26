@@ -8,7 +8,27 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
-require 'vendor/autoload.php';  // Use ../ if register-back.php is inside a subfolder
+require 'vendor/autoload.php';  
+
+// Add the validation function here
+function validatePassword($password) {
+    if (strlen($password) < 8 || strlen($password) > 12) {
+        return false;
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        return false;
+    }
+    if (!preg_match('/[!@#$%^&*]/', $password)) {
+        return false;
+    }
+    return true;
+}
 
 
 function sendemail_verify($name, $email,$verify_token)
@@ -75,6 +95,21 @@ if(isset($_POST['register_btn']))
     $password = $_POST['password'];
     $confirmpassword = $_POST['confirmpassword'];
     $verify_token = md5(rand());
+
+
+    // Check if passwords match
+    if ($password !== $confirmpassword) {
+        $_SESSION['status'] = "Passwords do not match";
+        header("Location: register.php");
+        exit();
+    }
+
+    // Validate password requirements
+    if (!validatePassword($password)) {
+        $_SESSION['status'] = "Password must be 8-12 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)";
+        header("Location: register.php");
+        exit();
+    }
 
     // Email exist or not
 

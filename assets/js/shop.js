@@ -3,105 +3,98 @@
     const products = [
         {
             id: 1,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science Computer Science (BCS)",
             price: 70,
             image: "assets/images/bcs.PNG",
-            category: "lace",
+            category: "lace"
         },
 
         {
             id: 2,
-            name: "QCU Lanyards",
+            name: "Bachelor of Early Childhood Education (BECED)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/beced.PNG",
+            category: "lace"
         },
 
         {
             id: 3,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Information Systems (BIS)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bis.PNG",
+            category: "lace"
         },
 
         {
             id: 4,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Accountancy (BSA)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsa.PNG",
+            category: "lace"
         },
 
         {
             id: 5,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Computer Engineering (BSCPE)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bscpe.PNG",
+            category: "lace"
         },
 
         {
             id: 6,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Electronics Engineering (BSECE)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsece.PNG",
+            category: "lace"
         },
 
         {
             id: 7,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Entrepreneurship (BSENTREP)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsentrep.PNG",
+            category: "lace"
         },
 
         {
             id: 8,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Industrial Engineering (BSIE)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsie.PNG",
+            category: "lace"
         },
         
         {
             id: 9,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Information Technology (BSIT)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsit.PNG",
+            category: "lace"
         },
 
         {
             id: 10,
-            name: "QCU Lanyards",
+            name: "Bachelor of Science in Management Accounting (BSMA)",
             price: 70,
-            image: "assets/images/bcs.PNG",
-            category: "lace",
+            image: "assets/images/bsma.PNG",
+            category: "lace"
         },
 
         {
             id: 11,
-            name: "QCU ID Lace",
+            name: "Jacket",
             price: 50,
-            originalPrice: 75,
-            discount: "33%",
-            image: "assets/images/IMG_0052.PNG",
-            category: "accessories",
-            sales: "500+ sold",
-            rating: 4.5
+            image: "assets/images/jacket.png",
+            category: "jackets"
         },
         {
             id: 12,
-            name: "QCU Cap",
+            name: "CBAA Shirt",
             price: 199,
-            originalPrice: 299,
-            discount: "33%",
-            image: "assets/images/bis.PNG",
-            category: "accessories",
-            sales: "300+ sold",
-            rating: 4.6
+            image: "assets/images/cbaa.png",
+            category: "college"
+           
         }
         
         // Add more products as needed
@@ -183,72 +176,70 @@ function decreaseQuantity() {
     }
 }
 
-// DOM Content Loaded Event
-document.addEventListener('DOMContentLoaded', function() {
-    // Display products function
-    function displayProducts(filteredProducts = products) {
-        const container = document.getElementById('products-container');
-        if (!container) {
-            console.error('Products container not found!');
-            return;
-        }
-    
-        if (filteredProducts.length === 0) {
-            container.innerHTML = `
-                <div class="no-products d-flex justify-content-center align-items-center text-center" style="height: 70vh; margin-left: 50px;">
+// Move displayProducts function outside of DOMContentLoaded
+function displayProducts(filteredProducts = products) {
+    const container = document.getElementById('products-container');
+    if (!container) {
+        console.error('Products container not found!');
+        return;
+    }
+
+    // Clear existing content
+    container.innerHTML = '';
+
+    if (filteredProducts.length === 0) {
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="no-products d-flex justify-content-center align-items-center text-center" style="height: 70vh;">
                     <div>
-                        <i class="fas fa-frown fa-3x text-muted"></i>
-                        <p class="text-muted mt-2">No products found <br> Try different or more general keywords</p>
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No products found</p>
+                        <p class="text-muted small">Try different keywords or check your spelling</p>
                     </div>
-                </div>`;
-            return;
-        }
-    
+                </div>
+            </div>`;
+        return;
+    }
+
+    // Display filtered products
         container.innerHTML = filteredProducts.map(product => `
             <div class="col">
                 <div class="card h-100" onclick="handleProductClick(${product.id})" style="cursor: pointer;">
-                    ${product.discount ? `<div class="badge bg-danger position-absolute top-0 start-0 m-2">-${product.discount}</div>` : ''}
                     <div class="image-container position-relative">
                         <img src="${product.image}" 
-                             class="card-img-top" 
-                             alt="${product.name}"
-                             onerror="this.src='https://via.placeholder.com/150'">
+                            class="card-img-top" 
+                            alt="${product.name}"
+                            onerror="this.src='https://via.placeholder.com/150'">
                         <div class="image-line"></div>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
+                        <h5 class="card-title" title="${product.name}">${product.name}</h5>
                         <div class="price-section">
                             <span class="text-danger fw-bold">₱${product.price.toFixed(2)}</span>
-                            ${product.originalPrice ? `
-                                <small class="text-decoration-line-through text-muted ms-2">₱${product.originalPrice.toFixed(2)}</small>
-                            ` : ''}
                         </div>
                     </div>
                 </div>
             </div>
         `).join('');
-    }
+}
 
-         // Search functionality
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        searchInput.addEventListener('keyup', () => {
-            const query = searchInput.value.toLowerCase();
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase().trim();
 
             const filteredProducts = products.filter(product => 
                 product.name.toLowerCase().includes(query) || 
-                product.category.toLowerCase().includes(query)
+                (product.category && product.category.toLowerCase().includes(query))
             );
 
             displayProducts(filteredProducts);
+            console.log('Search query:', query);
+            console.log('Filtered products:', filteredProducts);
         });
     }
-
-
-
-
-
-
 
     // Category filtering
     document.querySelectorAll('.category-link, .subcategory-menu a').forEach(link => {
@@ -275,7 +266,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     sortedProducts.sort((a, b) => b.price - a.price);
                     break;
                 case 'topSales':
-                    sortedProducts.sort((a, b) => parseInt(b.sales) - parseInt(a.sales));
+                    sortedProducts.sort((a, b) => {
+                        const aSales = parseInt(a.sales) || 0;
+                        const bSales = parseInt(b.sales) || 0;
+                        return bSales - aSales;
+                    });
                     break;
             }
             displayProducts(sortedProducts);
@@ -285,6 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial display
     displayProducts();
 });
+
+
 
 // Price js 
 

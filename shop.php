@@ -58,16 +58,6 @@
                 </li>
             </ul>
 
-            <!-- Search Bar -->
-            <form class="d-flex search-bar" role="search" onsubmit="return false;">
-                <input type="search" 
-                    id="searchInput" 
-                    class="form-control me-2" 
-                    placeholder="Search" 
-                    aria-label="Search">
-                <i class="fas fa-search"></i>
-            </form>
-
 
             <div class="d-flex align-items-center" id="iconContainer"> 
                 <a href="login.php" class="login-icon" id="loginIcon">
@@ -87,27 +77,33 @@
             <div class="shop-sidebar">
                 <div class="categories-section">
                 <h5 class="categories-header">
-                <i class="bi bi-grid-3x3-gap-fill me-2"></i>
-                All Categories
-            </h5>
+                    <a href="shop.php" style="text-decoration: none; color: inherit;">
+                        <i class="bi bi-grid-3x3-gap-fill me-2"></i>
+                    </a>
+                    All Categories
+                </h5>
                     <ul class="category-menu">
                         <li class="category-item">
                             <a href="#" class="category-link" data-category="uniforms">School Uniforms</a>
                             <ul class="subcategory-menu">
                                 <li><a href="#" data-category="lace">QCU Lanyards</a></li>
-                                <li><a href="#" data-category="college">College Uniform</a></li>
-                                <li><a href="#" data-category="pe">PE Uniform</a></li>
+                                <li><a href="#" data-category="college">QCU School Uniform</a></li>
+                                <li><a href="#" data-category="pe">QCU P.E Uniformm</a></li>
+                                <li><a href="#" data-category="jackets">QCU Jackets</a></li>
                                 <li><a href="#" data-category="department">Department Shirts</a></li>
-                                <li><a href="#" data-category="department">Department Shirts</a></li>
-                                <li><a href="#" data-category="department">Department Shirts</a></li>
+                                <li><a href="#" data-category="shirts">QCU T-Shirts</a></li>
+                                <li><a href="#" data-category="holder">QCU ID Holder</a></li>
                             </ul>
                         </li>
                         <li class="category-item">
-                            <a href="#" class="category-link" data-category="supplies">School Supplies</a>
+                            <a href="#" class="category-link" data-category="supplies">School Necessities</a>
                             <ul class="subcategory-menu">
-                                <li><a href="#" data-category="notebooks">Notebooks</a></li>
-                                <li><a href="#" data-category="writing">Writing Materials</a></li>
-                                <li><a href="#" data-category="art">Art Supplies</a></li>
+                                <li><a href="#" data-category="clip">Hair Clips</a></li>
+                                <li><a href="#" data-category="clutcher">Hair Clutchers</a></li>
+                                <li><a href="#" data-category="tumblers">Tumblers</a></li>
+                                <li><a href="#" data-category="tissue">Tissue Paper</a></li>
+                                <li><a href="#" data-category="umbrella">Umbrella</a></li>
+                                <li><a href="#" data-category="wipes">Wet Wipes</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -129,16 +125,30 @@
         </div>
         <!-- Products Grid -->
         <div class="col-lg-10 col-md-9">
-            <!-- Sort Options -->
-            <div class="sort-section mb-4">
-                Sort by: 
-                <select id="sortSelect" class="form-select d-inline-block w-auto ms-2">
-                    <option value="popular">Popular</option>
-                    <option value="latest">Latest</option>
-                    <option value="topSales">Top Sales</option>
-                    <option value="priceLow">Price: Low to High</option>
-                    <option value="priceHigh">Price: High to Low</option>
-                </select>
+     
+
+                    <!--Sort--->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="sort-section">
+                    Sort by: 
+                    <select id="sortSelect" class="form-select d-inline-block w-auto ms-2">
+                        <option value="popular">Popular</option>
+                        <option value="latest">Latest</option>
+                        <option value="topSales">Top Sales</option>
+                        <option value="priceLow">Price: Low to High</option>
+                        <option value="priceHigh">Price: High to Low</option>
+                    </select>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="shop-search-bar">
+                    <input type="search" 
+                     id="searchInput"
+                        class="form-control" 
+                        placeholder="Search" 
+                        aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </div>
             </div>
 
             <!-- Products Grid -->
