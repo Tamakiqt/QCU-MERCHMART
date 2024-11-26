@@ -1684,6 +1684,7 @@ p {
     border-radius: 5px;
     overflow: hidden;
     margin-right: 100px;
+
 }
 
 .shop-search-bar input[type="search"] {
@@ -1708,7 +1709,7 @@ p {
     .shop-search-bar {
         width: 100%;  /* Full width on smaller screens */
         margin-right: 0;  /* Remove right margin */
-        margin-top: 10px; /* Add some space from elements above */
+        margin-top: 25px; /* Add some space from elements above */
     }
 
     .d-flex.justify-content-between {

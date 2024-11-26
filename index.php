@@ -40,7 +40,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse align-items-center" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
@@ -78,7 +78,7 @@
     </div>
     <div class="banner-text">
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
-        <button>Shop Now</button>
+        <button onclick="window.location.href='shop.php';">Shop Now</button>
     </div>
 </section>
 

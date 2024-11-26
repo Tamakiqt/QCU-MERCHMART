@@ -67,12 +67,6 @@ if(!isset($_SESSION['user_id'])) {
                 </li>
             </ul>
 
-            <!-- Search Bar -->
-            <form class="d-flex search-bar" role="search">
-                <input type="search" class="form-control me-2" placeholder="Search" aria-label="Search">
-                <i class="fas fa-search"></i>
-            </form>
-
             <div class="d-flex align-items-center" id="iconContainer"> 
                 <a href="my-account.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
@@ -185,23 +179,6 @@ if(!isset($_SESSION['user_id'])) {
 
 
 
-
-
-
-
-<!-- Categories Section -->
-<section id="category-links" class="category my-5">
-    <h2>Categories</h2>
-    <div class="category-links">
-        <a href="lanyard.html">Lanyards</a>
-        <a href="#">Uniforms</a>
-        <a href="#">Jackets</a>
-        <a href="#">Umbrella</a>
-        <a href="#">Tumbler</a>
-        <a href="#">T-shirts</a>
-        <a href="#">Accessories</a>
-    </div>
-</section>
 
 <!-- Daily Discoveries Section -->
 <section id="product-list1" class="dailydiscoveries-products mt-5">
