@@ -19,9 +19,91 @@
         html {
             scroll-behavior: smooth;
         }
-        
+
+        /* Quantity controls */
+        .quantity-controls {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 39px;
+        }
+
+        .quantity-btn {
+            border: none;
+            background: white;
+            padding: 0 12px;
+            font-size: 16px;
+            height: 100%;
+            color: #000;
+        }
+
+        .quantity-input {
+            border: none;
+            width: 60px;
+            height: 100%;
+            text-align: center;
+            border-left: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            border-radius: 0;
+            padding: 0;
+        }
+
+        /* Text styles */
+        .text-muted {
+            color: #6c757d !important;
+            font-size: 14px;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            height: 40px;
+            border-radius: 4px;
+            font-weight: normal;
+        }
+
+        .add-cart {
+            border: 1px solid #dee2e6;
+            background: white;
+            color: black;
+        }
+
+        .buy-now {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .add-to-favorites {
+            border: 1px solid #dee2e6;
+            background: white;
+            color: black;
+        }
+
+        .action-btn:hover {
+            background-color: #940202; 
+            color: white; 
+        }
+
+        .add-cart:hover {
+            background-color: #940202; 
+            color: white; 
+        }
+
+        .add-to-favorites:hover {
+            background-color: #940202; 
+            color: #fff; 
+        }
+
+
+        /* Remove spinners from number input */
+        .quantity-input::-webkit-outer-spin-button,
+        .quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
     </style>
+
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -163,26 +245,77 @@
 
 <!-- Product Preview Modal -->
 <div class="modal fade" id="productPreviewModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Item Preview</h5>
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Product View</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-header-border" style="border-bottom: 1px solid #dee2e6; margin: 0 10px;"></div>
             <div class="modal-body">
-    <div class="row">
-        <div class="col-md-6">
-            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid product-preview-image" style="width: 100%; height: 300px; object-fit: contain; border-radius: 8px;">
-        </div>
-        <div class="col-md-6">
-            <h4 id="modalProductName"></h4>
-            <p id="modalProductPrice" class="text-danger fw-bold"></p>
-            <div class="quantity-controls d-flex justify-content-center align-items-center mb-3">
-                <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
-                <input type="number" id="productQuantity" class="quantity-input" value="1" min="1">
-                <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
-             </div>
-            <button type="button" id="addToCartButton" class="btn btn-danger w-100" onclick="addToCart()">Add to Cart</button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Main Product Image -->
+                        <div class="main-image-container mb-3">
+                            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid product-preview-image">
+                            <button class="favorite-btn" onclick="toggleFavorite()">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 id="modalProductName" class="mb-3 text-danger"></h4>
+                        <p id="modalProductDescription" class="text-muted small mb-3"></p>
+                        <p id="modalProductPrice" class="text-danger fw-bold fs-4 mb-4"></p>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="mb-0" style="min-width: 45px;">Size</label>
+                                <div class="size-options d-flex gap-2">
+                                    <button class="size-btn">S</button>
+                                    <button class="size-btn active">M</button>
+                                    <button class="size-btn">L</button>
+                                    <button class="size-btn">XL</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Variant Selection -->
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <label class="mb-0" style="min-width: 60px;">Variant</label>
+                                <select class="form-select w-auto">
+                                    <option>Select</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Selection -->
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <label class="mb-0" style="min-width: 60px;">Quantity</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="quantity-controls d-flex align-items-center">
+                                        <button type="button" class="btn quantity-btn" onclick="decreaseQuantity()">-</button>
+                                        <input type="number" id="productQuantity" class="form-control quantity-input" value="1" min="1">
+                                        <button type="button" class="btn quantity-btn" onclick="increaseQuantity()">+</button>
+                                    </div>
+                                    <span class="text-muted">Stocks: <span id="modalProductStock">20</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <div class="d-flex gap-2 mb-2">
+                                <button type="button" class="btn flex-grow-1 action-btn add-cart" onclick="addToCart()">Add to cart</button>
+                                <button type="button" class="btn flex-grow-1 action-btn buy-now">Buy Now</button>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary add-to-favorites mt-2 w-100" onclick="addToFavorites()">
+                                &#9829; Add to Favorites
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

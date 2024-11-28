@@ -104,9 +104,12 @@
 function handleProductClick(productId) {
     const product = products.find(p => p.id === productId);
     if (product) {
-        showProductPreview(product);
+        const modal = document.getElementById('productPreviewModal');
+        modal.setAttribute('data-product-id', product.id);
+        showProductPreview(product.name, product.price, product.image, product.category);
     }
 }
+    
 
 function updateQuantity(change) {
     const input = document.getElementById('productQuantity');
@@ -130,39 +133,160 @@ function showNotification(message) {
     }, 3000);
 }
 
-function addToCart() {
-    const isLoggedIn = false;
+function addToCart(product) {
+    // Log the product data for debugging
+    console.log('Product data:', product);
+
+    const formData = new FormData();
+    formData.append('product_id', product.id);
+    formData.append('product_name', product.name);
+    formData.append('price', product.price);
+    formData.append('quantity', product.quantity);
+    formData.append('image_url', product.image);
+
+    // Log the FormData (for debugging)
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    fetch('add-to-cart.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server response:', data); // Debug log
+        if (data.status === 'success') {
+            showNotification(`Added ${product.quantity} ${product.name}(s) to cart`);
+            
+            // Close modal if it's open
+            const modal = document.getElementById('productPreviewModal');
+            if (modal) {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
+            
+            // Update cart icon
+            updateCartIcon();
+        } else {
+            showNotification(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Error adding to cart');
+    });
+}
+
+function updateCartIcon() {
+    fetch('get-cart-count.php')
+        .then(response => response.json())
+        .then(data => {
+            const cartIcon = document.getElementById('CartIcon');
+            if (cartIcon) {
+                cartIcon.setAttribute('data-count', data.count);
+                cartIcon.classList.toggle('has-items', data.count > 0);
+            }
+        })
+        .catch(error => console.error('Error updating cart icon:', error));
+}
+
+ //Add to favorites
+
+ function addToFavorites() {
+    const isClientShop = window.location.pathname.includes('client-shop.php');
     
-    if (!isLoggedIn) {
+    if (isClientShop) {
+        const productId = document.getElementById('productPreviewModal').getAttribute('data-product-id');
+        const productName = document.getElementById('modalProductName').textContent;
+        const productPrice = document.getElementById('modalProductPrice').textContent.replace('₱', '').trim();
+        const productImage = document.getElementById('modalProductImage').src;
+
+        // Send data to PHP endpoint
+        fetch('add-to-favorites.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                product_name: productName,
+                price: productPrice,
+                image_url: productImage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(`${productName} added to favorites`);
+                // Update heart icon
+                const heartIcon = document.querySelector('.favorite-btn i');
+                heartIcon.classList.remove('bi-heart');
+                heartIcon.classList.add('bi-heart-fill');
+            } else {
+                showNotification(data.message);
+            }
+            const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
+            modal.hide();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error adding to favorites');
+        });
+    } else {
         const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
         modal.hide();
         
-        showNotification('Please login to add items to cart');
+        showNotification('Please login to add items to favorites');
         
         setTimeout(() => {
-            window.location.href = 'login.php';  // Redirect to login page
+            window.location.href = 'login.php';
         }, 2000);
-        return;
+    }
+}
+        
+
+function showProductPreview(name, price, imageUrl, category) {
+    const modal = document.getElementById('productPreviewModal');
+    const modalInstance = new bootstrap.Modal(modal);
+    const sizeSelection = document.querySelector('.modal-body .mb-3:has(.size-options)');
+    const descriptionElement = document.getElementById('modalProductDescription');
+    
+    // Define categories that should show size options
+    const categoriesWithSize = ['college', 'pe', 'jackets', 'department', 'shirts'];
+    
+    // Show/hide size selection based on category
+    if (sizeSelection) {
+        sizeSelection.style.display = categoriesWithSize.includes(category) ? 'block' : 'none';
     }
     
-    const quantity = document.getElementById('productQuantity').value;
-    const productName = document.getElementById('modalProductName').textContent;
-    
-    showNotification(`Added ${quantity} ${productName}(s) to cart`);
-    const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
-    modal.hide();
-}
-
-function showProductPreview(productId, name, price, imageUrl) {
-    const modal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
-    
-    document.getElementById('modalProductName').textContent = name;
-    document.getElementById('modalProductPrice').textContent = `₱${price}`;
-    document.getElementById('modalProductImage').src = imageUrl;
-    document.getElementById('productQuantity').value = 1;
-    
-    modal.show();
-}
+     // Update modal content
+     document.getElementById('modalProductName').textContent = name;
+     document.getElementById('modalProductPrice').textContent = `₱${price}`;
+     document.getElementById('modalProductImage').src = imageUrl;
+     document.getElementById('productQuantity').value = 1;
+     
+     // Set description based on category
+     if (descriptionElement) {
+         switch(category) {
+             case 'lace':
+                 descriptionElement.textContent = "The QCU Merch Lanyard collection combines style and durability, offering functional and fashionable lanyards for everyday or special use.";
+                 break;
+             case 'college':
+                 descriptionElement.textContent = "The QCU Merch Uniform is a versatile blue shirt with a stylish design, suitable for both casual and professional settings, offering modern aesthetics and quality.";
+                 break;
+             case 'jackets':
+                 descriptionElement.textContent = "This stylish jacket, with its prominent logo and sleek design, offers comfort, durability, and versatility for casual or semi-formal occasions, blending fashion with functionality.";
+                 break;
+             default:
+                 descriptionElement.textContent = '';
+         }
+     }
+     
+     modalInstance.show();
+ }
 
 function increaseQuantity() {
     const quantityInput = document.getElementById('productQuantity');
@@ -173,6 +297,16 @@ function decreaseQuantity() {
     const quantityInput = document.getElementById('productQuantity');
     if (parseInt(quantityInput.value) > 1) {
         quantityInput.value = parseInt(quantityInput.value) - 1;
+    }
+}
+
+function updateCartIcon() {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const cartIcon = document.getElementById('CartIcon');
+    if (cartIcon) {
+        const itemCount = cartItems.reduce((total, item) => total + parseInt(item.quantity), 0);
+        cartIcon.setAttribute('data-count', itemCount);
+        cartIcon.classList.toggle('has-items', itemCount > 0);
     }
 }
 
@@ -278,6 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initial display
+    updateCartIcon();
     displayProducts();
 });
 

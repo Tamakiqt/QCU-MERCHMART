@@ -54,16 +54,16 @@ if(!isset($_SESSION['user_id'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
-                    <a class="nav-link" href="category-links">Home</a>
+                    <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="daily-discoveries">About</a>
+                    <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="shop.php">Shop</a>
+                    <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Favorites</a>
+                    <a class="nav-link" href="favorite.php">Favorites</a>
                 </li>
             </ul>
 

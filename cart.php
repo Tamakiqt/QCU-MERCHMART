@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once('server/dbcon.php');
-
-// Check if user is logged in
+include('server/dbcon.php');
 if(!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -21,12 +21,26 @@ if(!isset($_SESSION['user_id'])) {
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+        z-index: 1030;
+        }
+
+        .cart-header {
+        z-index: 1020; 
+        }
+
+
+    </style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -40,6 +54,8 @@ if(!isset($_SESSION['user_id'])) {
                 <span class="text-blue">M</span><span class="text-black">ERCH</span><span class="text-red">M</span><span class="text-yellow">ART</span>
             </span>
         </a>
+
+        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,24 +64,18 @@ if(!isset($_SESSION['user_id'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
-                    <a class="nav-link" href="category-links">Home</a>
+                    <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="daily-discoveries">About</a>
+                    <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Shop</a>
+                    <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Favorites</a>
+                    <a class="nav-link" href="client-favorites.php">Favorites</a>
                 </li>
             </ul>
-
-            <!-- Search Bar -->
-            <form class="d-flex search-bar" role="search">
-                <input type="search" class="form-control me-2" placeholder="Search" aria-label="Search">
-                <i class="fas fa-search"></i>
-            </form>
 
             <div class="d-flex align-items-center" id="iconContainer"> 
                 <a href="my-account.php" class="login-icon" id="loginIcon">
