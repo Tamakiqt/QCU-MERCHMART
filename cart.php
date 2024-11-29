@@ -93,7 +93,7 @@ if(!isset($_SESSION['user_id'])) {
 <div class="cart-header py-3 fixed-top" style="top: 110px; background-color: #940202; border-bottom: 1px solid #ddd;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem; color: black;">
+            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem; color: black; margin-left: 10px;">
                 <i class="bi bi-arrow-left"></i>
             </a>
             <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">MY CART</h5>
@@ -171,13 +171,16 @@ if(!isset($_SESSION['user_id'])) {
                 <div class="total-section me-4">
                     <h5 class="mb-0" style="font-weight: bold;">Total: <span class="text-danger">₱<?php echo number_format($total, 2); ?></span></h5>
                 </div>
-                <button class="btn px-4" id="checkoutBtn" style="background-color: #940202; color: white; border: none; font-weight: bold;">
+                <button onclick="processPayment(<?php echo $total * 100; ?>)" class="btn px-4" id="checkoutBtn" 
+                        style="background-color: #940202; color: white; border: none; font-weight: bold;"
+                        <?php echo ($total <= 0) ? 'disabled' : ''; ?>>
                     Checkout
                 </button>
             </div>
         </div>
     </div>
 </div> 
+
 
 
 
@@ -229,6 +232,41 @@ if(!isset($_SESSION['user_id'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
+<script>
+function processPayment(amount) {
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    checkoutBtn.disabled = true;
+    checkoutBtn.innerHTML = 'Processing...';
+
+    fetch('http/PaymentController.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            amount: amount
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.checkout_url) {
+            // Store current cart state in session storage
+            sessionStorage.setItem('pendingPayment', 'true');
+            window.location.href = data.checkout_url;
+        } else {
+            alert('Payment Error: ' + (data.error || 'Unknown error occurred'));
+            checkoutBtn.disabled = false;
+            checkoutBtn.innerHTML = 'Checkout';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to process payment. Please try again.');
+        checkoutBtn.disabled = false;
+        checkoutBtn.innerHTML = 'Checkout';
+    });
+}
+</script>
 </body>
 </html>
 

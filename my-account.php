@@ -1,9 +1,88 @@
 <?php
 session_start();
-include('server/dbcon.php');  // Ensure session is started at the beginning
+require_once 'server/dbcon.php';
+
+// Check for successful payment
+if(isset($_GET['payment_status']) && $_GET['payment_status'] === 'success') {
+    try {
+        $user_id = $_SESSION['user_id'];
+        $con->begin_transaction();
+
+        // Get cart items
+        $cart_query = "SELECT * FROM cart WHERE user_id = ?";
+        $stmt = $con->prepare($cart_query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $cart_result = $stmt->get_result();
+
+        // Process each cart item
+        while($cart_item = $cart_result->fetch_assoc()) {
+            $order_number = 'ORD' . date('Ymd') . rand(1000, 9999);
+            
+            $insert_order = "INSERT INTO orders (
+                order_number, 
+                user_id, 
+                product_id,
+                product_name, 
+                price, 
+                quantity, 
+                total, 
+                image_url,
+                status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Ready for pickup')";
+            
+            $stmt = $con->prepare($insert_order);
+            $stmt->bind_param("siisdiis", 
+                $order_number,
+                $user_id,
+                $cart_item['product_id'],
+                $cart_item['product_name'],
+                $cart_item['price'],
+                $cart_item['quantity'],
+                $cart_item['total'],
+                $cart_item['image_url']
+            );
+            $stmt->execute();
+        }
+
+        // Clear the cart
+        $clear_cart = "DELETE FROM cart WHERE user_id = ?";
+        $stmt = $con->prepare($clear_cart);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $con->commit();
+
+        // Show success message
+        echo "<script>alert('Payment successful! Your order has been placed.');</script>";
+        
+        // Set the tab to order-history
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const orderHistoryItem = document.querySelector('[data-content=\"order-history\"]');
+                if (orderHistoryItem) {
+                    orderHistoryItem.click();
+                }
+            });
+        </script>";
+
+    } catch (Exception $e) {
+        $con->rollback();
+        echo "<script>alert('Error processing order: " . addslashes($e->getMessage()) . "');</script>";
+    }
+}
+
+if(!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if(isset($_SESSION['message'])) {
+    echo "<script>alert('" . htmlspecialchars($_SESSION['message']) . "');</script>";
+    unset($_SESSION['message']);
+}
+
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,80 +98,274 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
-    <style>
-           
-        .row>* {
-            padding-left: 0;
- 
-        }   
-        .nav-link {
-            margin-bottom: 5px;
-            text-align: left;
-        }
-
-       /*Arrow with style and hover */
-
-        .nav-link-arrow {
-            position: relative;
-            padding-left: 20px; 
-            cursor: pointer;
-            color: #000;  
-            transition: color 0.3s ease;  
-        }
-
-       
-        .nav-link-arrow::before {
-            content: "";
-            position: absolute;
-            left: 5px; 
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 5px solid #940202; 
-            opacity: 0;  
-            transition: opacity 0.3s ease;  
-        }
-
-       
-        .nav-link-arrow:hover::before {
-            opacity: 1; 
-        }
-
-     
-        .nav-link-arrow:hover {
-            color: #940202 !important;  
-        }
-
-
-
-        .mb-5 {
-             margin-bottom: 0 !important; */
-           }
-
-        .btn-danger.custom-hover:hover {
-        background-color: #940202 !important; 
-         }
-
-         .p-5 {
-             padding: 0 !important; */
-            }
- 
-
-            @media (min-width: 768px) {
-            .col-md-3 {
-                flex: 0 0 auto;
-                width: 25%;
-            }
-        }
-        </style>
-
 </head>
 <body>
 
+
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+        z-index: 1030;
+        }
+
+        .myaccount-header {
+        z-index: 1020; 
+        }
+
+        /* Main layout styles */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header styles */
+.myaccount-header {
+    position: fixed;
+    top: 110px;
+    width: 100%;
+    z-index: 100;
+    background-color: #940202;
+}
+
+/* Main content wrapper */
+.account-wrapper {
+    display: flex;
+    margin-top: 180px;
+    min-height: calc(100vh - 180px - 250px); 
+    flex: 1;
+}
+
+/* Sidebar styles */
+.account-sidebar {
+    width: 250px;
+    background-color: #f8ecec;
+    padding: 30px;
+    font-weight: bold;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 15px;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+    color: #940202;
+}
+
+/* Main content area */
+.account-content {
+    width: 100%;
+    background-color: white;
+    padding: 30px;
+    padding-bottom: 150px;
+}
+
+/* Form styles */
+.profile-form {
+    width: 411px;  
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.profile-form input {
+    width: 411px;
+    height: 43px;  /* Changed from 35px to 43px */
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+.profile-form button {
+    width: 411px;
+    height: 43px; 
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mt-5{
+    margin-top: 3rem !important;
+}
+
+
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
+    /* Main container */
+    .account-wrapper {
+        flex-direction: column;
+        margin-top: 120px;
+        padding: 15px;
+    }
+
+    /* Sidebar */
+    .account-sidebar {
+        width: 100%;
+        background-color: #f8ecec;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    /* Content area */
+    .account-content {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Form adjustments */
+    .profile-form {
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .profile-form input,
+    .profile-form button {
+        width: 100%;
+        height: 43px;
+        margin-bottom: 15px;
+    }
+
+    /* Header adjustments */
+    .myaccount-header {
+        top: 0;
+    }
+
+    /* Footer adjustments */
+    footer {
+        padding: 15px;
+    }
+
+    /* Adjust text sizes */
+    h4 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+}
+
+.menu-item {
+    transition: color 0.3s ease;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.orders-container {
+    padding: 20px;
+}
+
+.order-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.order-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-number {
+    font-weight: bold;
+}
+
+.order-content {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.order-image img {
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+.order-details {
+    flex: 1;
+}
+
+.order-dates {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.date-separator {
+    margin: 0 10px;
+    color: #999;
+}
+
+.order-status {
+    margin-bottom: 10px;
+}
+
+.view-details {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.view-details:hover {
+    text-decoration: underline;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.shop-now-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #940202;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.shop-now-btn:hover {
+    background-color: #7a0202;
+}
+
+</style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -106,24 +379,34 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
                 <span class="text-blue">M</span><span class="text-black">ERCH</span><span class="text-red">M</span><span class="text-yellow">ART</span>
             </span>
         </a>
+
+        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
-                <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Daily Discoveries</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Favorites</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="client-index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.php">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="client-shop.php">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="client-favorites.php">Favorites</a>
+                </li>
             </ul>
-            <form class="d-flex search-bar" role="search">
-                <input type="search" class="form-control me-2" placeholder="Search" aria-label="Search">
-                <i class="fas fa-search"></i>
-            </form>
+
             <div class="d-flex align-items-center" id="iconContainer"> 
-                <a href="login.html" class="login-icon" id="loginIcon"><i class="bi bi-person"></i></a>
-                <a href="cart.html" class="cart-icon" id="CartIcon">
+                <a href="my-account.php" class="login-icon" id="loginIcon">
+                    <i class="bi bi-person"></i>
+                </a>
+                <a href="cart.php" class="cart-icon" id="CartIcon">
                     <i class="bi bi-bag-heart"></i>
                 </a>
             </div>
@@ -131,86 +414,126 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
     </div>
 </nav>
 
-
-<!-- My account Header -->
+<!-- My Account Header -->
 <div class="myaccount-header py-3 fixed-top" style="top: 110px; background-color: #940202; border-bottom: 1px solid #ddd;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-        <!-- Back Button and Title "My Cart" -->
         <div class="d-flex align-items-center">
-            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem;">
+            <a href="client-index.php" class="btn btn-link text-black me-1 back-button" style="font-size: 1.25rem; color: black;">
                 <i class="bi bi-arrow-left"></i>
             </a>
-            <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">Edit Profile</h5>
+            <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; font-weight: bold; color: white;">User Account Menu</h5>
         </div>
-    </div>
-</div>          
-
-        <!-- My Account Section -->
-<div class="container-fluid mt-5 pt-5" style="margin-top: 160px; ">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3" style="background-color: #F1E8E8;padding: 30px;">
-            <h6 class="fw-bold mb-4" style="font-family: 'Poppins', sans-serif;">My Account</h6>
-            <ul class="nav flex-column">
-    <li class="nav-item">
-        <a class="nav-link active text-dark nav-link-arrow" href="my-account.php" style="font-size: 1.1rem;">Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark nav-link-arrow" href="account-setting.php" style="font-size: 1.1rem;">Account Setting</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark nav-link-arrow" href="notification-preference.php" style="font-size: 1.1rem;">Notification Preference</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark nav-link-arrow" href="order-history.php" style="font-size: 1.1rem;">Order History</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark nav-link-arrow" href="login.php" style="font-size: 1.1rem;">Log Out</a>
-    </li>
-</ul>
-
-        </div>
-
-        <!-- Profile Content -->
-        <div class="col-md-9">
-            <div class="card border-0">
-                <div class="card-header text-black text-left py-4">
-                <h5 class="mb-0" style="font-family: 'Poppins', sans-serif; color: black; font-weight: bold; text-align: left;">My Profile</h5>
-                    <small>Manage and protect your account</small>
-                </div>
-                <div class="card-body p-10 m-2 ">
-    <div class="text-center mb-4">
-        <label for="file-upload" class="profile-icon" style="cursor: pointer; position: relative; display: inline-block;">
-            <!-- Default Profile Icon -->
-            <i id="default-icon" class="bi bi-person-circle" style="font-size: 5rem; color: #6c757d;"></i>
-
-            <!-- Upload Image File (Hidden) -->
-            <input type="file" id="file-upload" style="display:none" accept="image/*" onchange="updateProfileImage(event)">
-            
-            <!-- Image will be positioned directly on top of the icon -->
-            <img id="profile-image" src="" alt="Profile Picture" style="display:none;  top: 0; left: 0; width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-        </label>
     </div>
 </div>
 
 
-                        <form class="text-center">
-                        <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Full name" 
-                                style="border-radius: 10px; border-width: 1px; border-color: #fffff; width: 50%; margin: 0 auto;">
+
+
+
+<!-- Account Section -->
+<div class="account-wrapper">
+    <!-- Left Sidebar -->
+    <div class="account-sidebar">
+        <h5 style="font-size: 16px; margin-bottom: 20px; font-weight: bold;">My Account</h5>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" class="menu-item active" data-content="profile">Profile</a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" data-content="account-setting">Account Setting</a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" data-content="order-history">Order History</a>
+            </li>
+            <li>
+                <a href="logout.php" class="menu-item">Log Out</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Right Content Area -->
+    <div class="account-content">
+        <!-- Profile Content -->
+        <div id="profile" class="content-section active">
+            <h4 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">My Profile</h4>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Manage and protect your account</p>
+            <hr style="margin: 0; border-top: 3px solid #000;">
+            <div style="display: flex; justify-content: center;">
+                <form class="profile-form" action="profile-update.php" method="POST">
+                    <input type="text" placeholder="Full name">
+                    <input type="email" placeholder="Email">
+                    <input type="tel" placeholder="Phone">
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Account Setting Content -->
+        <div id="account-setting" class="content-section">
+            <h4 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">Account Setting</h4>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Manage your account settings</p>
+            <hr style="margin: 0; border-top: 3px solid #000;">
+            <div style="display: flex; justify-content: center;">
+                <form class="profile-form" action="account-settings-update.php" method="POST">
+                    <input type="password" placeholder="Current Password">
+                    <input type="password" placeholder="New Password">
+                    <input type="password" placeholder="Confirm New Password">
+                    <button type="submit">Update Password</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order History Content -->
+        <div id="order-history" class="content-section">
+            <h3>Order History</h3>
+            <div class="orders-container">
+                <?php
+                // Get user's orders
+                $order_query = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+                $stmt = $con->prepare($order_query);
+                $stmt->bind_param("i", $_SESSION['user_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    while ($order = $result->fetch_assoc()) {
+                        ?>
+                        <div class="order-item">
+                            <div class="order-header">
+                                <div class="order-number">Order Number: <?php echo htmlspecialchars($order['order_number']); ?></div>
+                            </div>
+                            <div class="order-content">
+                                <div class="order-image">
+                                    <img src="<?php echo htmlspecialchars($order['image_url']); ?>" 
+                                         alt="<?php echo htmlspecialchars($order['product_name']); ?>" 
+                                         width="100">
+                                </div>
+                                <div class="order-details">
+                                    <div class="product-name"><?php echo htmlspecialchars($order['product_name']); ?></div>
+                                    <div class="order-dates">
+                                        <span>Order Date: <?php echo date('m/d/Y', strtotime($order['order_date'])); ?></span>
+                                        <span class="date-separator">|</span>
+                                        <span>Status: <?php echo htmlspecialchars($order['status']); ?></span>
+                                    </div>
+                                    <div class="order-total">
+                                        <span>Quantity: <?php echo htmlspecialchars($order['quantity']); ?></span>
+                                        <span class="date-separator">|</span>
+                                        <span>Total: ₱<?php echo number_format($order['total'], 2); ?></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <input type="email" class="form-control" placeholder="Email" 
-                                style="border-radius: 10px; border-width: 1px; border-color: #fffff; width: 50%; margin: 0 auto;">
-                        </div>
-                        <div class="mb-3">
-                            <input type="tel" class="form-control" placeholder="Phone" 
-                                style="border-radius: 10px; border-width: 1px; border-color: #fffff; width: 50%; margin: 0 auto;">
-                        </div>
-                        <button type="submit" class="btn btn-danger custom-hover" 
-                                style="border-radius: 10px; width: 50%; margin: 0 auto;">Save Changes</button>
-                    </form>
-                </div>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <div class="no-orders">
+                        <p>No orders found. Start shopping to see your order history!</p>
+                        <a href="client-shop.php" class="shop-now-btn">Shop Now</a>
+                    </div>
+                    <?php
+                }
+                ?>
             </div>
         </div>
     </div>
@@ -218,8 +541,15 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
 
 
 
+
+
+
+    
+
+
+
 <!----FOOTER------>
-<footer class="mt-5 py-5">
+<footer class="py-5">
     <div class="row">
     <div class="footer-one col-lg-3 col-md-6 col-sm-12">
     <h5 class="pb-2">CUSTOMER SERVICE</h5>
@@ -268,63 +598,97 @@ include('server/dbcon.php');  // Ensure session is started at the beginning
 <script src="assets/js/script.js"></script>
 
 <script>
-// Check if the user is logged in by checking the PHP session
-        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+    const menuItems = document.querySelectorAll('.menu-item');
+    
+    // Function to update menu item appearance
+    function updateMenuItems() {
+        menuItems.forEach(item => {
+            if (item.classList.contains('active')) {
+                item.style.color = '#940202';
+                if (!item.textContent.includes('→')) {
+                    item.textContent = '→ ' + item.textContent;
+                }
+            } else {
+                item.style.color = '#000';
+                item.textContent = item.textContent.replace('→ ', '');
+            }
+        });
+    }
+
+    // Function to show content section
+    function showContent(contentId) {
+        // Hide all content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
         
-        function showNotification(message) {
-            const notification = document.getElementById('custom-notification');
-            const messageElement = document.getElementById('notification-message');
-            messageElement.textContent = message;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+        // Show selected content section
+        const contentSection = document.getElementById(contentId);
+        if (contentSection) {
+            contentSection.classList.add('active');
         }
+    }
 
-        function addToCart() {
-            if (!isLoggedIn) {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
-                modal.hide();
-                
-                showNotification('Please login to add items to cart');
-                
-                setTimeout(() => {
-                    window.location.href = 'login.php';
-                }, 2000);
-                return;
+    // Initial setup
+    updateMenuItems();
+
+    // Add event listeners
+    menuItems.forEach(item => {
+        // Hover effect
+        item.addEventListener('mouseenter', () => {
+            if (!item.classList.contains('active')) {
+                item.style.color = '#940202';
+                item.textContent = '→ ' + item.textContent.replace('→ ', '');
+            }
+        });
+
+        item.addEventListener('mouseleave', () => {
+            if (!item.classList.contains('active')) {
+                item.style.color = '#000';
+                item.textContent = item.textContent.replace('→ ', '');
+            }
+        });
+
+        // Click effect
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Update menu items
+            menuItems.forEach(menuItem => {
+                menuItem.classList.remove('active');
+                menuItem.style.color = '#000';
+                menuItem.textContent = menuItem.textContent.replace('→ ', '');
+            });
+            
+            item.classList.add('active');
+            item.style.color = '#940202';
+            if (!item.textContent.includes('→')) {
+                item.textContent = '→ ' + item.textContent;
             }
 
-            const quantity = document.getElementById('productQuantity').value;
-            const productName = document.getElementById('modalProductName').textContent;
+            // Show corresponding content
+            const contentId = item.getAttribute('data-content');
+            if (contentId) {
+                showContent(contentId);
+            }
+        });
+    });
 
-            showNotification(`Added ${quantity} ${productName}(s) to cart`);
-            const modal = bootstrap.Modal.getInstance(document.getElementById('productPreviewModal'));
-            modal.hide();
-        }
-
-        function showProductPreview(productId, name, price, imageUrl) {
-            const modal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
-            
-            document.getElementById('modalProductName').textContent = name;
-            document.getElementById('modalProductPrice').textContent = `₱${price}`;
-            document.getElementById('modalProductImage').src = imageUrl;
-            document.getElementById('productQuantity').value = 1;
-            
-            modal.show();
-        }
-
-        function increaseQuantity() {
-            const quantityInput = document.getElementById('productQuantity');
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-        }
-
-        function decreaseQuantity() {
-            const quantityInput = document.getElementById('productQuantity');
-            if (parseInt(quantityInput.value) > 1) {
-                quantityInput.value = parseInt(quantityInput.value) - 1;
+    // Check for URL parameters on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        
+        if (tab === 'order-history') {
+            // Find and click the order history menu item
+            const orderHistoryItem = document.querySelector('[data-content="order-history"]');
+            if (orderHistoryItem) {
+                orderHistoryItem.click();
             }
         }
-    </script>
+    });
+</script>
+
+
 </body>
 </html>

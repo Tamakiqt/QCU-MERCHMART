@@ -1842,3 +1842,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .fw-bold[style*="min-width"] {
     min-width: 60px !important;
 }
+
+.mt-5{
+    margin-top: 3rem !important;
+}
