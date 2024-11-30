@@ -363,11 +363,17 @@
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">FOLLOW US</h5>
-             <ul class="list-unstyled d-flex gap-2">
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-facebook"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-twitter"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-instagram"></i></a></li>
-             </ul>   
+        <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank">
+            <img src="assets/images/facebook.png" alt="Facebook" class="social-icon">
+        </a>
+        <a href="https://www.instagram.com" target="_blank">
+            <img src="assets/images/instagram.png" alt="Instagram" class="social-icon">
+        </a>
+        <a href="https://www.twitter.com" target="_blank">
+            <img src="assets/images/twitter.png" alt="Twitter" class="social-icon">
+        </a>
+    </div>   
         </div>
 
         <hr class="footer-hr">

@@ -845,7 +845,9 @@ h2.form-weight-bold {
 /* Footer styling */
 footer{
     background-color: #2c2c2c;
-    padding: 3rem;
+    text-align: center;
+    padding: 20px 0;
+    color: #fff;
 }
 
 footer h5{
@@ -874,14 +876,72 @@ footer li a{
 
 .footer-one img {
     max-width: 50px; 
-    height: auto; 
-    margin-left: 12px; 
-    display: block; 
+    height: auto;  
+    align-items: center;
     border-radius: 10px;
 }
 
 footer li a:hover{
     color: #940202;
+}
+
+.payment img {
+    max-width: 50px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+/* Individual section styling */
+.customer-service,
+.about-merchmart,
+.payment,
+.follow-us {
+    flex: 1;
+    text-align: center;
+}
+
+.follow-us h5,
+.payment h5 {
+    margin-bottom: 15px;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+
+/* Social icons styling */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+}
+
+.social-icons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+
+.social-icons a:hover .social-icon {
+    transform: scale(1.1);
+}
+
+
+@media (max-width: 768px) {
+    
+    .footer-one img {
+
+        margin: 0;
+    }
 }
 
 
@@ -1843,6 +1903,8 @@ input[type="search"]::-webkit-search-results-decoration {
     min-width: 60px !important;
 }
 
-.mt-5{
-    margin-top: 3rem !important;
-}
+
+
+
+
+

@@ -27,20 +27,176 @@ if(!isset($_SESSION['user_id'])) {
 <body>
 
 <style>
-        html {
-            scroll-behavior: smooth;
-        }
+    html {
+        scroll-behavior: smooth;
+    }
 
-        .navbar {
+    .navbar {
         z-index: 1030;
-        }
+    }
 
-        .cart-header {
+    .cart-header {
         z-index: 1020; 
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .btn-danger {
+        background-color: #940202;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #7a0202;
+    }
+
+    .btn-light {
+        border: 1px solid #ddd;
+    }
+
+    .modal-body h5 {
+        font-weight: 500;
+    }
+
+
+    .cart-item1 {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .product-image-name {
+        display: flex;
+        align-items: center;
+        width: 40%;
+    }
+
+    .product-image-name h5 {
+        margin-left: 15px;
+        font-size: 14px;
+    }
+
+    .price-quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 60%;
+    }
+
+    .cart-item1 img {
+        max-width: 100px;
+        margin-right: 20px;
+    }
+
+    .quantity-controls1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .quantity-controls1 button {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+    }
+
+    .quantity-controls1 span {
+        min-width: 30px;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .cart-item1 {
+            flex-direction: column;
+            padding: 15px !important;
         }
 
+        .product-image-name {
+            width: 100%;
+            flex-direction: column;
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-    </style>
+        .product-image-name h5 {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+
+        .price-quantity-controls {
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cart-item1 img {
+            max-width: 150px !important;
+            margin: 0 auto 10px auto !important;
+        }
+
+        .quantity-controls1 {
+            margin: 15px 0;
+        }
+
+        .cart-summary {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #f3f3f3;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 15px !important;
+        }
+
+        .cart-items {
+            margin-bottom: 100px !important;
+            padding: 10px;
+        }
+
+        .btn-danger {
+            width: 100% !important;
+            margin-top: 10px;
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .cart-item1 h5 {
+            font-size: 16px;
+        }
+
+        .price-section {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .cart-summary .d-flex {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .total-section {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #checkoutBtn {
+            width: 100%;
+        }
+    }
+</style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -73,7 +229,7 @@ if(!isset($_SESSION['user_id'])) {
                     <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="client-favorites.php">Favorites</a>
+                    <a class="nav-link" href="client-favorite.php">Favorites</a>
                 </li>
             </ul>
 
@@ -81,8 +237,24 @@ if(!isset($_SESSION['user_id'])) {
                 <a href="my-account.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
                 </a>
-                <a href="cart.php" class="cart-icon" id="CartIcon">
+                <a href="cart.php" class="cart-icon position-relative" id="CartIcon">
                     <i class="bi bi-bag-heart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                        <?php
+                        if(isset($_SESSION['user_id'])) {
+                            $user_id = $_SESSION['user_id'];
+                            $count_query = "SELECT SUM(quantity) as total FROM cart WHERE user_id = ?";
+                            $stmt = $con->prepare($count_query);
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $count = $result->fetch_assoc()['total'] ?? 0;
+                            echo $count;
+                        } else {
+                            echo "0";
+                        }
+                        ?>
+                    </span>
                 </a>
             </div>
         </div>
@@ -151,7 +323,7 @@ if(!isset($_SESSION['user_id'])) {
             <i class="bi bi-pencil-square ml-3"></i>
         </button>
 
-        <button onclick="removeFromCart(<?php echo $item['id']; ?>)" class="btn btn-danger btn-sm d-flex justify-content-center align-items-center" style="width: 100px;">
+        <button onclick="showDeleteConfirmation(<?php echo $item['id']; ?>)" class="btn btn-danger btn-sm d-flex justify-content-center align-items-center" style="width: 100px;">
             <i class="bi bi-trash"></i> Delete
         </button>
     </div>
@@ -174,12 +346,40 @@ if(!isset($_SESSION['user_id'])) {
                 <button onclick="processPayment(<?php echo $total * 100; ?>)" class="btn px-4" id="checkoutBtn" 
                         style="background-color: #940202; color: white; border: none; font-weight: bold;"
                         <?php echo ($total <= 0) ? 'disabled' : ''; ?>>
-                    Checkout
+                    Checkout (<?php
+                        if(isset($_SESSION['user_id'])) {
+                            $user_id = $_SESSION['user_id'];
+                            $count_query = "SELECT SUM(quantity) as total FROM cart WHERE user_id = ?";
+                            $stmt = $con->prepare($count_query);
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $count = $result->fetch_assoc()['total'] ?? 0;
+                            echo $count;
+                        } else {
+                            echo "0";
+                        }
+                    ?>)
                 </button>
             </div>
         </div>
     </div>
 </div> 
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <h5 class="mb-4">Are you sure you want to delete this item?</h5>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-danger px-4" id="confirmDelete" onclick="removeFromCart(<?php echo $item['id']; ?>)">Yes</button>
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -215,11 +415,17 @@ if(!isset($_SESSION['user_id'])) {
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">FOLLOW US</h5>
-             <ul class="list-unstyled d-flex gap-2">
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-facebook"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-twitter"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-instagram"></i></a></li>
-             </ul>   
+        <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank">
+            <img src="assets/images/facebook.png" alt="Facebook" class="social-icon">
+        </a>
+        <a href="https://www.instagram.com" target="_blank">
+            <img src="assets/images/instagram.png" alt="Instagram" class="social-icon">
+        </a>
+        <a href="https://www.twitter.com" target="_blank">
+            <img src="assets/images/twitter.png" alt="Twitter" class="social-icon">
+        </a>
+    </div>   
         </div>
 
         <hr class="footer-hr">
@@ -267,6 +473,8 @@ function processPayment(amount) {
     });
 }
 </script>
+
+
 </body>
 </html>
 

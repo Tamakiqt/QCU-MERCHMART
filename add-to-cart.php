@@ -22,6 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debug log
     error_log("Processed data: product_id=$product_id, name=$product_name, price=$unit_price, quantity=$quantity");
 
+    // First, check current cart total quantity
+    $check_total_query = "SELECT SUM(quantity) as total_items FROM cart WHERE user_id = ?";
+    $check_total_stmt = $con->prepare($check_total_query);
+    $check_total_stmt->bind_param("i", $user_id);
+    $check_total_stmt->execute();
+    $total_result = $check_total_stmt->get_result();
+    $current_total = $total_result->fetch_assoc()['total_items'] ?? 0;
+    
+    // Calculate if this would exceed the limit
+    if (($current_total + $quantity) > 60) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Cart limit exceeded! Maximum 60 items allowed. Current items: ' . $current_total,
+            'current_total' => $current_total
+        ]);
+        exit;
+    }
+
     // Check if product exists in cart
     $check_query = "SELECT id, quantity, total FROM cart WHERE user_id = ? AND product_id = ?";
     $check_stmt = $con->prepare($check_query);

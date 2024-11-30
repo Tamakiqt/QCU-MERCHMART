@@ -63,7 +63,7 @@ if(!isset($_SESSION['user_id'])) {
                     <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="favorite.php">Favorites</a>
+                    <a class="nav-link" href="client-favorite.php">Favorites</a>
                 </li>
             </ul>
 
@@ -71,8 +71,24 @@ if(!isset($_SESSION['user_id'])) {
                 <a href="my-account.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
                 </a>
-                <a href="cart.php" class="cart-icon" id="CartIcon">
+                <a href="cart.php" class="cart-icon position-relative" id="CartIcon">
                     <i class="bi bi-bag-heart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                        <?php
+                        if(isset($_SESSION['user_id'])) {
+                            $user_id = $_SESSION['user_id'];
+                            $count_query = "SELECT SUM(quantity) as total FROM cart WHERE user_id = ?";
+                            $stmt = $con->prepare($count_query);
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $count = $result->fetch_assoc()['total'] ?? 0;
+                            echo $count;
+                        } else {
+                            echo "0";
+                        }
+                        ?>
+                    </span>
                 </a>
             </div>
         </div>
@@ -258,11 +274,17 @@ if(!isset($_SESSION['user_id'])) {
 
         <div class="footer-one col-lg-3 col-md-6 col-sm-12">
         <h5 class="pb-2">FOLLOW US</h5>
-             <ul class="list-unstyled d-flex gap-2">
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-facebook"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-twitter"></i></a></li>
-                <li><a href="#" class="footer-link text-white-50"><i class="bi bi-instagram"></i></a></li>
-             </ul>   
+        <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank">
+            <img src="assets/images/facebook.png" alt="Facebook" class="social-icon">
+        </a>
+        <a href="https://www.instagram.com" target="_blank">
+            <img src="assets/images/instagram.png" alt="Instagram" class="social-icon">
+        </a>
+        <a href="https://www.twitter.com" target="_blank">
+            <img src="assets/images/twitter.png" alt="Twitter" class="social-icon">
+        </a>
+    </div>   
         </div>
 
         <hr class="footer-hr">

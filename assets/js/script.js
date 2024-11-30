@@ -1,4 +1,3 @@
-//Notif for add to cart!
 document.addEventListener("DOMContentLoaded", function() {
     const addToFavoritesBtn = document.getElementById("addToFavoritesBtn");
     const addToCartBtn = document.getElementById("addToCart");
@@ -356,22 +355,63 @@ function toggleEdit(itemId) {
     }
 }
 
-// Function to update the quantity when clicked
-function updateQuantity(itemId, action) {
-    const editQuantityInput = document.getElementById('edit-quantity-' + itemId);
-    let currentQuantity = parseInt(editQuantityInput.value);
+// Cart limit functions
+function checkCartLimit(quantity) {
+    // Get all quantity inputs
+    const cartItems = document.querySelectorAll('[id^="display-quantity-"]');
+    let currentTotal = 0;
+    
+    // Sum up all quantities
+    cartItems.forEach(item => {
+        currentTotal += parseInt(item.textContent);
+    });
 
-    // Increase or decrease the quantity
+    if ((currentTotal + quantity) > 60) {
+        alert(`Cannot add ${quantity} items. Cart limit is 60 items. Current total: ${currentTotal}`);
+        return false;
+    }
+    return true;
+}
+
+// Add this function to update cart count
+function updateCartCount(change = 0) {
+    const cartCountElement = document.querySelector('.cart-count');
+    if (cartCountElement) {
+        let currentCount = parseInt(cartCountElement.textContent) || 0;
+        currentCount += change;
+        cartCountElement.textContent = currentCount;
+        
+        // Toggle visibility based on count
+        if (currentCount > 0) {
+            cartCountElement.style.display = 'block';
+        } else {
+            cartCountElement.style.display = 'none';
+        }
+    }
+}
+
+// Modify your existing updateQuantity function
+function updateQuantity(itemId, action) {
+    const quantityInput = document.getElementById(`edit-quantity-${itemId}`);
+    let currentQuantity = parseInt(quantityInput.value);
+    let newQuantity;
+
     if (action === 'increase') {
-        currentQuantity++;
+        newQuantity = currentQuantity + 1;
+        // Check if new quantity would exceed limit
+        if (!checkCartLimit(1)) {
+            return;
+        }
     } else if (action === 'decrease' && currentQuantity > 1) {
-        currentQuantity--;
+        newQuantity = currentQuantity - 1;
+    } else {
+        return;
     }
 
     // Update the quantity input field
-    editQuantityInput.value = currentQuantity;
-    const displayQuantity = document.getElementById('display-quantity-' + itemId);
-    displayQuantity.textContent = currentQuantity;
+    quantityInput.value = newQuantity;
+    const displayQuantity = document.getElementById(`display-quantity-${itemId}`);
+    displayQuantity.textContent = newQuantity;
 
     // Send AJAX request to update quantity in the database
     let xhr = new XMLHttpRequest();
@@ -381,11 +421,16 @@ function updateQuantity(itemId, action) {
         let response = JSON.parse(xhr.responseText);
         if (response.status === 'success') {
             console.log('Quantity updated');
+            // Update cart count
+            updateCartCount(action === 'increase' ? 1 : -1);
+            if (typeof updateTotal === 'function') {
+                updateTotal();
+            }
         } else {
-            alert(response.message); // Show error message if failed
+            alert(response.message);
         }
     };
-    xhr.send('item_id=' + itemId + '&quantity=' + currentQuantity);
+    xhr.send('item_id=' + itemId + '&quantity=' + newQuantity);
 }
 
 // Attach event listener to the edit button
@@ -398,26 +443,84 @@ document.querySelectorAll('.edit-button').forEach(button => {
 
 // Delete cart 
 
-function removeFromCart(itemId) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'cart-update/remove_cart.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+let itemToDelete = null;
 
-    // Add an event listener to handle the response
-    xhr.onload = function () {
-        let response = JSON.parse(xhr.responseText);
-
-        if (response.status === 'success') {
-            // Remove the item from the DOM
-            document.getElementById('cartItem-' + itemId).remove();
-            alert('Item removed successfully');
-        } else {
-            alert(response.message || 'Failed to remove item');
-        }
+function showDeleteConfirmation(itemId) {
+    // Store the item ID to be deleted
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+    
+    // Set up the confirm button's click handler
+    document.getElementById('confirmDelete').onclick = function() {
+        fetch('cart-update/remove_cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'item_id=' + itemId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const cartItem = document.getElementById('cartItem-' + itemId);
+                if (cartItem) {
+                    const quantity = parseInt(cartItem.querySelector('[id^="display-quantity-"]').textContent);
+                    updateCartCount(-quantity);
+                    cartItem.remove();
+                }
+                deleteModal.hide();
+            } else {
+                alert(data.message || 'Failed to remove item');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while removing the item');
+        });
     };
+    
+    // Show the modal
+    deleteModal.show();
+}
 
-    // Send the request with item_id
-    xhr.send('item_id=' + itemId);
+// Add event listener when document is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (itemToDelete) {
+                removeFromCart(itemToDelete);
+                bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
+                itemToDelete = null; // Reset the itemToDelete
+            }
+        });
+    }
+});
+
+function removeFromCart(itemId) {
+    fetch('cart-update/remove_cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'item_id=' + itemId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const cartItem = document.getElementById('cartItem-' + itemId);
+            if (cartItem) {
+                const quantity = parseInt(cartItem.querySelector('[id^="display-quantity-"]').textContent);
+                updateCartCount(-quantity);
+                cartItem.remove();
+            }
+        } else {
+            alert(data.message || 'Failed to remove item');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while removing the item');
+    });
 }
 
 
