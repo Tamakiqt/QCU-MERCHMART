@@ -2,86 +2,19 @@
 session_start();
 require_once 'server/dbcon.php';
 
-// Check for successful payment
-if(isset($_GET['payment_status']) && $_GET['payment_status'] === 'success') {
-    try {
-        $user_id = $_SESSION['user_id'];
-        $con->begin_transaction();
-
-        // Get cart items
-        $cart_query = "SELECT * FROM cart WHERE user_id = ?";
-        $stmt = $con->prepare($cart_query);
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $cart_result = $stmt->get_result();
-
-        // Process each cart item
-        while($cart_item = $cart_result->fetch_assoc()) {
-            $order_number = 'ORD' . date('Ymd') . rand(1000, 9999);
-            
-            $insert_order = "INSERT INTO orders (
-                order_number, 
-                user_id, 
-                product_id,
-                product_name, 
-                price, 
-                quantity, 
-                total, 
-                image_url,
-                status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Ready for pickup')";
-            
-            $stmt = $con->prepare($insert_order);
-            $stmt->bind_param("siisdiis", 
-                $order_number,
-                $user_id,
-                $cart_item['product_id'],
-                $cart_item['product_name'],
-                $cart_item['price'],
-                $cart_item['quantity'],
-                $cart_item['total'],
-                $cart_item['image_url']
-            );
-            $stmt->execute();
-        }
-
-        // Clear the cart
-        $clear_cart = "DELETE FROM cart WHERE user_id = ?";
-        $stmt = $con->prepare($clear_cart);
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-
-        $con->commit();
-
-        // Show success message
-        echo "<script>alert('Payment successful! Your order has been placed.');</script>";
-        
-        // Set the tab to order-history
-        echo "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const orderHistoryItem = document.querySelector('[data-content=\"order-history\"]');
-                if (orderHistoryItem) {
-                    orderHistoryItem.click();
-                }
-            });
-        </script>";
-
-    } catch (Exception $e) {
-        $con->rollback();
-        echo "<script>alert('Error processing order: " . addslashes($e->getMessage()) . "');</script>";
-    }
-}
-
-if(!isset($_SESSION['user_id'])) {
+// Add this code to fetch user data
+if(isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT * FROM user WHERE id = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+} else {
     header("Location: login.php");
     exit();
 }
-
-if(isset($_SESSION['message'])) {
-    echo "<script>alert('" . htmlspecialchars($_SESSION['message']) . "');</script>";
-    unset($_SESSION['message']);
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -102,268 +35,332 @@ if(isset($_SESSION['message'])) {
 <body>
 
 
-<style>
-        html {
-            scroll-behavior: smooth;
-        }
+                <style>
+                        html {
+                            scroll-behavior: smooth;
+                        }
 
-        .navbar {
-        z-index: 1030;
-        }
+                        .navbar {
+                        z-index: 1030;
+                        }
 
-        .myaccount-header {
-        z-index: 1020; 
-        }
+                        .myaccount-header {
+                        z-index: 1020; 
+                        }
 
-        /* Main layout styles */
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+                        /* Main layout styles */
+                body {
+                    margin: 0;
+                    padding: 0;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
 
-/* Header styles */
-.myaccount-header {
-    position: fixed;
-    top: 110px;
-    width: 100%;
-    z-index: 100;
-    background-color: #940202;
-}
+                /* Header styles */
+                .myaccount-header {
+                    position: fixed;
+                    top: 110px;
+                    width: 100%;
+                    z-index: 100;
+                    background-color: #940202;
+                }
 
-/* Main content wrapper */
-.account-wrapper {
-    display: flex;
-    margin-top: 180px;
-    min-height: calc(100vh - 180px - 250px); 
-    flex: 1;
-}
+                /* Main content wrapper */
+                .account-wrapper {
+                    display: flex;
+                    margin-top: 180px;
+                    min-height: calc(100vh - 180px - 250px); 
+                    flex: 1;
+                }
 
-/* Sidebar styles */
-.account-sidebar {
-    width: 250px;
-    background-color: #f8ecec;
-    padding: 30px;
-    font-weight: bold;
-}
+                /* Sidebar styles */
+                .account-sidebar {
+                    width: 250px;
+                    background-color: #f8ecec;
+                    padding: 30px;
+                    font-weight: bold;
+                }
 
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+                .sidebar-menu {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                }
 
-.sidebar-menu li {
-    margin-bottom: 15px;
-}
+                .sidebar-menu li {
+                    margin-bottom: 15px;
+                }
 
-.sidebar-menu a {
-    text-decoration: none;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    transition: all 0.3s ease;
-}
+                .sidebar-menu a {
+                    text-decoration: none;
+                    color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px 12px;
+                    transition: all 0.3s ease;
+                }
 
-.sidebar-menu a:hover {
-    color: #940202;
-}
+                .sidebar-menu a:hover {
+                    color: #940202;
+                }
 
-/* Main content area */
-.account-content {
-    width: 100%;
-    background-color: white;
-    padding: 30px;
-    padding-bottom: 150px;
-}
+                /* Main content area */
+                .account-content {
+                    width: 100%;
+                    background-color: white;
+                    padding: 30px;
+                    padding-bottom: 150px;
+                }
 
-/* Form styles */
-.profile-form {
-    width: 411px;  
-    margin: 0 auto;
-    margin-top: 50px;
-}
+                /* Form styles */
+                .profile-form {
+                    width: 411px;  
+                    margin: 0 auto;
+                    margin-top: 50px;
+                }
 
-.profile-form input {
-    width: 411px;
-    height: 43px;  /* Changed from 35px to 43px */
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0 12px;
-    font-size: 14px;
-}
+                .profile-form input {
+                    width: 411px;
+                    height: 43px;  /* Changed from 35px to 43px */
+                    margin-bottom: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    padding: 0 12px;
+                    font-size: 14px;
+                }
 
-.profile-form button {
-    width: 411px;
-    height: 43px; 
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-}
+                .profile-form button {
+                    width: 411px;
+                    height: 43px; 
+                    background-color: #dc3545;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    cursor: pointer;
+                }
 
-.mt-5{
-    margin-top: 3rem !important;
-}
+                .mt-5{
+                    margin-top: 3rem !important;
+                }
 
 
 
-/* Mobile responsive styles */
-@media screen and (max-width: 768px) {
-    /* Main container */
-    .account-wrapper {
-        flex-direction: column;
-        margin-top: 120px;
-        padding: 15px;
-    }
+                /* Mobile responsive styles */
+                @media screen and (max-width: 768px) {
+                    /* Main container */
+                    .account-wrapper {
+                        flex-direction: column;
+                        margin-top: 120px;
+                        padding: 15px;
+                    }
 
-    /* Sidebar */
-    .account-sidebar {
-        width: 100%;
-        background-color: #f8ecec;
-        padding: 15px;
-        margin-bottom: 20px;
-    }
+                    /* Sidebar */
+                    .account-sidebar {
+                        width: 100%;
+                        background-color: #f8ecec;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                    }
 
-    /* Content area */
-    .account-content {
-        width: 100%;
-        padding: 15px;
-    }
+                    /* Content area */
+                    .account-content {
+                        width: 100%;
+                        padding: 15px;
+                    }
 
-    /* Form adjustments */
-    .profile-form {
-        width: 100%;
-        padding: 0 15px;
-    }
+                    /* Form adjustments */
+                    .profile-form {
+                        width: 100%;
+                        padding: 0 15px;
+                    }
 
-    .profile-form input,
-    .profile-form button {
-        width: 100%;
-        height: 43px;
-        margin-bottom: 15px;
-    }
+                    .profile-form input,
+                    .profile-form button {
+                        width: 100%;
+                        height: 43px;
+                        margin-bottom: 15px;
+                    }
 
-    /* Header adjustments */
-    .myaccount-header {
-        top: 0;
-    }
+                    /* Header adjustments */
+                    .myaccount-header {
+                        top: 0;
+                    }
 
-    /* Footer adjustments */
-    footer {
-        padding: 15px;
-    }
+                    /* Footer adjustments */
+                    footer {
+                        padding: 15px;
+                    }
 
-    /* Adjust text sizes */
-    h4 {
-        font-size: 18px;
-    }
+                    /* Adjust text sizes */
+                    h4 {
+                        font-size: 18px;
+                    }
 
-    p {
-        font-size: 13px;
-    }
-}
+                    p {
+                        font-size: 13px;
+                    }
+                }
 
-.menu-item {
-    transition: color 0.3s ease;
-    text-decoration: none;
-    display: block;
-    padding: 8px 0;
-}
+                .menu-item {
+                    transition: color 0.3s ease;
+                    text-decoration: none;
+                    display: block;
+                    padding: 8px 0;
+                }
 
-.content-section {
-    display: none;
-}
+                .content-section {
+                    display: none;
+                }
 
-.content-section.active {
-    display: block;
-}
+                .content-section.active {
+                    display: block;
+                }
 
-.orders-container {
-    padding: 20px;
-}
+                .orders-container {
+                    padding: 20px;
+                }
 
-.order-item {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    background-color: #fff;
-}
+                .order-item {
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    margin-bottom: 20px;
+                    background-color: #fff;
+                }
 
-.order-header {
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-}
+                .order-header {
+                    padding: 15px;
+                    border-bottom: 1px solid #ddd;
+                }
 
-.order-number {
-    font-weight: bold;
-}
+                .order-number {
+                    font-weight: bold;
+                }
 
-.order-content {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+                .order-content {
+                    padding: 15px;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
 
-.order-image img {
-    border: 1px solid #ddd;
-    padding: 5px;
-}
+                .order-image img {
+                    border: 1px solid #ddd;
+                    padding: 5px;
+                }
 
-.order-details {
-    flex: 1;
-}
+                .order-details {
+                    flex: 1;
+                }
 
-.order-dates {
-    margin-bottom: 10px;
-    color: #666;
-}
+                .order-dates {
+                    margin-bottom: 10px;
+                    color: #666;
+                }
 
-.date-separator {
-    margin: 0 10px;
-    color: #999;
-}
+                .date-separator {
+                    margin: 0 10px;
+                    color: #999;
+                }
 
-.order-status {
-    margin-bottom: 10px;
-}
+                .order-status {
+                    margin-bottom: 10px;
+                }
 
-.view-details {
-    color: #0066cc;
-    text-decoration: none;
-    font-size: 14px;
-}
+                .view-details {
+                    color: #0066cc;
+                    text-decoration: none;
+                    font-size: 14px;
+                }
 
-.view-details:hover {
-    text-decoration: underline;
-}
+                .view-details:hover {
+                    text-decoration: underline;
+                }
 
-.no-orders {
-    text-align: center;
-    padding: 40px 20px;
-}
+                .no-orders {
+                    text-align: center;
+                    padding: 40px 20px;
+                }
 
-.shop-now-btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #940202;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
+                .shop-now-btn {
+                    display: inline-block;
+                    margin-top: 15px;
+                    padding: 10px 20px;
+                    background-color: #940202;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 4px;
+                }
 
-.shop-now-btn:hover {
-    background-color: #7a0202;
-}
+                .shop-now-btn:hover {
+                    background-color: #7a0202;
+                }
+
+                .password-requirements {
+                    font-size: 12px;
+                    color: #666;
+                    margin-top: 5px;
+                }
+
+                .password-requirements ul {
+                    margin: 5px 0;
+                    padding-left: 20px;
+                }
+
+                .form-group {
+                    margin-bottom: 15px;
+                }
+
+                .notification-container {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 9999;
+                    display: none;
+                }
+
+                .notification-content {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #940202;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    margin: 10px auto;
+                    width: fit-content;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                .notification-content i {
+                    margin-right: 10px;
+                }
+
+                .modal-content {
+                    border-radius: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .btn-danger {
+                    background-color: #940202;
+                    border: none;
+                }
+
+                .btn-danger:hover {
+                    background-color: #7a0202;
+                }
+
+                .btn-light {
+                    border: 1px solid #ddd;
+                }
+
+                .modal-body h5 {
+                    font-weight: 500;
+                }
 
 </style>
 <!-- Top Header -->
@@ -446,7 +443,7 @@ body {
                 <a href="#" class="menu-item" data-content="order-history">Order History</a>
             </li>
             <li>
-                <a href="logout.php" class="menu-item">Log Out</a>
+                <a href="#" class="menu-item" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
             </li>
         </ul>
     </div>
@@ -459,11 +456,17 @@ body {
             <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Manage and protect your account</p>
             <hr style="margin: 0; border-top: 3px solid #000;">
             <div style="display: flex; justify-content: center;">
-                <form class="profile-form" action="profile-update.php" method="POST">
-                    <input type="text" placeholder="Full name">
-                    <input type="email" placeholder="Email">
-                    <input type="tel" placeholder="Phone">
-                    <button type="submit">Save Changes</button>
+                <form class="profile-form" action="profile-update/profile-update.php" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="Name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" name="phone" placeholder="Phone Number" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
+                    </div>
+                    <button type="submit" name="update_profile" style="background-color: #940202; color: white; border: none; font-weight: bold;">Save Changes</button>
                 </form>
             </div>
         </div>
@@ -474,18 +477,36 @@ body {
             <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Manage your account settings</p>
             <hr style="margin: 0; border-top: 3px solid #000;">
             <div style="display: flex; justify-content: center;">
-                <form class="profile-form" action="account-settings-update.php" method="POST">
-                    <input type="password" placeholder="Current Password">
-                    <input type="password" placeholder="New Password">
-                    <input type="password" placeholder="Confirm New Password">
-                    <button type="submit">Update Password</button>
+                <form class="profile-form" action="account-setting/update-password.php" method="POST">
+                    <h5 style="font-size: 24px; margin-bottom: 30px; font-weight: bold; text-align: center;">Change Password</h5>
+                    <div class="form-group">
+                        <input type="password" name="current_password" placeholder="Current Password" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="new_password" placeholder="New Password" required>
+                        <small class="password-requirements">
+                            Password must:
+                            <ul>
+                                <li>Be at least 8 characters long</li>
+                                <li>Include at least one special character (!@#$%^&*)</li>
+                                <li>Include at least one number</li>
+                                <li>Include at least one uppercase letter</li>
+                            </ul>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="confirm_password" placeholder="Confirm New Password" required>
+                    </div>
+                    <button type="submit" style="background-color: #940202; color: white; border: none; font-weight: bold;">Update Password</button>
                 </form>
             </div>
         </div>
 
         <!-- Order History Content -->
         <div id="order-history" class="content-section">
-            <h3>Order History</h3>
+            <h3 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">Order History</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">View your order details in this page</p>
+            <hr style="margin: 0; border-top: 3px solid #000;">
             <div class="orders-container">
                 <?php
                 // Get user's orders
@@ -534,6 +555,59 @@ body {
                     <?php
                 }
                 ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Notification -->
+<div id="custom-notification" class="notification-container" style="display: none;">
+    <div class="notification-content">
+        <i class="bi bi-exclamation-circle"></i>
+        <span id="notification-message"></span>
+    </div>
+</div>
+
+<!-- Custom Notification -->
+<?php
+if(isset($_SESSION['status'])) {
+    ?>
+    <script>
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.getElementById('custom-notification');
+            const notificationMessage = document.getElementById('notification-message');
+            
+            notificationMessage.textContent = message;
+            notification.style.display = 'block';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show notification when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('<?php echo $_SESSION['status']; ?>');
+        });
+    </script>
+    <?php
+    unset($_SESSION['status']);
+}
+?>
+
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <h5 class="mb-4">Are you sure you want to logout?</h5>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="logout.php?redirect=index.php" class="btn btn-danger px-4">Yes</a>
+                    <button type="button" href="my-account.php" class="btn btn-light px-4" data-bs-dismiss="modal">No</button>
+                </div>
             </div>
         </div>
     </div>
@@ -617,12 +691,10 @@ body {
 
     // Function to show content section
     function showContent(contentId) {
-        // Hide all content sections
         document.querySelectorAll('.content-section').forEach(section => {
             section.classList.remove('active');
         });
         
-        // Show selected content section
         const contentSection = document.getElementById(contentId);
         if (contentSection) {
             contentSection.classList.add('active');
@@ -634,7 +706,6 @@ body {
 
     // Add event listeners
     menuItems.forEach(item => {
-        // Hover effect
         item.addEventListener('mouseenter', () => {
             if (!item.classList.contains('active')) {
                 item.style.color = '#940202';
@@ -649,11 +720,10 @@ body {
             }
         });
 
-        // Click effect
+        // Updated click handler
         item.addEventListener('click', (e) => {
             e.preventDefault();
             
-            // Update menu items
             menuItems.forEach(menuItem => {
                 menuItem.classList.remove('active');
                 menuItem.style.color = '#000';
@@ -666,24 +736,33 @@ body {
                 item.textContent = '→ ' + item.textContent;
             }
 
-            // Show corresponding content
             const contentId = item.getAttribute('data-content');
             if (contentId) {
                 showContent(contentId);
+                // Update URL without tab parameter for profile, with parameter for others
+                if (contentId === 'profile') {
+                    history.pushState({}, '', 'my-account.php');
+                } else {
+                    history.pushState({}, '', `my-account.php?tab=${contentId}`);
+                }
             }
         });
     });
 
-    // Check for URL parameters on page load
+    // Handle initial page load
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const tab = urlParams.get('tab');
         
-        if (tab === 'order-history') {
-            // Find and click the order history menu item
-            const orderHistoryItem = document.querySelector('[data-content="order-history"]');
-            if (orderHistoryItem) {
-                orderHistoryItem.click();
+        if (tab) {
+            const menuItem = document.querySelector(`[data-content="${tab}"]`);
+            if (menuItem) {
+                menuItem.click();
+            }
+        } else {
+            const profileItem = document.querySelector('[data-content="profile"]');
+            if (profileItem) {
+                profileItem.click();
             }
         }
     });
