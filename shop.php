@@ -269,24 +269,27 @@
                         <p id="modalProductPrice" class="text-danger fw-bold fs-4 mb-4"></p>
                         
                         <!-- Size Selection -->
-                        <div class="mb-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <label class="mb-0" style="min-width: 45px;">Size</label>
-                                <div class="size-options d-flex gap-2">
-                                    <button class="size-btn">S</button>
-                                    <button class="size-btn active">M</button>
-                                    <button class="size-btn">L</button>
-                                    <button class="size-btn">XL</button>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <label class="mb-0" style="min-width: 45px;">Size</label>
+                                    <div class="size-options d-flex gap-2">
+                                        <button class="size-btn" data-size="S">S</button>
+                                        <button class="size-btn" data-size="M">M</button>
+                                        <button class="size-btn" data-size="L">L</button>
+                                        <button class="size-btn" data-size="XL">XL</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Variant Selection -->
+                           
+
+
+                                                    <!-- Variant Selection -->
                         <div class="mb-3">
                             <div class="d-flex align-items-center">
                                 <label class="mb-0" style="min-width: 60px;">Variant</label>
-                                <select class="form-select w-auto">
-                                    <option>Select</option>
+                                <select class="form-select w-auto" id="variantSelect">
+                                    <option value="">Select</option>
                                 </select>
                             </div>
                         </div>

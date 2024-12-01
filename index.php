@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,6 +203,13 @@
             <p class="price">₱149</p>
             <p class="product-name">QCU Mug</p>
         </div>
+    </div>
+
+    <!-- Sign Up Button -->
+    <div class="text-center mt-4">
+        <button class="btn d-flex align-items-center justify-content-center mx-auto" style="background-color: #940202; color: white; border-radius: 20px;" onclick="window.location.href='register.php'">
+            Sign Up To Show More <i class="bi bi-arrow-right" style="color: white;"></i>
+        </button>
     </div>
 </section>
 

@@ -4,7 +4,7 @@
         {
             id: 1,
             name: "Bachelor of Science Computer Science (BCS)",
-            price: 70,
+            price: 75,
             image: "assets/images/bcs.PNG",
             category: "lace"
         },
@@ -12,7 +12,7 @@
         {
             id: 2,
             name: "Bachelor of Early Childhood Education (BECED)",
-            price: 70,
+            price: 75,
             image: "assets/images/beced.PNG",
             category: "lace"
         },
@@ -20,7 +20,7 @@
         {
             id: 3,
             name: "Bachelor of Science in Information Systems (BIS)",
-            price: 70,
+            price: 75,
             image: "assets/images/bis.PNG",
             category: "lace"
         },
@@ -28,7 +28,7 @@
         {
             id: 4,
             name: "Bachelor of Science in Accountancy (BSA)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsa.PNG",
             category: "lace"
         },
@@ -36,7 +36,7 @@
         {
             id: 5,
             name: "Bachelor of Science in Computer Engineering (BSCPE)",
-            price: 70,
+            price: 75,
             image: "assets/images/bscpe.PNG",
             category: "lace"
         },
@@ -44,7 +44,7 @@
         {
             id: 6,
             name: "Bachelor of Science in Electronics Engineering (BSECE)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsece.PNG",
             category: "lace"
         },
@@ -52,7 +52,7 @@
         {
             id: 7,
             name: "Bachelor of Science in Entrepreneurship (BSENTREP)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsentrep.PNG",
             category: "lace"
         },
@@ -60,7 +60,7 @@
         {
             id: 8,
             name: "Bachelor of Science in Industrial Engineering (BSIE)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsie.PNG",
             category: "lace"
         },
@@ -68,7 +68,7 @@
         {
             id: 9,
             name: "Bachelor of Science in Information Technology (BSIT)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsit.PNG",
             category: "lace"
         },
@@ -76,7 +76,7 @@
         {
             id: 10,
             name: "Bachelor of Science in Management Accounting (BSMA)",
-            price: 70,
+            price: 75,
             image: "assets/images/bsma.PNG",
             category: "lace"
         },
@@ -84,7 +84,7 @@
         {
             id: 11,
             name: "Jacket",
-            price: 50,
+            price: 600,
             image: "assets/images/jacket.png",
             category: "jackets"
         },
@@ -95,7 +95,73 @@
             image: "assets/images/cbaa.png",
             category: "college"
            
+        },
+
+        {
+            id: 13,
+            name: "Male Polo",
+            category: "college",
+            image: "assets/images/male.png",
+            sizePricing: {
+                'XS': 470,
+                'S': 470,
+                'M': 470,
+                'L': 470,
+                'XL': 480
+            },
+            defaultPrice: 470
+        },
+        
+
+        {
+            id: 14,
+            name: "Male Pants",
+            category: "college",
+            image: "assets/images/pants.png",
+            sizePricing: {
+                'XS': 570,
+                'S': 570,
+                'M': 570,
+                'L': 570,
+                'XL': 580
+            },
+            defaultPrice: 570
+        },
+
+        {
+            id: 15,
+            name: "Female Blouse",
+            category: "college",
+            image: "assets/images/female.png",
+            sizePricing: {
+                'XS': 470,
+                'S': 470,
+                'M': 470,
+                'L': 470,
+                'XL': 480
+            },
+            defaultPrice: 470
+        },
+
+        {
+            id: 16,
+            name: "NSTP Shirt",
+            price: 250,
+            image: "assets/images/nstp.png",
+            category: "college"
+           
+        },
+
+        {
+            id: 17,
+            name: "P.E Shirt",
+            price: 250,
+            image: "assets/images/p.e.png",
+            category: "pe"
+           
         }
+
+
         
         // Add more products as needed
     ];
@@ -248,45 +314,102 @@ function updateCartIcon() {
 }
         
 
-function showProductPreview(name, price, imageUrl, category) {
+function showProductPreview(name, price, imageUrl, category, variants) {
     const modal = document.getElementById('productPreviewModal');
     const modalInstance = new bootstrap.Modal(modal);
     const sizeSelection = document.querySelector('.modal-body .mb-3:has(.size-options)');
+    const variantSelection = document.querySelector('.modal-body .mb-3:has(.form-select)');
     const descriptionElement = document.getElementById('modalProductDescription');
+    
+    // Find the product
+    const product = products.find(p => p.name === name);    
     
     // Define categories that should show size options
     const categoriesWithSize = ['college', 'pe', 'jackets', 'department', 'shirts'];
-    
-    // Show/hide size selection based on category
+    const categoriesWithVariant = ['jackets'];
+    // Show/hide size selection based on category           
     if (sizeSelection) {
         sizeSelection.style.display = categoriesWithSize.includes(category) ? 'block' : 'none';
     }
+    if (variantSelection) {
+        variantSelection.style.display = categoriesWithVariant.includes(category) ? 'block' : 'none';
+    }
+
     
-     // Update modal content
-     document.getElementById('modalProductName').textContent = name;
-     document.getElementById('modalProductPrice').textContent = `₱${price}`;
-     document.getElementById('modalProductImage').src = imageUrl;
-     document.getElementById('productQuantity').value = 1;
+    // Update modal content
+    document.getElementById('modalProductName').textContent = name;
+    document.getElementById('modalProductImage').src = imageUrl;
+    document.getElementById('productQuantity').value = 1;
+    const priceElement = document.getElementById('modalProductPrice');
+
+    // Handle size buttons and pricing
+    const sizeButtons = document.querySelectorAll('.size-btn');
+    
+    // Remove old event listeners
+    sizeButtons.forEach(btn => {
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+    });
+
+    // Get fresh reference to buttons after cloning
+    const freshSizeButtons = document.querySelectorAll('.size-btn');
+    
+    if (product && product.sizePricing) {
+        // Show initial price
+        priceElement.textContent = `₱${product.defaultPrice}`;
+
+        // Add click handlers to size buttons
+        freshSizeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                freshSizeButtons.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get the size from the button text
+                const selectedSize = this.textContent.trim(); // XS, S, M, L, XL
+                
+                // Update price based on selected size
+                if (product.sizePricing[selectedSize]) {
+                    const newPrice = product.sizePricing[selectedSize];
+                    priceElement.textContent = `₱${newPrice}`;
+                }
+            });
+        });
+    } else {
+        // For non-uniform products
+        priceElement.textContent = `₱${price}`;
+    }
      
-     // Set description based on category
-     if (descriptionElement) {
-         switch(category) {
-             case 'lace':
-                 descriptionElement.textContent = "The QCU Merch Lanyard collection combines style and durability, offering functional and fashionable lanyards for everyday or special use.";
-                 break;
-             case 'college':
-                 descriptionElement.textContent = "The QCU Merch Uniform is a versatile blue shirt with a stylish design, suitable for both casual and professional settings, offering modern aesthetics and quality.";
-                 break;
-             case 'jackets':
-                 descriptionElement.textContent = "This stylish jacket, with its prominent logo and sleek design, offers comfort, durability, and versatility for casual or semi-formal occasions, blending fashion with functionality.";
-                 break;
-             default:
-                 descriptionElement.textContent = '';
-         }
-     }
-     
-     modalInstance.show();
- }
+    // Set description based on category and product name
+    if (descriptionElement) {
+        // Check for specific product first
+        if (name.toLowerCase().includes('nstp shirt')) {
+            descriptionElement.textContent = "The QCU NSTP T-shirt is a durable, breathable, and stylish green shirt with a patriotic red, white, and blue logo.";
+        } else {
+            // If not NSTP shirt, use category-based descriptions
+            switch(category) {
+                case 'lace':
+                    descriptionElement.textContent = "The QCU Merch Lanyard collection combines style and durability, offering functional and fashionable lanyards for everyday or special use.";
+                    break;
+                case 'college':
+                    descriptionElement.textContent = "The QCU Merch Uniform is a versatile blue shirt with a stylish design, suitable for both casual and professional settings, offering modern aesthetics and quality.";
+                    break;
+                case 'jackets':
+                    descriptionElement.textContent = "This stylish jacket, with its prominent logo and sleek design, offers comfort, durability, and versatility for casual or semi-formal occasions, blending fashion with functionality.";
+                    break;
+                case 'pe':
+                    descriptionElement.textContent = "The QCU P.E. T-Shirt is a durable, breathable yellow shirt designed for comfort, visibility, and team spirit during workouts.";
+                    break;
+                default:
+                    descriptionElement.textContent = '';
+            }
+        }
+    }
+
+    modalInstance.show();
+}
 
 function increaseQuantity() {
     const quantityInput = document.getElementById('productQuantity');
@@ -336,25 +459,29 @@ function displayProducts(filteredProducts = products) {
     }
 
     // Display filtered products
-        container.innerHTML = filteredProducts.map(product => `
-            <div class="col">
-                <div class="card h-100" onclick="handleProductClick(${product.id})" style="cursor: pointer;">
-                    <div class="image-container position-relative">
-                        <img src="${product.image}" 
-                            class="card-img-top" 
-                            alt="${product.name}"
-                            onerror="this.src='https://via.placeholder.com/150'">
-                        <div class="image-line"></div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title" title="${product.name}">${product.name}</h5>
-                        <div class="price-section">
-                            <span class="text-danger fw-bold">₱${product.price.toFixed(2)}</span>
-                        </div>
+    container.innerHTML = filteredProducts.map(product => `
+        <div class="col">
+            <div class="card h-100" onclick="handleProductClick(${product.id})" style="cursor: pointer;">
+                <div class="image-container position-relative">
+                    <img src="${product.image}" 
+                        class="card-img-top" 
+                        alt="${product.name}"
+                        onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="image-line"></div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" title="${product.name}">${product.name}</h5>
+                    <div class="price-section">
+                        <span class="text-danger fw-bold">
+                            ${product.sizePricing 
+                                ? `₱${product.defaultPrice.toFixed(2)}` 
+                                : `₱${product.price.toFixed(2)}`}
+                        </span>
                     </div>
                 </div>
             </div>
-        `).join('');
+        </div>
+    `).join('');
 }
 
 // Search functionality
