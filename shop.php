@@ -284,12 +284,12 @@
                            
 
 
-                                                    <!-- Variant Selection -->
+                     <!-- Variant Selection -->
                         <div class="mb-3">
                             <div class="d-flex align-items-center">
                                 <label class="mb-0" style="min-width: 60px;">Variant</label>
                                 <select class="form-select w-auto" id="variantSelect">
-                                    <option value="">Select</option>
+                                    <option>Select</option>
                                 </select>
                             </div>
                         </div>

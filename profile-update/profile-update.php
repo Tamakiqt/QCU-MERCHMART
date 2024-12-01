@@ -9,12 +9,13 @@ if (!isset($_SESSION['user_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
-    $name = $_POST['name'];
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
 
     // Validate if fields are empty
-    if (empty($name) || empty($email) || empty($phone)) {
+    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
         $_SESSION['status'] = "All fields are required!";
         header("Location: ../my-account.php");
         exit();
@@ -48,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Update user information
-        $update_stmt = $con->prepare("UPDATE user SET name = ?, email = ?, phone = ? WHERE id = ?");
-        $update_stmt->bind_param("sssi", $name, $email, $phone, $user_id);
+        $update_stmt = $con->prepare("UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ? WHERE id = ?");
+        $update_stmt->bind_param("ssssi", $first_name, $last_name, $email, $phone, $user_id);
         $update_stmt->execute();
 
         if ($update_stmt->affected_rows > 0) {

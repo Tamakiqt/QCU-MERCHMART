@@ -18,9 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Store payment info in session
         $_SESSION['pending_payment'] = true;
 
-        // Make sure to use your exact folder path
-        $success_url = "http://localhost:8000/QCU%20E-COMMERCE/handle-success.php";
-        $failure_url = "http://localhost:8000/QCU%20E-COMMERCE/cart.php";
+        // Make sure these URLs match your actual domain/path
+        $success_url = "http://localhost:8000/checkout-success.php";
+        $failure_url = "http://localhost:8000/checkout-failed.php";
+
+        $payload = json_encode([
+            "data" => [
+                "attributes" => [
+                    "amount" => $amount,
+                    "description" => "Payment for order",
+                    "currency" => "PHP",
+                    "success_url" => $success_url,
+                    "failure_url" => $failure_url
+                ]
+            ]
+        ]);
 
         curl_setopt_array($curl, [
             CURLOPT_URL => "https://api.paymongo.com/v1/links",
@@ -30,25 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode([
-                'data' => [
-                    'attributes' => [
-                        'amount' => $amount,
-                        'description' => 'Test Payment for QCU-MERCHMART',
-                        'currency' => 'PHP',
-                        'success_url' => $success_url,
-                        'cancel_url' => $failure_url
-                    ]
-                ]
-            ]),
+            CURLOPT_POSTFIELDS => $payload,
             CURLOPT_HTTPHEADER => [
                 "accept: application/json",
-                "authorization: Basic c2tfdGVzdF9idlVLbXU2enFmSmIxODNqaUw3WlVjSkU6",
+                "authorization: Basic " . base64_encode('sk_test_bvUKmu6zqfJb183jiL7ZUcJE'),
                 "content-type: application/json"
             ],
         ]);
 
         $response = curl_exec($curl);
+        $err = curl_error($curl);
+        
+        if ($err) {
+            throw new Exception('Curl Error: ' . $err);
+        }
+
         $responseData = json_decode($response, true);
         
         if (isset($responseData['data']['attributes']['checkout_url'])) {
@@ -57,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'checkout_url' => $responseData['data']['attributes']['checkout_url']
             ]);
         } else {
-            throw new Exception('Failed to create payment link');
+            error_log('PayMongo Response: ' . print_r($responseData, true));
+            throw new Exception('Failed to create payment link: ' . ($responseData['errors'][0]['detail'] ?? 'Unknown error'));
         }
 
     } catch (Exception $e) {
