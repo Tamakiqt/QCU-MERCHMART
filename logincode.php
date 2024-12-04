@@ -60,7 +60,7 @@ if (isset($_POST['login_btn'])) {
                         $_SESSION['lockout_time'] = time() + 120; // Lock for 2 minutes
                         $_SESSION['status'] = "Login Locked! Too many login attempts! Please try again after 2 minutes.";
                     } else {
-                        $_SESSION['status'] = "Invalid Email or Password. Attempt " . $_SESSION['login_attempts'] . " of 5.";
+                        $_SESSION['status'] = "Invalid Email or Password. Attempt " . $_SESSION['login_attempts'] . " ";
                     }
                     header("Location: login.php");
                     exit(0);

@@ -41,6 +41,8 @@ body {
     justify-content: center;
     color: #6c757d;
   }
+
+
   /* Sidebar collapse for mobile */
   @media (max-width: 768px) {
     .sidebar {
@@ -67,3 +69,45 @@ body {
       display: block;
     }
   }
+
+/* Login css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa; 
+  color: #333;
+}
+
+/* Header Styling */
+.header {
+  background-color: #a10202;
+  color: #fff;
+  padding: 70px;
+  text-align: left;
+  font-size: 1.5em;
+}
+
+/* Container for Login Form */
+.container {
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+/* Form Title */
+h2.form-weight-bold {
+  font-weight: bold;
+  align-self: left;
+  color: #000;
+}
+
+
+  #login-btn {
+    background-color: #000;
+    width: 100%;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
