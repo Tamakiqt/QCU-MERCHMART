@@ -1,11 +1,23 @@
 <?php
 session_start();
 include('server/dbcon.php');
+
+// Redirect user to login page if not logged in
 if(!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
+// Check for payment status from PayMongo
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+
+if ($status === 'success') {
+    $paymentMessage = "Your payment was successful. Thank you for your purchase!";
+} else {
+    $paymentMessage = "There was an issue with your payment. Please try again later.";
+}
 ?>
+
 
 
 
@@ -31,6 +43,8 @@ if(!isset($_SESSION['user_id'])) {
             scroll-behavior: smooth;
         }
     </style>
+
+    
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
     <p class="mb-0">QCU Coop Online Shopping Site</p>
@@ -106,7 +120,7 @@ if(!isset($_SESSION['user_id'])) {
     </div>
     <div class="banner-text">
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
-        <button>Shop Now</button>
+        <a href="client-shop.php"><button>Shop Now</button></a>
     </div>
 </section>
 

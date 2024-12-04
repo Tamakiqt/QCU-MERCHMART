@@ -433,6 +433,9 @@ function updateCartIcon() {
     }
 }
 
+
+
+
 // Move displayProducts function outside of DOMContentLoaded
 function displayProducts(filteredProducts = products) {
     const container = document.getElementById('products-container');
@@ -543,6 +546,8 @@ document.addEventListener('DOMContentLoaded', function() {
     displayProducts();
 });
 
+
+// Buy Now
 
 
 // Price js 

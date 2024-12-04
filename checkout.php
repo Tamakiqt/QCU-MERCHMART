@@ -2,10 +2,11 @@
 session_start();
 include('server/dbcon.php');
 
-if(!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
 
 // Fetch user information
 $user_id = $_SESSION['user_id'];
@@ -23,6 +24,8 @@ $stmt->bind_param("i", $product_id);
 $stmt->execute();
 $product_data = $stmt->get_result()->fetch_assoc();
 
+error_log('Product data fetched: ' . print_r($product_data, true)); // Debugging log
+
 if (!$product_data) {
     $_SESSION['message'] = "Product not found";
     header("Location: client-shop.php");
@@ -32,14 +35,29 @@ if (!$product_data) {
 $product = [
     'id' => $product_id,
     'product_name' => $product_data['product_name'],
-    'price' => $product_data['price'], // Original price from the database
+    'price' => $product_data['price'],
     'image_url' => $product_data['image_url']
 ];
 
 $quantity = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 1;
 $total_amount = floatval($product['price']) * $quantity;
-?>
 
+// Set the pending order in the session before processing payment
+$_SESSION['pending_order'] = [
+    'order_number' => uniqid(),
+    'user_id' => $user_id,
+    'product_id' => $product['id'],
+    'product_name' => $product['product_name'],
+    'price' => $product['price'],
+    'quantity' => $quantity,
+    'total' => $total_amount,
+    'image_url' => $product['image_url'],
+    'status' => 'pending'
+];
+
+// Debugging log
+error_log('Pending order set: ' . print_r($_SESSION['pending_order'], true));
+?>
 
 
 
@@ -246,6 +264,22 @@ $total_amount = floatval($product['price']) * $quantity;
                         PROCEED TO PAYMENT
                     </button>
 
+                
+                    
+                    <!-- Thank You Message -->
+                    <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
+                        <div class="alert alert-success mt-3">
+                            Thank you for your purchase! Your order has been successfully processed.
+                        </div>
+                    <?php elseif (isset($_GET['status']) && $_GET['status'] === 'failure'): ?>
+                        <div class="alert alert-danger mt-3">
+                            There was an issue processing your payment. Please try again.
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                
+
                 </div>
             </div>
         </div>
@@ -327,51 +361,46 @@ $total_amount = floatval($product['price']) * $quantity;
 
 
 function processPayment() {
-    // Get button reference
     const paymentButton = document.getElementById('paymentButton');
-
-    // Disable the button and show loading state
     paymentButton.disabled = true;
     paymentButton.classList.add('btn-loading');
     paymentButton.innerHTML = '<span class="spinner"></span>Processing Payment...';
 
-    // Amount in cents (PHP value echoed)
-    const amount = <?php echo $total_amount * 100; ?>;
+    const amount = <?php echo $total_amount * 100; ?>; // Amount in cents
 
-    // Fetch request to PaymentController.php
-    fetch('http/PaymentController.php', {
+    fetch('http://localhost:8000/http/PaymentController.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            amount: amount,
-        }),
+        body: JSON.stringify({ amount })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success && data.checkout_url) {
-                // Redirect to checkout
-                window.location.href = data.checkout_url;
-            } else {
-                throw new Error(data.error || 'Unknown error occurred.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error processing payment: ' + error.message);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.checkout_url) {
+            window.open(data.checkout_url, '_blank');
+        } else {
+            throw new Error('Payment initiation failed: ' + (data.error || 'Unknown error'));
+        }
+    })
 
-            // Re-enable button on failure
-            paymentButton.disabled = false;
-            paymentButton.classList.remove('btn-loading');
-            paymentButton.innerHTML = 'PROCEED TO PAYMENT';
-        });
+    .catch(error => {
+        console.error('Payment error:', error);
+        alert('Error processing payment: ' + error.message);
+        paymentButton.disabled = false;
+        paymentButton.classList.remove('btn-loading');
+        paymentButton.innerHTML = 'PROCEED TO PAYMENT';
+    });
+
+    
 }
+
+
 
 
 </script>
