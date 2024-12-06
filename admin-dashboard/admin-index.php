@@ -82,8 +82,29 @@ $offset = ($page - 1) * $limit;
 
     <?php if (isset($_GET['section']) && $_GET['section'] === 'products'): ?>
     <h2>Products</h2>
+     <!-- Add this message display section -->
+     <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php 
+                echo $_SESSION['success_message'];
+                unset($_SESSION['success_message']);
+            ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php 
+                echo $_SESSION['error_message'];
+                unset($_SESSION['error_message']);
+            ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="row mb-3">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="col-12 d-flex align-items-center filter-container">
         <form method="GET" action="" class="w-100">
     <input type="hidden" name="section" value="products">
     <div class="row g-2">
@@ -95,27 +116,37 @@ $offset = ($page - 1) * $limit;
                    placeholder="Search" 
                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
         </div>
-                        
-                        <!-- Category Dropdown -->
-                        <div class="w-auto">
-                            <select class="form-select category-dropdown" name="category" onchange="this.form.submit()">
-                                <option value="">All Categories</option>
-                                <optgroup label="School Uniforms">
-                                    <!-- ... options ... -->
-                                </optgroup>
-                                <optgroup label="School Necessities">
-                                    <!-- ... options ... -->
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Add Button (outside the form) -->
-                 <button type="button" class="btn btn-primary ms-3" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
+        
+        <!-- Category Dropdown -->
+        <div class="col-12 col-md-4">
+            <select class="form-select category-dropdown" name="category" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                <optgroup label="School Uniforms">
+                    <option value="lace" <?php echo $category === 'lace' ? 'selected' : ''; ?>>QCU Lanyards</option>
+                    <option value="college" <?php echo $category === 'college' ? 'selected' : ''; ?>>QCU School Uniform</option>
+                    <option value="pe" <?php echo $category === 'pe' ? 'selected' : ''; ?>>QCU P.E Uniform</option>
+                    <option value="jackets" <?php echo $category === 'jackets' ? 'selected' : ''; ?>>QCU Jackets</option>
+                    <option value="department" <?php echo $category === 'department' ? 'selected' : ''; ?>>Department Shirts</option>
+                    <option value="shirts" <?php echo $category === 'shirts' ? 'selected' : ''; ?>>QCU T-Shirts</option>
+                    <option value="holder" <?php echo $category === 'holder' ? 'selected' : ''; ?>>QCU ID Holder</option>
+                </optgroup>
+                <optgroup label="School Necessities">
+                    <option value="clip" <?php echo $category === 'clip' ? 'selected' : ''; ?>>Hair Clips</option>
+                    <option value="clutcher" <?php echo $category === 'clutcher' ? 'selected' : ''; ?>>Hair Clutchers</option>
+                    <option value="tumblers" <?php echo $category === 'tumblers' ? 'selected' : ''; ?>>Tumblers</option>
+                    <option value="tissue" <?php echo $category === 'tissue' ? 'selected' : ''; ?>>Tissue Paper</option>
+                    <option value="umbrella" <?php echo $category === 'umbrella' ? 'selected' : ''; ?>>Umbrella</option>
+                    <option value="wipes" <?php echo $category === 'wipes' ? 'selected' : ''; ?>>Wet Wipes</option>
+                </optgroup>
+            </select>
+        </div>
+        
+    </div>
+</form>
+        <!-- Add Button (outside the form) -->
+        <button type="button" class="btn btn-primary ms-3" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#addProductModal">
             Add
         </button>
-            </div>
         </div>
     </div>
    
@@ -202,7 +233,7 @@ $offset = ($page - 1) * $limit;
                         <h5><?php echo htmlspecialchars($row['product_name']); ?></h5>
                         <p class="price">₱<?php echo number_format($row['price'], 2); ?></p>
                         <div class="action-buttons" style="display: none;">
-                            <button class="btn btn-danger me-2">Delete</button>
+                        <button class="btn btn-danger delete-btn" data-id="<?php echo $row['id']; ?>">Delete</button>
                             <button class="btn btn-success">Edit</button>
                         </div>
                     </div>
@@ -242,7 +273,7 @@ $offset = ($page - 1) * $limit;
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm" action="add_product.php" method="POST" enctype="multipart/form-data">
+            <form id="addProductForm" action="add_product.php" method="POST" enctype="multipart/form-data">
                     <!-- Product Name -->
                     <div class="mb-3">
                         <label for="productName" class="form-label">Product Name</label>
@@ -258,7 +289,7 @@ $offset = ($page - 1) * $limit;
                     <!-- Description -->
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="description" name="description" required></textarea>
                     </div>
 
                     <!-- Price -->
@@ -294,9 +325,10 @@ $offset = ($page - 1) * $limit;
 
                     <!-- Stock Quantity -->
                     <div class="mb-3">
-                        <label for="stockQuantity" class="form-label">Stock Quantity</label>
-                        <input type="number" class="form-control" id="stockQuantity" name="stock_quantity" min="0" required>
-                    </div>
+                    <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" id="stockQuantity" name="stock_quantity" required>
+                </div>
+
 
                     <div class="modal-footer px-0 pb-0">
                         <button type="submit" class="btn btn-primary">Add Product</button>

@@ -2,47 +2,59 @@
 session_start();
 require_once '../server/dbcon.php';
 
+$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+$maxFileSize = 5 * 1024 * 1024; // 5MB
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
     $productName = $_POST['product_name'];
     $description = $_POST['description'];
     $price = $_POST['price'];
     $category = $_POST['category'];
     $stockQuantity = $_POST['stock_quantity'];
-
-    // Handle file upload
-    $targetDir = "../assets/images/products/";
-    $fileName = basename($_FILES["product_picture"]["name"]);
-    $targetFilePath = $targetDir . $fileName;
-    $imageUrl = "assets/images/products/" . $fileName;
     
-    // Check if image file is valid
-    $imageFileType = strtolower(pathinfo($targetFilePath,PATHINFO_EXTENSION));
-    $allowTypes = array('jpg','png','jpeg');
+    if (isset($_FILES['product_picture'])) {
+        $file = $_FILES['product_picture'];
+        
+        if (!in_array($file['type'], $allowedTypes)) {
+            $_SESSION['error_message'] = "Invalid file type. Please upload JPG, PNG or GIF files only.";
+            header("Location: admin-index.php?section=products");
+            exit();
+        }
+        
+        if ($file['size'] > $maxFileSize) {
+            $_SESSION['error_message'] = "File is too large. Maximum size is 5MB.";
+            header("Location: admin-index.php?section=products");
+            exit();
+        }
+    }
     
-    if(in_array($imageFileType, $allowTypes)){
-        // Upload file to server
-        if(move_uploaded_file($_FILES["product_picture"]["tmp_name"], $targetFilePath)){
+    if (isset($_FILES['product_picture']) && $_FILES['product_picture']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = "../uploads/";
+        
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $fileExtension = pathinfo($_FILES['product_picture']['name'], PATHINFO_EXTENSION);
+        $uniqueFilename = uniqid('product_', true) . '.' . $fileExtension;
+        $targetFile = $uploadDir . $uniqueFilename;
+        
+        if (move_uploaded_file($_FILES['product_picture']['tmp_name'], $targetFile)) {
             // Insert into database
-            $query = "INSERT INTO products (product_name, description, price, category, stock_quantity, image_url) 
-                     VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $con->prepare($query);
-            $stmt->bind_param("ssdsss", $productName, $description, $price, $category, $stockQuantity, $imageUrl);
+            $stmt = $con->prepare("INSERT INTO products (product_name, image_url, description, price, category, stock_quantity, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+            $imageUrl = $targetFile;
+            $stmt->bind_param("sssdsi", $productName, $imageUrl, $description, $price, $category, $stockQuantity);
             
-            if($stmt->execute()){
-                $_SESSION['message'] = "Product added successfully!";
-                $_SESSION['message_type'] = "success";
+            if ($stmt->execute()) {
+                $_SESSION['success_message'] = "Product added successfully!";
             } else {
-                $_SESSION['message'] = "Error adding product.";
-                $_SESSION['message_type'] = "danger";
+                $_SESSION['error_message'] = "Error adding product to database.";
             }
         } else {
-            $_SESSION['message'] = "Error uploading image.";
-            $_SESSION['message_type'] = "danger";
+            $_SESSION['error_message'] = "Error uploading file.";
         }
     } else {
-        $_SESSION['message'] = "Invalid file type. Only JPG, JPEG & PNG files are allowed.";
-        $_SESSION['message_type'] = "danger";
+        $_SESSION['error_message'] = "No file uploaded or file upload error.";
     }
     
     header("Location: admin-index.php?section=products");
