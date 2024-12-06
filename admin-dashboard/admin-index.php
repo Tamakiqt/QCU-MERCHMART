@@ -42,6 +42,29 @@ $offset = ($page - 1) * $limit;
       font-family: poppins, sans-serif;
     }
 
+    .modal-content {
+    border-radius: 8px;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#confirmDeleteBtn:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
     
   </style>
 
@@ -222,22 +245,26 @@ $offset = ($page - 1) * $limit;
             
             while ($row = $result->fetch_assoc()) {
                 ?>
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                    <div class="product-card text-center p-3" onclick="toggleButtons(this)">
-                        <input type="checkbox" class="form-check-input mb-2" />
-                        <div class="product-image mb-2">
-                            <img src="<?php echo htmlspecialchars($row['image_url']); ?>" 
-                                alt="<?php echo htmlspecialchars($row['product_name']); ?>"
-                                class="img-fluid">
-                        </div>
-                        <h5><?php echo htmlspecialchars($row['product_name']); ?></h5>
-                        <p class="price">₱<?php echo number_format($row['price'], 2); ?></p>
-                        <div class="action-buttons" style="display: none;">
-                        <button class="btn btn-danger delete-btn" data-id="<?php echo $row['id']; ?>">Delete</button>
-                            <button class="btn btn-success">Edit</button>
-                        </div>
-                    </div>
-                </div>
+             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+    <div class="product-card text-center p-3" data-id="<?php echo $row['id']; ?>">
+        <input type="checkbox" class="form-check-input mb-2" />
+        <div class="product-image mb-2">
+            <img src="<?php echo htmlspecialchars($row['image_url']); ?>" 
+                alt="<?php echo htmlspecialchars($row['product_name']); ?>"
+                class="img-fluid">
+        </div>
+        <h5><?php echo htmlspecialchars($row['product_name']); ?></h5>
+        <p class="price">₱<?php echo number_format($row['price'], 2); ?></p>
+        <div class="action-buttons">
+            <button type="button" 
+                    class="btn btn-danger delete-btn" 
+                    onclick="deleteProduct(<?php echo $row['id']; ?>)">
+                Delete
+            </button>
+            <button class="btn btn-success">Edit</button>
+        </div>
+    </div>
+</div>
                   <?php
             }
         }
@@ -262,6 +289,8 @@ $offset = ($page - 1) * $limit;
         </ul>
     </nav>
     <?php endif; ?>
+
+
 
 
     <!-- Add Product Modal -->
@@ -342,7 +371,24 @@ $offset = ($page - 1) * $limit;
 
 
 
-
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this product?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -722,6 +768,61 @@ if (isset($_SESSION['password_message'])) {
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
   <script src="admin.js"></script>
+  <script>
+let productToDelete = null;
+const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+
+function deleteProduct(productId) {
+    if (!productId) {
+        console.error('No product ID provided');
+        return;
+    }
+    
+    // Store the product ID and show the modal
+    productToDelete = productId;
+    deleteModal.show();
+}
+
+// Add event listener for the confirm delete button
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    if (!productToDelete) return;
+    
+    fetch('delete_product.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'product_id=' + productToDelete
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server response:', data);
+        if (data.status === 'success') {
+            // Find and remove the product card
+            const productCard = document.querySelector(`[data-id="${productToDelete}"]`).closest('.col-12');
+            if (productCard) {
+                productCard.remove();
+                // Show success message
+                alert('Product deleted successfully!');
+            }
+        } else {
+            alert('Error deleting product: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting product');
+    })
+    .finally(() => {
+        // Hide the modal and reset the productToDelete
+        deleteModal.hide();
+        productToDelete = null;
+    });
+});
+
+// Add this to verify the function is loaded
+console.log('Delete function loaded');
+</script>
 
 </body>
 </html>

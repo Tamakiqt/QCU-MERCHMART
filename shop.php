@@ -1,3 +1,15 @@
+<?php
+session_start();
+require_once 'server/dbcon.php';
+
+// Fetch products from database
+$query = "SELECT * FROM products ORDER BY created_at DESC";
+$result = $con->query($query);
+?>
+
+
+
+
 <?php if(isset($_SESSION['message'])): ?>
     <div class="alert alert-info">
         <?php 
@@ -147,7 +159,7 @@
                     <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Favorites</a>
+                <a class="nav-link" href="#" onclick="checkLoginForFavorites(event)">Favorites</a>
                 </li>
             </ul>
 

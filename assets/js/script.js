@@ -580,3 +580,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// Favorites
+function checkLoginForFavorites(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    
+    // Show notification
+    showNotification('Please login to access favorites');
+    
+    // Redirect to login page after a short delay
+    setTimeout(() => {
+        window.location.href = 'login.php';
+    }, 2000); // 2 seconds delay
+}

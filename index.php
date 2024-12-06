@@ -51,7 +51,8 @@
                     <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Favorites</a>
+                <a class="nav-link" href="#" onclick="checkLoginForFavorites(event)">Favorites</a>
+
                 </li>
             </ul>
 
