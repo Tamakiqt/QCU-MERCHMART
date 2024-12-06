@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,6 +56,10 @@
         <div class="form-group">
             <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
         </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="register-student-number" name="student_number" placeholder="Student Number" required>
+        </div>
+
         <div class="form-group">
             <input type="password" class="form-control" id="register-password" name="password" placeholder="Password" required>
         </div>

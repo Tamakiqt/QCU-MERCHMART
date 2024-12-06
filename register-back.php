@@ -1,18 +1,16 @@
 <?php
 session_start();
-
 include('server/dbcon.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//Load Composer's autoloader
+// Load Composer's autoloader
 require 'vendor/autoload.php';  
 
-// Add the validation function here
+// Password validation function
 function validatePassword($password) {
-    if (strlen($password) < 8 || strlen($password) > 12) {
+    if (strlen($password) < 8) { // Minimum length requirement
         return false;
     }
     if (!preg_match('/[A-Z]/', $password)) {
@@ -86,16 +84,26 @@ $mail->addAddress($email, $name);  // $email should be the second argument
     }
 }
 
-
-if(isset($_POST['register_btn']))
-
-{
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirmpassword = $_POST['confirmpassword'];
+if (isset($_POST['register_btn'])) {
+    $student_number = trim($_POST['student_number']);
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']); // Trim whitespace
+    $confirmpassword = trim($_POST['confirmpassword']);
     $verify_token = md5(rand());
 
+    // Check if the student number is valid
+    $query = "SELECT * FROM student_numbers WHERE student_number = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("s", $student_number);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        $_SESSION['status'] = "The student number is not officially enrolled in QCU.";
+        header("Location: register.php");
+        exit();
+    }
 
     // Check if passwords match
     if ($password !== $confirmpassword) {
@@ -106,7 +114,7 @@ if(isset($_POST['register_btn']))
 
     // Validate password requirements
     if (!validatePassword($password)) {
-        $_SESSION['status'] = "Password must be 8-12 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)";
+        $_SESSION['status'] = "Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)";
         header("Location: register.php");
         exit();
     }
@@ -148,16 +156,4 @@ if(isset($_POST['register_btn']))
 
 
 }
-
-
-
-
-
 ?>
-
-
-
-
-
-
-
