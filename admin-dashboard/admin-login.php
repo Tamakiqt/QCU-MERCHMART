@@ -1,71 +1,44 @@
 <?php
-session_start(); // Start the session
+session_start();
+require_once '../server/dbcon.php';
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "qcumerchmart_db";
+error_log("Session status on login page: " . print_r($_SESSION, true));
 
-$con = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    header("Location: admin-index.php?section=dashboard");
+    exit();
 }
 
-// Initialize error variable
-if (!isset($_SESSION['error'])) {
-    $_SESSION['error'] = ""; // Initialize error session variable
-}
-
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
 
-    // Prepare and bind
-    $stmt = $con->prepare("SELECT password FROM admin WHERE username = ?");
+    $stmt = $con->prepare("SELECT id, password FROM admin WHERE username = ?");
     $stmt->bind_param("s", $inputUsername);
     $stmt->execute();
-    $stmt->store_result();
+    $result = $stmt->get_result();
 
-    // Check if the username exists
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($storedPassword);
-        $stmt->fetch();
-
-        // Verify the password (plain text comparison)
-        if ($inputPassword === $storedPassword) {
-            // Successful login
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if ($inputPassword === $row['password']) {
             $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_id'] = $row['id'];
             $_SESSION['username'] = $inputUsername;
 
-            // Update last login time
-            $updateStmt = $con->prepare("UPDATE admin SET last_login = NOW() WHERE username = ?");
-            $updateStmt->bind_param("s", $inputUsername);
+            $updateStmt = $con->prepare("UPDATE admin SET last_login = NOW() WHERE id = ?");
+            $updateStmt->bind_param("i", $row['id']);
             $updateStmt->execute();
-
-            // Clear the error message
-            unset($_SESSION['error']);
-
-            // Redirect to admin dashboard
-            header("Location: admin-index.php?section=dashboard");
+            
+            error_log("Login successful for user: " . $inputUsername);
+            
+            header("Location: admin-index.php?section=products");
             exit();
-        } else {
-            // Invalid password
-            $_SESSION['error'] = "Invalid username or password.";
         }
-    } else {
-        // Invalid username
-        $_SESSION['error'] = "Invalid username or password.";
     }
-
-    $stmt->close();
+    $_SESSION['error'] = "Invalid username or password.";
 }
-
-$con->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

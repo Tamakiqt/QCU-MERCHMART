@@ -500,39 +500,41 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
     <!-- Right Content Area -->
-    <div class="account-content">
-        <!-- Profile Content -->
-        <div id="profile" class="content-section">
-            <h4>My Profile</h4>
-            <p>Manage and protect your account</p>
+<div class="account-content">
+    <!-- Profile Content -->
+    <div id="profile" class="content-section">
+        <h4>My Profile</h4>
+        <p>Manage and protect your account</p>
 
-            <form class="profile-form" action="profile-update/profile-update.php" method="POST">
-                <div class="form-group">
-                    <input type="text" name="first_name" placeholder="First Name" 
-                        value="<?php echo isset($user['first_name']) ? htmlspecialchars($user['first_name']) : ''; ?>" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" name="last_name" placeholder="Last Name" 
-                        value="<?php echo isset($user['last_name']) ? htmlspecialchars($user['last_name']) : ''; ?>" required>
-                </div>
-                
-               
-
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Username" 
-                        value="<?php echo isset($user['name']) ? htmlspecialchars($user['name']) : ''; ?>" readonly>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email" 
-                        value="<?php echo isset($user['email']) ? htmlspecialchars($user['email']) : ''; ?>" required>
-                </div>
-                <div class="form-group">
-                    <input type="tel" name="phone" placeholder="Phone Number" 
-                        value="<?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?>" required>
-                </div>
-                <button type="submit" name="update_profile" class="btn btn-danger">Save Changes</button>
-            </form>
-        </div>
+        <form class="profile-form" action="profile-update/profile-update.php" method="POST">
+            <div class="form-group">
+                <input type="text" name="student_number" placeholder="Student Number" 
+                    value="<?php echo isset($user['student_number']) ? htmlspecialchars($user['student_number']) : ''; ?>" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="first_name" placeholder="First Name" 
+                    value="<?php echo isset($user['first_name']) ? htmlspecialchars($user['first_name']) : ''; ?>" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" placeholder="Last Name" 
+                    value="<?php echo isset($user['last_name']) ? htmlspecialchars($user['last_name']) : ''; ?>" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Username" 
+                    value="<?php echo isset($user['name']) ? htmlspecialchars($user['name']) : ''; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" 
+                    value="<?php echo isset($user['email']) ? htmlspecialchars($user['email']) : ''; ?>" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Phone Number" 
+                    value="<?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?>" required>
+            </div>
+            <button type="submit" name="update_profile" class="btn btn-danger">Save Changes</button>
+        </form>
+    </div>
+</div>
 
         <!-- Account Setting Content -->
         <div id="account-setting" class="content-section">

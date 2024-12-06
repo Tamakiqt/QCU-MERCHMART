@@ -1,3 +1,20 @@
+// Select the sidebar and toggle button
+const toggleSidebarButton = document.getElementById("toggleSidebar");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");  // if you have an overlay to hide the sidebar
+
+// Add click event listener to the toggle button
+toggleSidebarButton.addEventListener("click", () => {
+  // Toggle the "active" class on the sidebar to show/hide it
+  sidebar.classList.toggle("active");
+  
+  // If you're using an overlay, toggle its visibility as well
+  overlay.classList.toggle("active");
+});
+
+
+
+
 function selectProduct(card) {
     // Toggle selected class
     card.classList.toggle('selected');
@@ -31,3 +48,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+//buttons for delete and edit
+function toggleButtons(card) {
+    const buttons = card.querySelector('.action-buttons');
+    buttons.style.display = buttons.style.display === 'none' ? 'block' : 'none';
+}
+
+// Add Product
+document.addEventListener('DOMContentLoaded', function() {
+    // Test if modal trigger is working
+    const addButton = document.querySelector('[data-bs-target="#addProductModal"]');
+    addButton.addEventListener('click', function() {
+        console.log('Add button clicked');
+        const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+        modal.show();
+    });
+});

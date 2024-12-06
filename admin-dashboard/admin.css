@@ -74,30 +74,95 @@
     }
   }
 
-
-  .active-link {
-    background-color: #2e84d4; /* Active link color */
-    color: #fff; /* Text color for active link */
-  }
   .product-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     background-color: #f8f9fa;
-    position: relative;
-    transition: border-color 0.3s;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.filter-container {
+  display: flex;
+  align-items: flex-start; /* Aligns items to the top */
+  gap: 15px;
+}
+
+.search-category-container {
+  display: flex;
+  gap: 15px;
+}
+
+.search-bar {
+  width: 328px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.category-dropdown {
+  width: 241px;
+  height: 39px;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  width: 200px;
+  height: 38px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: auto; 
+}
+.price {
+    font-weight: bold;
+    color: #000; /* Green color for price */
+    font-size: 1.1em;
+    margin-top: 5px;
+}
+
+
+.row.g-2 {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .form-control, .form-select, .btn {
+      margin-bottom: 0.5rem;
   }
-  .product-card:hover {
-    border-color: #007bff; /* Change border color on hover */
+
+  .row.g-2 {
+    margin-bottom: 1rem;
   }
-  .selected {
-    border-color: #007bff; /* Highlight selected product */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
-  }
-  .pagination {
-    margin-top: 20px;
-  }
+}
+
+
+
+/* ALERT */
+.alert {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+
+ 
 
   .table th, .table td {
     text-align: center;
@@ -113,3 +178,32 @@
 }
 
 
+.btn-group {
+  margin-left: auto; /* Aligns the button group to the right */
+}
+
+.btn {
+  margin-right: 5px; /* Adds space between buttons */
+}
+
+/* ADD PRODUCT */
+.modal-dialog {
+  max-width: 500px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.modal-footer {
+  border-top: none;
+}
