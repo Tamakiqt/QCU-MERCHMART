@@ -3,65 +3,65 @@
     const products = [
         {
             id: 1,
-            name: "Bachelor of Science Computer Science (BCS)",
-            price: 75,
-            image: "assets/images/bcs.PNG",
-            category: "lace"
+            name: "Tumbler (Violet)",
+            price: 250,
+            image: "../uploads/product_67565263363751.16010069.PNG",
+            category: "tumblers"
         },
 
         {
             id: 2,
-            name: "Bachelor of Early Childhood Education (BECED)",
-            price: 75,
-            image: "assets/images/beced.PNG",
-            category: "lace"
+            name: "Tumblers (Red)",
+            price: 250,
+            image: "../uploads/product_675654da3989a2.18568684.PNG",
+            category: "tumblers"
         },
 
         {
             id: 3,
-            name: "Bachelor of Science in Information Systems (BIS)",
+            name: "Bachelor of Science in Computer Science (BCS)",
             price: 75,
-            image: "assets/images/bis.PNG",
+            image: "../uploads/product_67569f53364787.30492816.PNG",
             category: "lace"
         },
 
         {
             id: 4,
-            name: "Bachelor of Science in Accountancy (BSA)",
+            name: "Bachelor of Science in Management Accounting (BSMA)",
             price: 75,
-            image: "assets/images/bsa.PNG",
+            image: "../uploads/product_67569cc76d70c2.80101398.PNG",
             category: "lace"
         },
 
         {
             id: 5,
-            name: "Bachelor of Science in Computer Engineering (BSCPE)",
+            name: "Bachelor of Science in Entrepreneurship (BSENTREP)",
             price: 75,
-            image: "assets/images/bscpe.PNG",
+            image: "../uploads/product_67569da8188136.71205525.PNG",
             category: "lace"
         },
 
         {
             id: 6,
-            name: "Bachelor of Science in Electronics Engineering (BSECE)",
+            name: "Bachelor of Science in Information Systems (BIS)",
             price: 75,
-            image: "assets/images/bsece.PNG",
+            image: "../uploads/product_67569e2a5db551.81571066.PNG",
             category: "lace"
         },
 
         {
             id: 7,
-            name: "Bachelor of Science in Entrepreneurship (BSENTREP)",
+            name: "Bachelor of Early Childhood Education (BECED)",
             price: 75,
-            image: "assets/images/bsentrep.PNG",
+            image: "../uploads/product_67569f13208980.41388595.PNG",
             category: "lace"
         },
 
         {
             id: 8,
-            name: "Bachelor of Science in Industrial Engineering (BSIE)",
+            name: "Bachelor of Science Computer Science (BCS)",
             price: 75,
-            image: "assets/images/bsie.PNG",
+            image: "../uploads/product_67569f53364787.30492816.PNG",
             category: "lace"
         },
         
@@ -69,39 +69,65 @@
             id: 9,
             name: "Bachelor of Science in Information Technology (BSIT)",
             price: 75,
-            image: "assets/images/bsit.PNG",
+            image: "../uploads/product_67569fb1816d59.50711803.PNG",
             category: "lace"
         },
 
         {
             id: 10,
-            name: "Bachelor of Science in Management Accounting (BSMA)",
+            name: "Bachelor of Science in Electronics Engineering (BSECE)",
             price: 75,
-            image: "assets/images/bsma.PNG",
+            image: "../uploads/product_67569ffedacad5.92496251.PNG",
             category: "lace"
         },
 
         {
             id: 11,
-            name: "Jacket",
-            price: 600,
-            image: "assets/images/jacket.png",
-            category: "jackets"
+            name: "Bachelor of Science in Industrial Engineering (BSIE)",
+            price: 75,
+            image: "../uploads/product_6756a036cd9a36.55822817.PNG",
+            category: "lace"
         },
+
         {
             id: 12,
-            name: "CBAA Shirt",
-            price: 199,
-            image: "assets/images/cbaa.png",
-            category: "college"
-           
+            name: "Bachelor of Science in Accountancy (BSA)",
+            price: 75,
+            image: "../uploads/product_6756a0a5a60160.67885630.PNG",
+            category: "lace"
         },
 
         {
             id: 13,
-            name: "Male Polo",
+            name: "NSTP Shirt",
+            price: 250,
+            image: "../uploads/product_6756a1213beec2.83624615.png",
+            category: "college"
+        },
+        {
+            id: 14,
+            name: "P.E Shirt",
+            price: 250,
+            image: "../uploads/product_6756a1928f62c5.33368374.png",
+            category: "pe"
+           
+        },
+
+        {
+            id: 15,
+            name: "CBAA Shirt",
+            price: 199,
+            image: "../uploads/product_6756a1ffdec678.71267709.png",
+            category: "college"
+           
+        },
+
+
+        {
+            id: 16,
+            name: "Female Blouse",
             category: "college",
-            image: "assets/images/male.png",
+            image: "../uploads/product_6756a2323aa864.81991127.png",
             sizePricing: {
                 'XS': 470,
                 'S': 470,
@@ -114,25 +140,10 @@
         
 
         {
-            id: 14,
-            name: "Male Pants",
+            id: 17,
+            name: "Male Polo",
             category: "college",
-            image: "assets/images/pants.png",
-            sizePricing: {
-                'XS': 570,
-                'S': 570,
-                'M': 570,
-                'L': 570,
-                'XL': 580
-            },
-            defaultPrice: 570
-        },
-
-        {
-            id: 15,
-            name: "Female Blouse",
-            category: "college",
-            image: "assets/images/female.png",
+            image: "../uploads/product_6756a2593dd7d9.05310333.png",
             sizePricing: {
                 'XS': 470,
                 'S': 470,
@@ -144,23 +155,36 @@
         },
 
         {
-            id: 16,
-            name: "NSTP Shirt",
-            price: 250,
-            image: "assets/images/nstp.png",
-            category: "college"
-           
+            id: 18,
+            name: "Male Pants",
+            category: "college",
+            image: "../uploads/product_6756a2884826f7.79784606.png",
+            sizePricing: {
+                'XS': 470,
+                'S': 470,
+                'M': 470,
+                'L': 470,
+                'XL': 480
+            },
+            defaultPrice: 470
         },
 
         {
-            id: 17,
-            name: "P.E Shirt",
-            price: 250,
-            image: "assets/images/p.e.png",
-            category: "pe"
-           
-        }
+            id: 19,
+            name: "Jacket (Black)",
+            category: "jackets",
+            image: "../uploads/product_6756a310aa2f59.85803338.png",
+            sizePricing: {
+                'XS': 600,
+                'S': 600,
+                'M': 600,
+                'L': 600,
+                'XL': 600
+            },
+            defaultPrice: 600
+        },
 
+       
 
         
         // Add more products as needed
@@ -172,17 +196,51 @@ function handleProductClick(productId) {
     if (product) {
         const modal = document.getElementById('productPreviewModal');
         modal.setAttribute('data-product-id', product.id);
-        showProductPreview(product.name, product.price, product.image, product.category);
+        
+        // Fetch stock quantity from server
+        fetch(`get-product-stock.php?id=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showProductPreview(
+                        product.name, 
+                        product.sizePricing ? product.defaultPrice : product.price,
+                        product.image, 
+                        product.category,
+                        data.stock_quantity
+                    );
+                } else {
+                    console.error('Error:', data.message);
+                    showProductPreview(product.name, product.price, product.image, product.category, 0);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching stock:', error);
+                showProductPreview(product.name, product.price, product.image, product.category, 0);
+            });
     }
 }
     
 
-function updateQuantity(change) {
-    const input = document.getElementById('productQuantity');
-    let value = parseInt(input.value) + change;
-    if (value >= 1) {
-        input.value = value;
+function updateQuantity(action) {
+    const quantityInput = document.getElementById('productQuantity');
+    const currentStock = parseInt(document.getElementById('modalProductStock').textContent);
+    let currentValue = parseInt(quantityInput.value);
+
+    if (action === 'increase') {
+        if (currentValue < currentStock) {
+            currentValue++;
+        } else {
+            alert('Cannot exceed available stock');
+            return;
+        }
+    } else if (action === 'decrease') {
+        if (currentValue > 1) {
+            currentValue--;
+        }
     }
+
+    quantityInput.value = currentValue;
 }
 
 
@@ -314,7 +372,7 @@ function updateCartIcon() {
 }
         
 
-function showProductPreview(name, price, imageUrl, category, variants) {
+function showProductPreview(name, price, imageUrl, category, stockQuantity) {
     const modal = document.getElementById('productPreviewModal');
     const modalInstance = new bootstrap.Modal(modal);
     const sizeSelection = document.querySelector('.modal-body .mb-3:has(.size-options)');
@@ -322,7 +380,33 @@ function showProductPreview(name, price, imageUrl, category, variants) {
     const descriptionElement = document.getElementById('modalProductDescription');
     
     // Find the product
-    const product = products.find(p => p.name === name);    
+    const product = products.find(p => p.name === name);   
+    
+    
+    
+    // NEW CODE: Update stock display and handle out of stock state
+    document.getElementById('modalProductStock').textContent = stockQuantity;
+    const addToCartBtn = modal.querySelector('.add-cart');
+    const buyNowBtn = modal.querySelector('.buy-now');
+    
+    if (stockQuantity <= 0) {
+        addToCartBtn.disabled = true;
+        addToCartBtn.textContent = 'Out of Stock';
+        buyNowBtn.disabled = true;
+        // Disable quantity controls
+        document.querySelector('.quantity-btn[onclick="decreaseQuantity()"]').disabled = true;
+        document.querySelector('.quantity-btn[onclick="increaseQuantity()"]').disabled = true;
+        document.getElementById('productQuantity').disabled = true;
+    } else {
+        addToCartBtn.disabled = false;
+        addToCartBtn.textContent = 'Add to Cart';
+        buyNowBtn.disabled = false;
+        // Enable quantity controls
+        document.querySelector('.quantity-btn[onclick="decreaseQuantity()"]').disabled = false;
+        document.querySelector('.quantity-btn[onclick="increaseQuantity()"]').disabled = false;
+        document.getElementById('productQuantity').disabled = false;
+    }
+    // END OF NEW CODE
     
     // Define categories that should show size options
     const categoriesWithSize = ['college', 'pe', 'jackets', 'department', 'shirts'];
@@ -335,7 +419,6 @@ function showProductPreview(name, price, imageUrl, category, variants) {
         variantSelection.style.display = categoriesWithVariant.includes(category) ? 'block' : 'none';
     }
 
-    
     // Update modal content
     document.getElementById('modalProductName').textContent = name;
     document.getElementById('modalProductImage').src = imageUrl;
@@ -390,6 +473,9 @@ function showProductPreview(name, price, imageUrl, category, variants) {
         } else {
             // If not NSTP shirt, use category-based descriptions
             switch(category) {
+                case 'tumblers':  // Add this new case
+                    descriptionElement.textContent = "The QCU TUMBLER collection features a colorful selection of durable, functional water bottles, emphasizing variety, quality, and style.";
+                    break;
                 case 'lace':
                     descriptionElement.textContent = "The QCU Merch Lanyard collection combines style and durability, offering functional and fashionable lanyards for everyday or special use.";
                     break;
@@ -471,6 +557,7 @@ function displayProducts(filteredProducts = products) {
                         alt="${product.name}"
                         onerror="this.src='https://via.placeholder.com/150'">
                     <div class="image-line"></div>
+                    ${product.stock_quantity <= 0 ? '<div class="out-of-stock-overlay">Out of Stock</div>' : ''}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title" title="${product.name}">${product.name}</h5>
@@ -547,11 +634,72 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Buy Now
-
-
-// Price js 
-
+//Delete Favorite
+function deleteFavorite(favoriteId) {
+    // Get the modal
+    const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+    const confirmBtn = document.getElementById('confirmDelete');
+    
+    // Remove any existing click handlers
+    confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+    
+    // Get fresh reference to the button
+    const newConfirmBtn = document.getElementById('confirmDelete');
+    
+    // Add click handler
+    newConfirmBtn.addEventListener('click', function() {
+        fetch('delete-favorite.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                favorite_id: favoriteId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Hide the modal
+                modal.hide();
+                
+                // Remove the item from the DOM
+                const favoriteItem = document.getElementById(`favorite-${favoriteId}`);
+                favoriteItem.classList.add('removing');
+                
+                setTimeout(() => {
+                    favoriteItem.remove();
+                    
+                    // Check if there are any favorites left
+                    const favoritesContainer = document.querySelector('.favorites-row');
+                    if (favoritesContainer.children.length === 0) {
+                        // Show the "No favorites" message
+                        favoritesContainer.innerHTML = `
+                            <div class="col-12 text-center" style="margin-top: 50px;">
+                                <div class="no-favorites d-flex justify-content-center align-items-center flex-column">
+                                    <i class="bi bi-heart" style="font-size: 3rem; color: #6c757d;"></i>
+                                    <p class="mt-3 mb-2">No favorites yet</p>
+                                    <a href="client-shop.php" class="btn btn-primary">Go Shopping</a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }, 300);
+                
+                showNotification('Item removed from favorites');
+            } else {
+                showNotification('Error removing item from favorites');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error removing item from favorites');
+        });
+    });
+    
+    // Show the modal
+    modal.show();
+}
 
 
 

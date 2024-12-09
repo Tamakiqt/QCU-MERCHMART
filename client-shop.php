@@ -136,10 +136,20 @@ if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
             color: black;
         }
 
+        .add-cart:hover {
+            background-color: #940202; 
+            color: #fff; 
+        }
+
         .buy-now {
             background: #dc3545;
             color: white;
             border: none;
+        }
+
+        .buy-now:hover {
+            background-color: #940202; 
+            color: #fff; 
         }
 
         .add-to-favorites {
@@ -158,6 +168,48 @@ if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
         .quantity-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
+        }
+
+        .main-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .out-of-stock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 2;
+        }   
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .favorite-btn i.bi-heart-fill.text-danger {
+            color: #dc3545 !important;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3;
         }
 
     </style>
@@ -189,7 +241,7 @@ if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
                     <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>
@@ -312,44 +364,47 @@ if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
             </div>
 
             <!-- Products Grid -->
-<div class="row row-cols-md-3 row-cols-lg-5 g-3" id="products-container">
-    <?php
-    $query = "SELECT * FROM products";
-    $result = $con->query($query);
-    
-    while($product = $result->fetch_assoc()) {
-    ?>
-        <div class="col">
-            <div class="product-card">
-                <div class="image-container">
-                    <img src="<?php echo $product['image_url']; ?>" 
-                         alt="<?php echo $product['product_name']; ?>">
-                    <button class="favorite-btn" onclick="toggleFavorite(<?php echo $product['id']; ?>)">
-                        <i class="bi bi-heart"></i>
-                    </button>
+            <div class="row row-cols-md-3 row-cols-lg-5 g-3" id="products-container">
+            <?php
+            $query = "SELECT * FROM products";
+            $result = $con->query($query);
+            
+            while($product = $result->fetch_assoc()) {
+                $outOfStock = $product['stock_quantity'] <= 0;
+            ?>
+                <div class="col">
+                    <div class="product-card">
+                        <div class="image-container">
+                            <img src="<?php echo $product['image_url']; ?>" 
+                                alt="<?php echo $product['product_name']; ?>">
+                            <button class="favorite-btn" onclick="toggleFavorite(<?php echo $product['id']; ?>)">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                            <?php if ($outOfStock): ?>
+                                <div class="out-of-stock-overlay">Out of Stock</div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="product-details">
+                            <h3 class="product-name"><?php echo $product['product_name']; ?></h3>
+                            <p class="product-price">₱<?php echo number_format($product['price'], 2); ?></p>
+                            <button class="btn btn-primary add-cart-btn" 
+                                    onclick="addToCart(
+                                        <?php echo $product['id']; ?>, 
+                                        '<?php echo addslashes($product['product_name']); ?>', 
+                                        '₱<?php echo number_format($product['price'], 2); ?>', 
+                                        '<?php echo $product['image_url']; ?>'
+                                    )"
+                                    <?php echo $outOfStock ? 'disabled' : ''; ?>>
+                                <?php echo $outOfStock ? 'Out of Stock' : 'Add to Cart'; ?>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="product-details">
-                    <h3 class="product-name"><?php echo $product['product_name']; ?></h3>
-                    <p class="product-price">₱<?php echo number_format($product['price'], 2); ?></p>
-                    <button class="btn btn-primary add-cart-btn" 
-                            onclick="addToCart(
-                                <?php echo $product['id']; ?>, 
-                                '<?php echo addslashes($product['product_name']); ?>', 
-                                '₱<?php echo number_format($product['price'], 2); ?>', 
-                                '<?php echo $product['image_url']; ?>'
-                            )">
-                        Add to Cart
-                    </button>
-
-                    
-                </div>
+            <?php 
+            }
+            ?>
             </div>
         </div>
-    <?php 
-    }
-    ?>
-</div>
-            </div>
         </div>
         </div>
     </div>
@@ -414,7 +469,7 @@ if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
                                         <input type="number" id="productQuantity" class="form-control quantity-input" value="1" min="1">
                                         <button type="button" class="btn quantity-btn" onclick="increaseQuantity()">+</button>
                                     </div>
-                                    <span class="text-muted">Stocks: <span id="modalProductStock">20</span></span>
+                                    <span class="text-muted">Stocks: <span id="modalProductStock">0</span></span>
                                 </div>
                             </div>
                         </div>

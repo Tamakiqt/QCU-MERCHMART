@@ -223,7 +223,7 @@ if(!isset($_SESSION['user_id'])) {
                     <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>
@@ -278,20 +278,22 @@ if(!isset($_SESSION['user_id'])) {
     <?php
     $user_id = $_SESSION['user_id'];
     $query = "SELECT 
-                id,
-                product_name,
-                price,
-                quantity,
-                total,
-                image_url
-              FROM cart 
-              WHERE user_id = ?";
+            c.id,
+            c.product_name,
+            c.price,
+            c.quantity,
+            c.total,
+            p.image_url  
+          FROM cart c
+          JOIN products p ON c.product_id = p.id  
+          WHERE c.user_id = ?";
 
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $total = 0;
+
 
     if ($result->num_rows > 0) {
         while($item = $result->fetch_assoc()) {

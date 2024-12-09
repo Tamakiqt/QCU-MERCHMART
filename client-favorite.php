@@ -24,21 +24,23 @@ if(!isset($_SESSION['user_id'])) {
 <body>
 
 <style>
-    html {
-        scroll-behavior: smooth;
+        html {
+            scroll-behavior: smooth;
+        }
+        .navbar {
+            z-index: 1030;
+        }
+        .favorite-header {
+            z-index: 1020; 
+        }
+        
+        .favorites-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 250px); /* Adjust based on your header height */
     }
-    .navbar {
-        z-index: 1030;
-    }
-    .favorite-header {
-        z-index: 1020; 
-    }
-    
-    .favorites-container {
-        margin-top: 180px;
-        padding: 0 20px;
-        max-width: 1200px; /* Add max-width to control container width */
-    }
+
 
     .favorites-row {
         display: grid;
@@ -128,11 +130,91 @@ if(!isset($_SESSION['user_id'])) {
         }
     }
 
-    @media (min-width: 992px) {
-        .favorites-row {
-            grid-template-columns: repeat(5, 1fr);
+
+            #deleteConfirmModal .modal-content {
+            border: none;
+            border-radius: 8px;
         }
-    }
+
+        #deleteConfirmModal .modal-body {
+            padding: 2rem;
+        }
+
+        #deleteConfirmModal h5 {
+            color: #333;
+            font-weight: 500;
+        }
+
+        #deleteConfirmModal .btn {
+            padding: 0.5rem 2rem;
+            border-radius: 4px;
+        }
+
+        #deleteConfirmModal .btn-danger {
+            background-color: #940202;
+            border-color: #940202;
+        }
+
+        #deleteConfirmModal .btn-danger:hover {
+            background-color: #7a0202;
+            border-color: #7a0202;
+        }
+
+        #deleteConfirmModal .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        #deleteConfirmModal .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .removing {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .no-favorites-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 250px); /* Adjust this value based on your header/footer height */
+            width: 100%;
+       }
+
+        .no-favorites-content {
+            text-align: center;
+        }
+
+        .no-favorites-content h4 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .no-favorites-content p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+
+        .btn-shop {
+            display: inline-block;
+            background-color: #940202;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-shop:hover {
+            background-color: #7a0202;
+            color: white;
+            text-decoration: none;
+        }
 </style>
 
 <!-- Top Header -->
@@ -157,16 +239,16 @@ if(!isset($_SESSION['user_id'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-links">
                 <li class="nav-item">
-                    <a class="nav-link" href="category-links">Home</a>
+                    <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="daily-discoveries">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Favorites</a>
+                    <a class="nav-link" href="client-favorite.php">Favorites</a>
                 </li>
             </ul>
 
@@ -232,13 +314,13 @@ if(!isset($_SESSION['user_id'])) {
         if ($result->num_rows > 0) {
             while ($item = $result->fetch_assoc()) {
         ?>
-            <div class="col">
+            <div class="col favorite-item" id="favorite-<?php echo $item['id']; ?>">
                 <div class="product-card">
                     <div class="image-container">
                         <img src="<?php echo $item['image_url']; ?>" 
                              alt="<?php echo $item['product_name']; ?>">
-                        <button class="favorite-btn active">
-                            <i class="bi bi-heart-fill"></i>
+                        <button class="favorite-btn active" onclick="deleteFavorite(<?php echo $item['id']; ?>)">
+                            <i class="bi bi-trash text-danger"></i>
                         </button>
                     </div>
                     <div class="product-details">
@@ -253,19 +335,34 @@ if(!isset($_SESSION['user_id'])) {
             }
         } else {
         ?>
-            <div class="col-12 text-center" style="margin-top: 50px;">
-                <div class="no-favorites d-flex justify-content-center align-items-center flex-column">
-                    <i class="bi bi-heart" style="font-size: 3rem; color: #6c757d;"></i>
-                    <p class="mt-3 mb-2">No favorites yet</p>
-                    <a href="client-shop.php" class="btn btn-primary">Go Shopping</a>
+             <div class="no-favorites-container">
+                <div class="no-favorites-content">
+                    <h4>No favorites yet</h4>
+                    <p>Start adding some items to your favorites!</p>
+                    <a href="client-shop.php" class="btn-shop">Go Shopping</a>
                 </div>
             </div>
         <?php
+       
         }
         ?>
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <h5 class="mb-3">Are you sure you want to delete this item?</h5>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-danger px-4" id="confirmDelete">Yes</button>
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!----FOOTER------>

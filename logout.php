@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_unset();
 session_destroy();
 
 // Check if there's a redirect parameter

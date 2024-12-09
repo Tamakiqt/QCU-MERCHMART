@@ -120,20 +120,15 @@ $('#addProductModal').on('hidden.bs.modal', function () {
 });
 
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Debug: Log to confirm the script is running
-    console.log('Delete buttons script loaded');
-    
-    // Select all delete buttons
+    // Add click event listeners to all delete buttons
     const deleteButtons = document.querySelectorAll('.delete-btn');
-    console.log('Found delete buttons:', deleteButtons.length);
+
+    
     
     deleteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
+        button.addEventListener('click', function() {
             const productId = this.getAttribute('data-id');
-            console.log('Delete clicked for product ID:', productId);
             
             if (confirm('Are you sure you want to delete this product?')) {
                 // Send delete request
@@ -146,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Server response:', data);
                     if (data.status === 'success') {
                         // Remove the product card from the DOM
                         this.closest('.col-12').remove();
@@ -162,4 +156,131 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
 });
+
+button.addEventListener('click', function() {
+    const productId = this.getAttribute('data-id');
+    console.log('Delete button clicked for product ID:', productId);
+    
+    if (confirm('Are you sure you want to delete this product?')) {
+        console.log('Sending delete request for product ID:', productId);
+    }
+});
+
+
+// Function to show notification
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+    notification.style.zIndex = '9999';
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} me-2"></i>
+            <strong>${message}</strong>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    document.getElementById('notificationContainer').appendChild(notification);
+    
+    setTimeout(() => notification.remove(), 3000);
+}
+
+// Function to edit product
+function editProduct(productId) {
+    // Show loading state
+    console.log('Fetching product data for ID:', productId);
+    
+    fetch(`get_product.php?id=${productId}`)
+        .then(response => response.json())
+        .then(product => {
+            console.log('Received product data:', product);
+            
+            // Populate form fields
+            document.getElementById('editProductId').value = product.id;
+            document.getElementById('editProductName').value = product.product_name;
+            document.getElementById('editDescription').value = product.description;
+            document.getElementById('editPrice').value = product.price;
+            document.getElementById('editCategory').value = product.category;
+            document.getElementById('editStockQuantity').value = product.stock_quantity;
+            
+            // Update image preview
+            const currentImage = document.getElementById('currentProductImage');
+            if (product.image_url) {
+                currentImage.src = product.image_url;
+                currentImage.style.display = 'block';
+            } else {
+                currentImage.style.display = 'none';
+            }
+            
+            // Show the modal
+            const editModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            editModal.show();
+        })
+        .catch(error => {
+            console.error('Error fetching product:', error);
+            showNotification('Error loading product details', 'danger');
+        });
+}
+
+// Handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('editProductForm');
+    
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create FormData object
+            const formData = new FormData(this);
+            
+            // Debug: Log form data
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            
+            // Send AJAX request
+            fetch('edit_product.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                
+                if (data.status === 'success') {
+                    // Show success message
+                    showNotification('Product updated successfully!', 'success');
+                    
+                    // Close the modal
+                    const editModal = bootstrap.Modal.getInstance(document.getElementById('editProductModal'));
+                    editModal.hide();
+                    
+                    // Refresh the page after a short delay
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    // Show error message
+                    showNotification(data.message || 'Error updating product', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error updating product. Please try again.', 'danger');
+            });
+        });
+    }
+});
+
+// Preview new image when selected
+document.getElementById('editProductPicture').addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('currentProductImage').src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+

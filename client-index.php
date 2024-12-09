@@ -71,7 +71,7 @@ if ($status === 'success') {
                     <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>

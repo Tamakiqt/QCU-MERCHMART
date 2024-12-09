@@ -1,3 +1,21 @@
+<?php
+session_start();
+require_once 'server/dbcon.php';  // Make sure this path is correct
+
+// Simple session check
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +59,7 @@
                     <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>
@@ -57,7 +75,6 @@
                 <a href="login.php" class="login-icon" id="loginIcon">
                     <i class="bi bi-person"></i>
                 </a>
-                
             </div>
         </div>
     </div>

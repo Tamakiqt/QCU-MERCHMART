@@ -37,6 +37,11 @@ $offset = ($page - 1) * $limit;
 </head>
 <body>
 
+<div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+
+
+
 <style>
     body {
       font-family: poppins, sans-serif;
@@ -105,6 +110,9 @@ $offset = ($page - 1) * $limit;
 
     <?php if (isset($_GET['section']) && $_GET['section'] === 'products'): ?>
     <h2>Products</h2>
+
+       
+
      <!-- Add this message display section -->
      <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -261,7 +269,11 @@ $offset = ($page - 1) * $limit;
                     onclick="deleteProduct(<?php echo $row['id']; ?>)">
                 Delete
             </button>
-            <button class="btn btn-success">Edit</button>
+            <button type="button" 
+                    class="btn btn-success" 
+                    onclick="editProduct(<?php echo $row['id']; ?>)">
+                    <i class="fas fa-edit"></i> Edit
+            </button>
         </div>
     </div>
 </div>
@@ -368,6 +380,101 @@ $offset = ($page - 1) * $limit;
         </div>
     </div>
 </div>
+
+
+<div id="notificationContainer"></div>
+
+
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" t abindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm" action="edit_product.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="editProductId" name="product_id">
+                    
+                    <!-- Product Name -->
+                    <div class="mb-3">
+                        <label for="editProductName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="editProductName" name="product_name" required>
+                    </div>
+
+                    <!-- Current Product Picture -->
+                    <div class="mb-3">
+                        <label class="form-label">Current Picture</label>
+                        <img id="currentProductImage" src="" alt="Current Product" class="img-fluid mb-2" style="max-height: 100px;">
+                    </div>
+
+                    <!-- New Product Picture -->
+                    <div class="mb-3">
+                        <label for="editProductPicture" class="form-label">New Product Picture (Optional)</label>
+                        <input type="file" class="form-control" id="editProductPicture" name="product_picture">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editDescription" name="description" required></textarea>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <label for="editPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="editPrice" name="price" step="0.01" required>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label for="editCategory" class="form-label">Category</label>
+                        <select class="form-select" id="editCategory" name="category" required>
+                            <option value="">Select Category</option>
+                            <optgroup label="School Uniforms">
+                                <option value="lace">QCU Lanyards</option>
+                                <option value="college">QCU School Uniform</option>
+                                <option value="pe">QCU P.E Uniform</option>
+                                <option value="jackets">QCU Jackets</option>
+                                <option value="department">Department Shirts</option>
+                                <option value="shirts">QCU T-Shirts</option>
+                                <option value="holder">QCU ID Holder</option>
+                            </optgroup>
+                            <optgroup label="School Necessities">
+                                <option value="clip">Hair Clips</option>
+                                <option value="clutcher">Hair Clutchers</option>
+                                <option value="tumblers">Tumblers</option>
+                                <option value="tissue">Tissue Paper</option>
+                                <option value="umbrella">Umbrella</option>
+                                <option value="wipes">Wet Wipes</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Stock Quantity -->
+                    <div class="mb-3">
+                        <label for="editStockQuantity" class="form-label">Stock Quantity</label>
+                        <input type="number" class="form-control" id="editStockQuantity" name="stock_quantity" required>
+                    </div>
+
+                    <div class="modal-footer px-0 pb-0">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
 
 
 

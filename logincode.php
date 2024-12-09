@@ -51,7 +51,7 @@ if (isset($_POST['login_btn'])) {
 
                     // Redirect to the client-index.php page with a success message
                     $_SESSION['status'] = "You are logged in successfully!";
-                    header("Location: client-index.php");
+                    header("Location: my-account.php");
                     exit(0);
                 } else {
                     // If password is incorrect

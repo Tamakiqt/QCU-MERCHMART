@@ -143,7 +143,7 @@ if (isset($_SESSION['user_id'])) {
 
                 /* Main content area */
                 .account-content {
-                    width: 100%;
+                    max-width: 800px;
                     background-color: white;
                     padding: 30px;
                     padding-bottom: 150px;
@@ -248,6 +248,8 @@ if (isset($_SESSION['user_id'])) {
 
                 .content-section {
                     display: none;
+                    width: 100%;
+                    padding: 20px;
                 }
 
                 .content-section.active {
@@ -397,6 +399,9 @@ if (isset($_SESSION['user_id'])) {
                     font-weight: 500;
                 }
 
+
+                
+
 </style>
 <!-- Top Header -->
 <div class="top-header py-2 text-white bg-back text-center fixed-top">
@@ -424,13 +429,13 @@ if (isset($_SESSION['user_id'])) {
                     <a class="nav-link" href="client-index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
+                    <a class="nav-link" href="aboutus.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="client-shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="client-favorites.php">Favorites</a>
+                    <a class="nav-link" href="client-favorite.php">Favorites</a>
                 </li>
             </ul>
 
@@ -500,7 +505,7 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
     <!-- Right Content Area -->
-<div class="account-content">
+<div class="account-content1">
     <!-- Profile Content -->
     <div id="profile" class="content-section">
         <h4>My Profile</h4>
@@ -536,8 +541,9 @@ if (isset($_SESSION['user_id'])) {
     </div>
 </div>
 
+ 
         <!-- Account Setting Content -->
-        <div id="account-setting" class="content-section">
+        <div id="account-setting" class="content-section" >
             <h4 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">Account Setting</h4>
             <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Manage your account settings</p>
             <hr style="margin: 0; border-top: 3px solid #000;">
@@ -842,6 +848,9 @@ if(isset($_SESSION['status'])) {
 
 </body>
 </html>
+
+
+
 
 
 
