@@ -5,6 +5,40 @@ if(!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
+
+$total = 0;
+$cartCount = 0;
+
+if(isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    
+    // Calculate total
+    $total_query = "SELECT SUM(c.quantity * p.price) as total 
+                   FROM cart c 
+                   JOIN products p ON c.product_id = p.id 
+                   WHERE c.user_id = ?";
+    $stmt = $con->prepare($total_query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $total = $row['total'] ?? 0;
+    
+    // Calculate cart count
+    $count_query = "SELECT SUM(quantity) as count FROM cart WHERE user_id = ?";
+    $stmt = $con->prepare($count_query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $cartCount = $result->fetch_assoc()['count'] ?? 0;
+    
+    // Debug logs
+    error_log("Cart total: " . $total);
+    error_log("Cart count: " . $cartCount);
+}
+
+
 ?>
 
 
@@ -341,32 +375,21 @@ if(!isset($_SESSION['user_id'])) {
 <div class="cart-summary py-4" style="background-color: #f3f3f3;">
     <div class="container-fluid">
         <div class="d-flex justify-content-end">
-            <div class="d-flex align-items-right">
+            <div class="d-flex align-items-center">
                 <div class="total-section me-4">
                     <h5 class="mb-0" style="font-weight: bold;">Total: <span class="text-danger">₱<?php echo number_format($total, 2); ?></span></h5>
                 </div>
-                <button onclick="processPayment(<?php echo $total * 100; ?>)" class="btn px-4" id="checkoutBtn" 
-                        style="background-color: #940202; color: white; border: none; font-weight: bold;"
-                        <?php echo ($total <= 0) ? 'disabled' : ''; ?>>
-                    Checkout (<?php
-                        if(isset($_SESSION['user_id'])) {
-                            $user_id = $_SESSION['user_id'];
-                            $count_query = "SELECT SUM(quantity) as total FROM cart WHERE user_id = ?";
-                            $stmt = $con->prepare($count_query);
-                            $stmt->bind_param("i", $user_id);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $count = $result->fetch_assoc()['total'] ?? 0;
-                            echo $count;
-                        } else {
-                            echo "0";
-                        }
-                    ?>)
+                <button id="checkoutBtn" 
+                    class="btn" 
+                    onclick="processCheckout()"
+                    data-total="<?php echo htmlspecialchars($total); ?>"
+                    style="background-color: #940202; color: white; border: none;">
+                    Check Out
                 </button>
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
@@ -441,37 +464,55 @@ if(!isset($_SESSION['user_id'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
 <script>
-function processPayment(amount) {
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    checkoutBtn.disabled = true;
-    checkoutBtn.innerHTML = 'Processing...';
+function processCheckout() {
+    const button = document.getElementById('checkoutBtn');
+    const total = parseFloat(button.getAttribute('data-total'));
+    
+    if (isNaN(total) || total <= 0) {
+        alert('Invalid total amount');
+        return;
+    }
+    
+    // Disable button and show loading state
+    button.disabled = true;
+    button.textContent = 'Processing...';
 
-    fetch('http/PaymentController.php', {
+    // Create form data
+    const formData = new FormData();
+    formData.append('from_cart', 'true');
+    formData.append('total_amount', total);
+
+    // Send request
+    fetch('Payment-method/process-payment.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            amount: amount
-        })
+        body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text().then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Response text:', text);
+                throw new Error('Invalid JSON response');
+            }
+        });
+    })
     .then(data => {
-        if (data.success && data.checkout_url) {
-            // Store current cart state in session storage
-            sessionStorage.setItem('pendingPayment', 'true');
-            window.location.href = data.checkout_url;
+        if (data.success) {
+            window.location.href = 'Payment-method/payment-gateway.php';
         } else {
-            alert('Payment Error: ' + (data.error || 'Unknown error occurred'));
-            checkoutBtn.disabled = false;
-            checkoutBtn.innerHTML = 'Checkout';
+            throw new Error(data.message || 'Failed to process checkout');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Failed to process payment. Please try again.');
-        checkoutBtn.disabled = false;
-        checkoutBtn.innerHTML = 'Checkout';
+        alert('Error processing checkout: ' + error.message);
+        // Reset button state
+        button.disabled = false;
+        button.textContent = 'Check Out';
     });
 }
 </script>

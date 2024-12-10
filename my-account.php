@@ -399,6 +399,16 @@ if (isset($_SESSION['user_id'])) {
                     font-weight: 500;
                 }
 
+                .status-pending {
+                    color: #f0ad4e;
+                }
+                .status-paid {
+                    color: #5cb85c;
+                }
+                .status-cancelled {
+                    color: #d9534f;
+                }
+
 
                 
 
@@ -505,7 +515,7 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
     <!-- Right Content Area -->
-<div class="account-content1">
+<div class="account-content-first">
     <!-- Profile Content -->
     <div id="profile" class="content-section">
         <h4>My Profile</h4>
@@ -573,61 +583,68 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
 
-        <!-- Order History Content -->
-        <div id="order-history" class="content-section">
-            <h3 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">Order History</h3>
-            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">View your order details in this page</p>
-            <hr style="margin: 0; border-top: 3px solid #000;">
-            <div class="orders-container">
-                <?php
-                // Get user's orders
-                $order_query = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
-                $stmt = $con->prepare($order_query);
-                $stmt->bind_param("i", $_SESSION['user_id']);
-                $stmt->execute();
-                $result = $stmt->get_result();
+       
+        
+<div id="order-history" class="content-section">
+    <h3 style="font-size: 20px; margin-bottom: 5px; font-weight: bold;">Order History</h3>
+    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">View your order details in this page</p>
+    <hr style="margin: 0; border-top: 3px solid #000;">
+    <div class="orders-container">
+        <?php
+        // Get user's orders
+        $order_query = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+        $stmt = $con->prepare($order_query);
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-                if ($result->num_rows > 0) {
-                    while ($order = $result->fetch_assoc()) {
-                        ?>
-                        <div class="order-item">
-                            <div class="order-header">
-                                <div class="order-number">Order Number: <?php echo htmlspecialchars($order['order_number']); ?></div>
+        if ($result->num_rows > 0) {
+            while ($order = $result->fetch_assoc()) {
+                ?>
+                <div class="order-item">
+                    <div class="order-header">
+                        <div class="order-number">Order Number: <?php echo htmlspecialchars($order['order_number']); ?></div>
+                    </div>
+                    <div class="order-content">
+                        <div class="order-image">
+                            <img src="<?php echo htmlspecialchars($order['image_url']); ?>" 
+                                 alt="<?php echo htmlspecialchars($order['product_name']); ?>" 
+                                 width="100">
+                        </div>
+                        <div class="order-details">
+                            <div class="product-name"><?php echo htmlspecialchars($order['product_name']); ?></div>
+                            <div class="order-dates">
+                                <span>Order Date: <?php echo date('m/d/Y', strtotime($order['order_date'])); ?></span>
+                                <span class="date-separator">|</span>
+                                <?php if (!empty($order['claim_date'])): ?>
+                                    <span>Claim Date: <?php echo date('m/d/Y h:i A', strtotime($order['claim_date'])); ?></span>
+                                    <span class="date-separator">|</span>
+                                <?php endif; ?>
+                                <span>Status: <span class="status-<?php echo strtolower($order['status'] ?: 'pending'); ?>">
+                                    <?php echo $order['status'] ?: 'Pending'; ?>
+                                </span></span>
                             </div>
-                            <div class="order-content">
-                                <div class="order-image">
-                                    <img src="<?php echo htmlspecialchars($order['image_url']); ?>" 
-                                         alt="<?php echo htmlspecialchars($order['product_name']); ?>" 
-                                         width="100">
-                                </div>
-                                <div class="order-details">
-                                    <div class="product-name"><?php echo htmlspecialchars($order['product_name']); ?></div>
-                                    <div class="order-dates">
-                                        <span>Order Date: <?php echo date('m/d/Y', strtotime($order['order_date'])); ?></span>
-                                        <span class="date-separator">|</span>
-                                        <span>Status: <?php echo htmlspecialchars($order['status']); ?></span>
-                                    </div>
-                                    <div class="order-total">
-                                        <span>Quantity: <?php echo htmlspecialchars($order['quantity']); ?></span>
-                                        <span class="date-separator">|</span>
-                                        <span>Total: ₱<?php echo number_format($order['total'], 2); ?></span>
-                                    </div>
-                                </div>
+                            <div class="order-total">
+                                <span>Quantity: <?php echo htmlspecialchars($order['quantity']); ?></span>
+                                <span class="date-separator">|</span>
+                                <span>Total: ₱<?php echo number_format($order['total'], 2); ?></span>
                             </div>
                         </div>
-                        <?php
-                    }
-                } else {
-                    ?>
-                    <div class="no-orders">
-                        <p>No orders found. Start shopping to see your order history!</p>
-                        <a href="client-shop.php" class="shop-now-btn">Shop Now</a>
                     </div>
-                    <?php
-                }
-                ?>
+                </div>
+                <?php
+            }
+        } else {
+            ?>
+            <div class="no-orders">
+                <p>No orders found.</p>
+                <a href="client-shop.php" class="shop-now-btn">Shop Now</a>
             </div>
-        </div>
+            <?php
+        }
+        ?>
+    </div>
+</div>
     </div>
 </div>
 

@@ -260,7 +260,7 @@ error_log('Pending order set: ' . print_r($_SESSION['pending_order'], true));
                 <!-- Total and Place Order Button -->
                 <div class="d-flex justify-content-between align-items-center mt-5">
                     <h5 class="mb-0 fs-4">Total Amount: ₱<?php echo number_format($total_amount, 2); ?></h5>
-                    <button onclick="processPayment()" class="btn btn-danger btn-lg px-5" id="paymentButton">
+                    <button onclick="redirectToPayment()" class="btn btn-danger btn-lg px-5" id="paymentButton">
                         PROCEED TO PAYMENT
                     </button>
 
@@ -366,40 +366,41 @@ function processPayment() {
     paymentButton.classList.add('btn-loading');
     paymentButton.innerHTML = '<span class="spinner"></span>Processing Payment...';
 
-    const amount = <?php echo $total_amount * 100; ?>; // Amount in cents
-
-    fetch('http://localhost:8000/http/PaymentController.php', {
+    // Store order details in session
+    fetch('Payment-method/process-payment.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount })
+        body: JSON.stringify({
+            name: '<?php echo htmlspecialchars($user_data['first_name'] . ' ' . $user_data['last_name']); ?>',
+            email: '<?php echo htmlspecialchars($user_data['email']); ?>',
+            phone: '<?php echo htmlspecialchars($user_data['phone']); ?>',
+            amount: <?php echo $total_amount; ?>,
+            payment_method: 'gcash' // or 'maya' depending on selection
+        })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to fetch: ' + response.statusText);
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        if (data.success && data.checkout_url) {
-            window.open(data.checkout_url, '_blank');
+        if (data.success) {
+            // Redirect to payment page
+            window.location.href = 'Payment-method/payment.php';
         } else {
-            throw new Error('Payment initiation failed: ' + (data.error || 'Unknown error'));
+            throw new Error(data.message || 'Payment processing failed');
         }
     })
-
     .catch(error => {
-        console.error('Payment error:', error);
+        console.error('Error:', error);
         alert('Error processing payment: ' + error.message);
         paymentButton.disabled = false;
         paymentButton.classList.remove('btn-loading');
         paymentButton.innerHTML = 'PROCEED TO PAYMENT';
     });
-
-    
 }
 
+function redirectToPayment() {
+    window.location.href = 'payment-method/payment-gateway.php';
+}
 
 
 

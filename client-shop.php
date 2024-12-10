@@ -6,64 +6,6 @@ if(!isset($_SESSION['user_id'])) {
     exit();
 }
 
-if (isset($_GET['payment']) && $_GET['payment'] === 'success') {
-    try {
-        // Generate order number
-        $order_number = 'ORD' . date('Ymd') . rand(1000, 9999);
-        
-        // Get the pending order details from session
-        if (isset($_SESSION['pending_order'])) {
-            $order = $_SESSION['pending_order'];
-            
-            // Insert into orders table
-            $query = "INSERT INTO orders (
-                order_number, 
-                user_id, 
-                product_id, 
-                product_name, 
-                price, 
-                quantity, 
-                total, 
-                image_url, 
-                status,
-                order_date
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NOW())";
-            
-            $stmt = $con->prepare($query);
-            $stmt->bind_param("siisdiiss", 
-                $order_number,
-                $_SESSION['user_id'],
-                $order['product_id'],
-                $order['product_name'],
-                $order['price'],
-                $order['quantity'],
-                $order['total'],
-                $order['image_url']
-            );
-            
-            if ($stmt->execute()) {
-                // Log successful order
-                error_log("Order saved successfully: " . $order_number);
-                
-                $_SESSION['success_message'] = "Payment successful! Your order number is: " . $order_number;
-                unset($_SESSION['pending_order']);
-                
-                // Redirect to order history
-                header("Location: my-account.php?tab=order-history");
-                exit();
-            } else {
-                throw new Exception("Failed to save order to database");
-            }
-        } else {
-            throw new Exception("No pending order found in session");
-        }
-    } catch (Exception $e) {
-        error_log('Error processing successful payment: ' . $e->getMessage());
-        $_SESSION['error_message'] = "Error processing your order. Please contact support.";
-        header("Location: client-shop.php");
-        exit();
-    }
-}
 ?>
 
 
@@ -577,43 +519,41 @@ function buyNow() {
         return;
     <?php endif; ?>
 
-    // Get product information from the modal
     const modal = document.getElementById('productPreviewModal');
     const productId = modal.getAttribute('data-product-id');
     const productName = document.getElementById('modalProductName').textContent;
     const productPrice = document.getElementById('modalProductPrice').textContent.replace('₱', '').trim();
     const productImage = document.getElementById('modalProductImage').src;
-    
-    // Get the selected quantity
     const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
-    
-    // Calculate total price
     const totalPrice = (parseFloat(productPrice) * quantity).toFixed(2);
 
-    // Debug logs
-    console.log('Product ID:', productId);
-    console.log('Product Name:', productName);
-    console.log('Price per item:', productPrice);
-    console.log('Quantity:', quantity);
-    console.log('Total Price:', totalPrice);
-    console.log('Image:', productImage);
-
-    // Validate data
-    if (!productId || !productName || !productPrice) {
-        alert('Missing product information');
-        return;
-    }
-
-    // Redirect to checkout with all necessary information
-    const checkoutUrl = `checkout.php?` + 
-        `product_id=${encodeURIComponent(productId)}` +
-        `&product_name=${encodeURIComponent(productName)}` +
-        `&price=${encodeURIComponent(totalPrice)}` + // Send total price instead of unit price
-        `&unit_price=${encodeURIComponent(productPrice)}` + // Also send unit price
-        `&image_url=${encodeURIComponent(productImage)}` +
-        `&quantity=${encodeURIComponent(quantity)}`;
-
-    window.location.href = checkoutUrl;
+    fetch('Payment-method/process-payment.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: productId,
+            product_name: productName,
+            price: productPrice,
+            quantity: quantity,
+            total_price: totalPrice,  // Add this line
+            image_url: productImage
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Fix the redirect path by adding 'Payment-method/' prefix
+            window.location.href = 'Payment-method/payment-gateway.php';
+        } else {
+            throw new Error(data.message || 'Failed to process purchase');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error processing purchase: ' + error.message);
+    });
 }
 </script>
 </body>
