@@ -49,26 +49,63 @@ $offset = ($page - 1) * $limit;
 
     .modal-content {
     border-radius: 8px;
-}
+    }
 
-.modal-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
+    .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
 
-.modal-footer {
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
+    .modal-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
 
-#confirmDeleteBtn:hover {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
+    #confirmDeleteBtn:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .card-title {
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .card-text {
+        color: #333;
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .dashboard-card {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+    }
+    .graph-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        height: 400px;
+    }
+
+    
 
     
   </style>
@@ -500,82 +537,185 @@ $offset = ($page - 1) * $limit;
 
 
 
-    <?php elseif (isset($_GET['section']) && $_GET['section'] === 'orders'): ?>
+<?php elseif (isset($_GET['section']) && $_GET['section'] === 'orders'): ?>
     <!-- Orders Section -->
     <h2 class="mb-4">Orders</h2>
 
     <!-- Wrapper for Filter Bar and Orders Table -->
-<div class="orders-section border rounded p-3 mb-4">
-    <!-- Filter Bar -->
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <div class="col-md-4">
-            <div class="input-group">
-                <button class="btn btn-outline-secondary">Filter</button>
-                <select class="form-select">
-                    <option selected>Order Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
+    <div class="orders-section border rounded p-3 mb-4">
+        <!-- Search and Filter Form -->
+        <form method="GET" action="" class="mb-3">
+            <input type="hidden" name="section" value="orders">
+            <div class="row g-2">
+                <!-- Search Bar -->
+                <div class="col-12 col-md-4">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Search by order number, student number, name..." 
+                           value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                </div>
+                <!-- Status Filter -->
+                <div class="col-12 col-md-3">
+                    <select class="form-select" name="status" onchange="this.form.submit()">
+                        <option value="">All Status</option>
+                        <option value="Pending" <?php echo isset($_GET['status']) && $_GET['status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                        <option value="Ready for pickup" <?php echo isset($_GET['status']) && $_GET['status'] === 'Ready for pickup' ? 'selected' : ''; ?>>Ready for pickup</option>
+                        <option value="Claimed" <?php echo isset($_GET['status']) && $_GET['status'] === 'Claimed' ? 'selected' : ''; ?>>Claimed</option>
+                        <option value="Cancelled" <?php echo isset($_GET['status']) && $_GET['status'] === 'Cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                    </select>
+                </div>
+                <!-- Search Button -->
+                <div class="col-12 col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-end">
-            <button class="btn btn-danger me-2">Delete</button>
-            <button class="btn btn-success">Edit</button>
-        </div>
-    </div>
+        </form>
 
-    <!-- Orders Table -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th></th>
-                    <th>Order Number</th>
-                    <th>Student Number</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                    <th>Quantity</th>
-                    <th>Order Date</th>
-                    <th>Total</th>
-                    <th>Payment Status</th>
-                    <th>Order Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>00123</td>
-                    <td>23-0000</td>
-                    <td>Juan</td>
-                    <td>Tamad</td>
-                    <td>JuanTamad</td>
-                    <td>2</td>
-                    <td>11-21-2024</td>
-                    <td>100.00</td>
-                    <td>Unpaid</td>
-                    <td>Pending</td>
-                </tr>
-                <!-- Add more rows dynamically -->
-            </tbody>
-        </table>
-    </div>
-</div>
+        <!-- Orders Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Student Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Order Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Prepare base query
+                    $query = "SELECT o.*, u.student_number, u.first_name, u.last_name, u.name as username 
+                             FROM orders o 
+                             JOIN user u ON o.user_id = u.id 
+                             WHERE 1=1";
+                    $params = [];
+                    $types = "";
+
+                    // Add search condition if search parameter exists
+                    if (!empty($_GET['search'])) {
+                        $searchTerm = "%" . $_GET['search'] . "%";
+                        $query .= " AND (o.order_number LIKE ? OR 
+                                       u.student_number LIKE ? OR 
+                                       u.first_name LIKE ? OR 
+                                       u.last_name LIKE ? OR 
+                                       u.name LIKE ? OR
+                                       o.product_name LIKE ?)";
+                        $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+                        $types .= "ssssss";
+                    }
+
+                    // Add status filter if selected
+                    if (!empty($_GET['status'])) {
+                        $query .= " AND o.status = ?";
+                        $params[] = $_GET['status'];
+                        $types .= "s";
+                    }
+
+                    // Count total records for pagination
+                    $countQuery = $query;
+                    $countStmt = $con->prepare($countQuery);
+                    if (!empty($params)) {
+                        $countStmt->bind_param($types, ...$params);
+                    }
+                    $countStmt->execute();
+                    $countResult = $countStmt->get_result();
+                    $totalRecords = $countResult->num_rows;
+                    $totalPages = ceil($totalRecords / $limit);
+
+                    // Add pagination to main query
+                    $query .= " ORDER BY o.order_date DESC LIMIT ? OFFSET ?";
+                    $params[] = $limit;
+                    $params[] = $offset;
+                    $types .= "ii";
+
+                    // Prepare and execute the main query
+                    $stmt = $con->prepare($query);
+                    if (!empty($params)) {
+                        $stmt->bind_param($types, ...$params);
+                    }
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['order_number']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['student_number']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['first_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['product_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                            echo "<td>" . date('M d, Y h:i A', strtotime($row['order_date'])) . "</td>";
+                            echo "<td>₱" . number_format($row['total'], 2) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                            echo "<td>
+                                    <select class='form-select form-select-sm status-select' 
+                                            onchange='updateOrderStatus(this, " . $row['id'] . ")'>
+                                        <option value='Pending' " . ($row['status'] == 'Pending' ? 'selected' : '') . ">Pending</option>
+                                        <option value='Ready for pickup' " . ($row['status'] == 'Ready for pickup' ? 'selected' : '') . ">Ready for pickup</option>
+                                        <option value='Claimed' " . ($row['status'] == 'Claimed' ? 'selected' : '') . ">Claimed</option>
+                                        <option value='Cancelled' " . ($row['status'] == 'Cancelled' ? 'selected' : '') . ">Cancelled</option>
+                                    </select>
+                                  </td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='11' class='text-center'>No orders found</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
 
         <!-- Pagination -->
-    <nav aria-label="Page navigation" class="mt-3">
-        <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+        <?php if ($totalRecords > 0): ?>
+        <nav aria-label="Page navigation" class="mt-3">
+            <ul class="pagination justify-content-center">
+                <?php
+                // Previous page link
+                if ($page > 1) {
+                    echo '<li class="page-item">
+                            <a class="page-link" href="?section=orders&page=' . ($page - 1) . 
+                            '&search=' . urlencode(isset($_GET['search']) ? $_GET['search'] : '') . 
+                            '&status=' . urlencode(isset($_GET['status']) ? $_GET['status'] : '') . 
+                            '">Previous</a>
+                          </li>';
+                }
+
+                // Page numbers
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    echo '<li class="page-item' . ($i === $page ? ' active' : '') . '">
+                            <a class="page-link" href="?section=orders&page=' . $i . 
+                            '&search=' . urlencode(isset($_GET['search']) ? $_GET['search'] : '') . 
+                            '&status=' . urlencode(isset($_GET['status']) ? $_GET['status'] : '') . 
+                            '">' . $i . '</a>
+                          </li>';
+                }
+
+                // Next page link
+                if ($page < $totalPages) {
+                    echo '<li class="page-item">
+                            <a class="page-link" href="?section=orders&page=' . ($page + 1) . 
+                            '&search=' . urlencode(isset($_GET['search']) ? $_GET['search'] : '') . 
+                            '&status=' . urlencode(isset($_GET['status']) ? $_GET['status'] : '') . 
+                            '">Next</a>
+                          </li>';
+                }
+                ?>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
 
 
 
@@ -758,91 +898,203 @@ if (isset($_SESSION['password_message'])) {
 <?php elseif (isset($_GET['section']) && $_GET['section'] === 'statistics'): ?>
     <!-- Statistics Section -->
     <h2 class="mb-4">Statistics</h2>
+    
+    <?php
+    // Fetch total sales
+    $salesQuery = "SELECT COALESCE(SUM(total), 0) as total_sales FROM orders WHERE status != 'Cancelled'";
+    $salesResult = $con->query($salesQuery);
+    $totalSales = $salesResult->fetch_assoc()['total_sales'];
+
+    // Fetch total orders
+    $ordersQuery = "SELECT COUNT(*) as total_orders FROM orders";
+    $ordersResult = $con->query($ordersQuery);
+    $totalOrders = $ordersResult->fetch_assoc()['total_orders'];
+
+    // Fetch total verified customers (updated to match your table structure)
+    $customersQuery = "SELECT COUNT(*) as total_customers FROM user WHERE verification_status = 1";
+    $customersResult = $con->query($customersQuery);
+    $totalCustomers = $customersResult->fetch_assoc()['total_customers'];
+
+    // Fetch total products
+    $productsQuery = "SELECT COUNT(*) as total_products FROM products";
+    $productsResult = $con->query($productsQuery);
+    $totalProducts = $productsResult->fetch_assoc()['total_products'];
+
+    // Fetch sales data for last 7 days
+    $salesOverTimeQuery = "SELECT DATE(order_date) as date, SUM(total) as daily_sales 
+                          FROM orders 
+                          WHERE status != 'Cancelled' 
+                          AND order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+                          GROUP BY DATE(order_date)
+                          ORDER BY date";
+    $salesOverTimeResult = $con->query($salesOverTimeQuery);
+    $salesData = [];
+    while($row = $salesOverTimeResult->fetch_assoc()) {
+        $salesData[$row['date']] = $row['daily_sales'];
+    }
+
+    // Fetch orders data for last 7 days
+    $ordersOverTimeQuery = "SELECT DATE(order_date) as date, COUNT(*) as daily_orders 
+                           FROM orders 
+                           WHERE order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+                           GROUP BY DATE(order_date)
+                           ORDER BY date";
+    $ordersOverTimeResult = $con->query($ordersOverTimeQuery);
+    $ordersData = [];
+    while($row = $ordersOverTimeResult->fetch_assoc()) {
+        $ordersData[$row['date']] = $row['daily_orders'];
+    }
+    ?>
+
+    <!-- Statistics Cards -->
     <div class="row g-4">
         <div class="col-md-3">
-            <div class="p-3 border rounded text-center">
-                <h6>Total Sales:</h6>
-                <h4>1000.00</h4>
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Total Sales</h6>
+                    <h4 class="card-text">₱<?php echo number_format($totalSales, 2); ?></h4>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="p-3 border rounded text-center">
-                <h6>Total Orders:</h6>
-                <h4>100</h4>
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Total Orders</h6>
+                    <h4 class="card-text"><?php echo number_format($totalOrders); ?></h4>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="p-3 border rounded text-center">
-                <h6>Total Customers:</h6>
-                <h4>50</h4>
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Verified Customers</h6>
+                    <h4 class="card-text"><?php echo number_format($totalCustomers); ?></h4>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="p-3 border rounded text-center">
-                <h6>Total Products:</h6>
-                <h4>200</h4>
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Total Products</h6>
+                    <h4 class="card-text"><?php echo number_format($totalProducts); ?></h4>
+                </div>
             </div>
         </div>
     </div>
 
+   <!-- Graphs Section -->
+<div class="row g-4 mt-4">
+    <!-- Sales Over Time (Line Chart) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Sales Over Time</h5>
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders by Status (Pie Chart) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Orders by Status</h5>
+                <canvas id="ordersChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<?php else: ?>
+    <!-- Dashboard Section -->
+    <?php
+    // Fetch total sales
+    $salesQuery = "SELECT COALESCE(SUM(total), 0) as total_sales FROM orders WHERE status != 'Cancelled'";
+    $salesResult = $con->query($salesQuery);
+    $totalSales = $salesResult->fetch_assoc()['total_sales'];
+
+    // Fetch total orders
+    $ordersQuery = "SELECT COUNT(*) as total_orders FROM orders";
+    $ordersResult = $con->query($ordersQuery);
+    $totalOrders = $ordersResult->fetch_assoc()['total_orders'];
+
+    // Fetch total products
+    $productsQuery = "SELECT COUNT(*) as total_products FROM products";
+    $productsResult = $con->query($productsQuery);
+    $totalProducts = $productsResult->fetch_assoc()['total_products'];
+    ?>
+
+    <!-- Dashboard Cards -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="p-3 bg-white text-center dashboard-card">
+                <h6>Total Sales</h6>
+                <h4>₱<?php echo number_format($totalSales, 2); ?></h4>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white text-center dashboard-card">
+                <h6>Total Orders</h6>
+                <h4><?php echo number_format($totalOrders); ?></h4>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white text-center dashboard-card">
+                <h6>Total Products</h6>
+                <h4><?php echo number_format($totalProducts); ?></h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphs Section -->
     <div class="row g-4 mt-4">
-        <div class="col-md-6">
-            <div class="p-3 border rounded text-center">
-                <h5>Sales Over Time:</h5>
-                <p>Graph here</p>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="p-3 border rounded text-center">
-                <h5>Orders Over Time:</h5>
-                <p>Graph here</p>
-            </div>
-        </div>
-    </div>
-
-
-
-    <?php else: ?>
-      <!-- Dashboard Cards -->
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="p-3 bg-white text-center dashboard-card">
-            <h6>Total Sales</h6>
-            <h4>1000.00</h4>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="p-3 bg-white text-center dashboard-card">
-            <h6>Total Orders</h6>
-            <h4>100</h4>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="p-3 bg-white text-center dashboard-card">
-            <h6>Total Products</h6>
-            <h4>100</h4>
-          </div>
-        </div>
-      </div>
-
-      <!-- Graphs Section -->
-      <div class="row g-4 mt-4">
         <div class="col-md-12">
-          <h5>Sales Statistics:</h5>
-          <div class="graph-container">
-            Graph here
-          </div>
+            <h5>Sales Statistics:</h5>
+            <div class="graph-container">
+                <canvas id="dashboardSalesChart"></canvas>
+            </div>
         </div>
         <div class="col-md-12 mt-4">
-          <h5>Latest Orders:</h5>
-          <div class="graph-container">
-            Graph here
-          </div>
+            <h5>Latest Orders:</h5>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        // Fetch latest 5 orders
+                        $latestOrdersQuery = "SELECT o.*, u.first_name, u.last_name 
+                                            FROM orders o 
+                                            JOIN user u ON o.user_id = u.id 
+                                            ORDER BY o.order_date DESC 
+                                            LIMIT 5";
+                        $latestOrdersResult = $con->query($latestOrdersQuery);
+                        while($order = $latestOrdersResult->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>{$order['order_number']}</td>";
+                            echo "<td>{$order['first_name']} {$order['last_name']}</td>";
+                            echo "<td>{$order['product_name']}</td>";
+                            echo "<td>₱" . number_format($order['total'], 2) . "</td>";
+                            echo "<td>{$order['status']}</td>";
+                            echo "<td>" . date('M d, Y', strtotime($order['order_date'])) . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-    <?php endif; ?>
-  </div>
-
+    </div>
   
 
 
@@ -870,10 +1122,13 @@ if (isset($_SESSION['password_message'])) {
         </div>
     </div>
 </div>
+<?php endif; ?>
+
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="admin.js"></script>
   <script>
 let productToDelete = null;
@@ -929,6 +1184,219 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function()
 
 // Add this to verify the function is loaded
 console.log('Delete function loaded');
+
+// Update the claim date
+function updateOrderStatus(selectElement, orderId) {
+    const newStatus = selectElement.value;
+    
+    fetch('update_order_status.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `order_id=${orderId}&status=${newStatus}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            alert('Order status updated successfully!');
+        } else {
+            // Show error message and revert the select
+            alert('Failed to update order status');
+            selectElement.value = selectElement.getAttribute('data-original-value');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating order status');
+        selectElement.value = selectElement.getAttribute('data-original-value');
+    });
+}
+
+// Statistics
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Format PHP data for Sales Chart
+    const salesData = <?php 
+        $salesQuery = "SELECT DATE(order_date) as date, SUM(total) as daily_sales 
+                      FROM orders 
+                      WHERE status != 'Cancelled' 
+                      AND order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+                      GROUP BY DATE(order_date)
+                      ORDER BY date";
+        $salesResult = $con->query($salesQuery);
+        $salesData = [];
+        while($row = $salesResult->fetch_assoc()) {
+            $salesData[$row['date']] = $row['daily_sales'];
+        }
+        echo json_encode($salesData);
+    ?>;
+
+    // Format PHP data for Orders Pie Chart
+    const orderStatusData = <?php 
+        $orderStatusQuery = "SELECT status, COUNT(*) as count 
+                           FROM orders 
+                           GROUP BY status";
+        $orderStatusResult = $con->query($orderStatusQuery);
+        $statusLabels = [];
+        $statusCounts = [];
+        while($row = $orderStatusResult->fetch_assoc()) {
+            $statusLabels[] = $row['status'];
+            $statusCounts[] = $row['count'];
+        }
+        echo json_encode([
+            'labels' => $statusLabels,
+            'counts' => $statusCounts
+        ]);
+    ?>;
+
+    // Get dates for last 7 days
+    const dates = [];
+    const salesValues = [];
+    
+    for(let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const formattedDate = date.toISOString().split('T')[0];
+        dates.push(formattedDate.substring(5)); // Show only MM-DD
+        salesValues.push(salesData[formattedDate] || 0);
+    }
+
+    // Create Sales Chart (Line)
+    new Chart(document.getElementById('salesChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Daily Sales (₱)',
+                data: salesValues,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₱' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Create Orders Chart (Pie)
+    new Chart(document.getElementById('ordersChart'), {
+        type: 'pie',
+        data: {
+            labels: orderStatusData.labels,
+            datasets: [{
+                data: orderStatusData.counts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',   // Pending
+                    'rgba(54, 162, 235, 0.8)',   // Ready for pickup
+                    'rgba(75, 192, 192, 0.8)',   // Claimed
+                    'rgba(255, 206, 86, 0.8)'    // Cancelled
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+
+// Dashboard Graphs
+document.addEventListener('DOMContentLoaded', function() {
+        // Fetch sales data for the last 7 days
+        <?php
+        $salesChartQuery = "SELECT DATE(order_date) as date, SUM(total) as daily_sales 
+                           FROM orders 
+                           WHERE status != 'Cancelled' 
+                           AND order_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+                           GROUP BY DATE(order_date)
+                           ORDER BY date";
+        $salesChartResult = $con->query($salesChartQuery);
+        $dates = [];
+        $sales = [];
+        while($row = $salesChartResult->fetch_assoc()) {
+            $dates[] = date('M d', strtotime($row['date']));
+            $sales[] = $row['daily_sales'];
+        }
+        ?>
+
+        const salesChart = new Chart(document.getElementById('dashboardSalesChart'), {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($dates); ?>,
+                datasets: [{
+                    label: 'Daily Sales',
+                    data: <?php echo json_encode($sales); ?>,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₱' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
 </script>
 
 </body>
