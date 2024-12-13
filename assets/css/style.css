@@ -347,14 +347,16 @@ body {
 }
 
 .banner h1 {
-    font-family: 'Impact', sans-serif;
-    font-size: clamp(3rem, 8vw, 7rem);
+    font-family: 'Poppins', sans-serif;
+    font-size: 7rem;
     line-height: 1.2;
     color: white;
     text-transform: uppercase;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
     margin: 0;
 }
+
+
 
 .banner-text {
     flex: 1;
@@ -480,10 +482,18 @@ hr {
     color: #ffffff;
 }
 
+.product-name-first {
+    font-size: 1.2rem;
+    margin: 5px 0;
+    color: #fff;
+    text-transform: uppercase;
+}
+
 .product-name {
     font-size: 1.2rem;
     margin: 5px 0;
     color: #000;
+    font-weight: bold;
     text-transform: uppercase;
 }
 

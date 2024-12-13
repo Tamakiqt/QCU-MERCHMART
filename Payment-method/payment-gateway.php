@@ -159,7 +159,7 @@ function submitPayment(event) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = 'payment-success.php';  // Changed this line
+            window.location.href = 'payment-success.php';  
         } else {
             throw new Error(data.message || 'Payment processing failed');
         }

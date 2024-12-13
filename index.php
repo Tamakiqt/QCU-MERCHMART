@@ -77,7 +77,7 @@
         <h1>Gear Up <br> Stand Out</h1>
     </div>
     <div class="banner-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
+        <p>Welcome to Merchmart! Your one-stop online destination for all your Quezon City University essentials. From official merchandise like lanyards, uniforms, and foundation shirts to other must-have items, Merchmart is designed to make your shopping experience seamless and hassle-free. With a user-friendly platform, convenient checkout options, and real-time order tracking, we bring campus pride and accessibility to your fingertips. Thank you for choosing Merchmart—where convenience meets university spirit!</p>
         <button onclick="window.location.href='shop.php';">Shop Now</button>
     </div>
 </section>

@@ -181,6 +181,17 @@ if (isset($data['product_id'])) {
         $order_number = 'ORD' . uniqid();
         $payment_ref = 'PAY' . date('YmdHis') . rand(1000, 9999);
         
+        // Check for duplicate order number
+        $check_order_query = "SELECT order_number FROM orders WHERE order_number = ?";
+        $stmt = $con->prepare($check_order_query);
+        $stmt->bind_param("s", $order_number);
+        $stmt->execute();
+        $existing_order = $stmt->get_result()->fetch_assoc();
+
+        if ($existing_order) {
+            throw new Exception('Duplicate order detected');
+        }
+
         // Create the order immediately
         $order_query = "INSERT INTO orders (
             order_number,
@@ -413,11 +424,11 @@ try {
     }
 
     // Insert payment method record
-    $payment_method_query = "INSERT INTO payment_methods (user_id, payment_type) 
-                           VALUES (?, ?) 
+    $payment_method_query = "INSERT INTO payment_methods (user_id, payment_type, payment_number) 
+                           VALUES (?, ?, ?) 
                            ON DUPLICATE KEY UPDATE payment_type = VALUES(payment_type)";
     $stmt = $con->prepare($payment_method_query);
-    $stmt->bind_param("is", $user_id, $payment_method);
+    $stmt->bind_param("iss", $user_id, $payment_method, $payment_number);
     $stmt->execute();
 
     // Commit transaction

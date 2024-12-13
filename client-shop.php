@@ -544,8 +544,8 @@ function buyNow() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Fix the redirect path by adding 'Payment-method/' prefix
-            window.location.href = 'Payment-method/payment-gateway.php';
+           
+            window.location.href = 'Payment-method/payment.php';
         } else {
             throw new Error(data.message || 'Failed to process purchase');
         }

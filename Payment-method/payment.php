@@ -33,6 +33,8 @@ if (isset($_SESSION['direct_purchase'])) {
 
 if (isset($_POST['payment_submit'])) {
     try {
+
+
         if (isset($_SESSION['direct_purchase'])) {
             // Process direct purchase
             $product = $_SESSION['direct_purchase'];
@@ -65,13 +67,12 @@ if (isset($_POST['payment_submit'])) {
             // Clear direct purchase session
             unset($_SESSION['direct_purchase']);
         } else {
-            // Process cart purchase
-            // Your existing cart processing logic here
+           
         }
         
         // If payment successful
         $_SESSION['payment_success'] = true;
-        header("Location: payment-success.php");
+        header("Location: payment-gateway.php");
         exit();
     } catch (Exception $e) {
         $error = "Payment failed: " . $e->getMessage();
@@ -206,7 +207,7 @@ if (isset($_POST['payment_submit'])) {
                 <input type="radio" name="payment_method" value="paymaya" id="paymaya" class="d-none">
                 <div class="d-flex align-items-center">
                     <img src="../assets/images/maya.jpg" alt="PayMaya">
-                    <span>PayMaya</span>
+                    <span>Maya</span>
                 </div>
             </div>
         </div>

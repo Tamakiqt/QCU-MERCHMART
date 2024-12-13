@@ -434,6 +434,7 @@ if(isset($_SESSION['user_id'])) {
             <ul class="list-unstyled">
                 <li>
                  <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
+                 <img src="assets/images/mayaa.png" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
@@ -502,7 +503,7 @@ function processCheckout() {
     })
     .then(data => {
         if (data.success) {
-            window.location.href = 'Payment-method/payment-gateway.php';
+            window.location.href = 'Payment-method/payment.php';
         } else {
             throw new Error(data.message || 'Failed to process checkout');
         }

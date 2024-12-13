@@ -119,7 +119,7 @@ if ($status === 'success') {
         <h1>Gear Up <br> Stand Out</h1>
     </div>
     <div class="banner-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias molestias ex eaque voluptates, porro perferendis voluptatum harum, ipsum maiores maxime modi ad culpa autem reiciendis praesentium quae recusandae, accusantium inventore?</p>
+        <p>Welcome to Merchmart! Your one-stop online destination for all your Quezon City University essentials. From official merchandise like lanyards, uniforms, and foundation shirts to other must-have items, Merchmart is designed to make your shopping experience seamless and hassle-free. With a user-friendly platform, convenient checkout options, and real-time order tracking, we bring campus pride and accessibility to your fingertips. Thank you for choosing Merchmart—where convenience meets university spirit!</p>
         <a href="client-shop.php"><button>Shop Now</button></a>
     </div>
 </section>
@@ -135,7 +135,7 @@ if ($status === 'success') {
             </div>
             <hr>
             <p class="price">₱70</p>
-            <p class="product-name">QCU Lanyard</p>
+            <p class="product-name-first">QCU Lanyard</p>
         </div>
 
         <div class="product" onclick="showProductPreview(2, 'Tumblers', '280.00', 'assets/images/tumblers.PNG')">
@@ -144,7 +144,7 @@ if ($status === 'success') {
             </div>
             <hr>
             <p class="price">₱280</p>
-            <p class="product-name">Tumblers</p>
+            <p class="product-name-first">Tumblers</p>
         </div>
 
         <div class="product" onclick="showProductPreview(3, 'Clips', '40.00', 'assets/images/clip.png')">
@@ -153,7 +153,7 @@ if ($status === 'success') {
             </div>
             <hr>
             <p class="price">₱40</p>
-            <p class="product-name">Clips</p>
+            <p class="product-name-first">Clips</p>
         </div>
 
         <div class="product" onclick="showProductPreview(4, 'T - Shirts', '250.00', 'assets/images/t-shirt.png')">
@@ -162,7 +162,7 @@ if ($status === 'success') {
             </div>
             <hr>
             <p class="price">₱250</p>
-            <p class="product-name">T - Shirts</p>
+            <p class="product-name-first">T - Shirts</p>
         </div>
     </div>
 </section>
@@ -282,6 +282,7 @@ if ($status === 'success') {
             <ul class="list-unstyled">
                 <li>
                  <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
+                 <img src="assets/images/mayaa.png" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
