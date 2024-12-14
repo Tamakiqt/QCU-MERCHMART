@@ -184,6 +184,64 @@
             defaultPrice: 600
         },
 
+        {
+            id: 20,
+            name: "Tissue",
+            price: 15,
+            image: "../uploads/product_675cad4025f6c5.75342426.png",
+            category: "tissue"
+        },
+
+        {
+            id: 21,
+            name: "Wipes",
+            price: 30,
+            image: "../uploads/product_675cae1e1166b3.24573004.png",
+            category: "wipes"
+        },
+
+        {
+            id: 22,
+            name: "JPIA (Junior Philippine Institute of Accountance)",
+            price: 450,
+            image: "../uploads/1734127789_IMG_20241108_151238_284-removebg-preview.png",
+            category: "department"
+        },
+
+        {
+            id: 23,
+            name: "ID Holder",
+            price: 30,
+            image: "../uploads/product_675cb1184cd991.94736803.png",
+            category: "holder"
+        },
+
+        {
+            id: 24,
+            name: "Hair clip (Flower)",
+            price: 25,
+            image: "../uploads/product_675cb1df4abc34.63390838.png",
+            category: "clip"
+        },
+
+        {
+            id: 25,
+            name: "Hair Clutchers",
+            price: 25,
+            image: "../uploads/product_675cb2ad73e470.69371842.png",
+            category: "clutcher"
+        },
+
+        {
+            id: 26,
+            name: "Umbrella (Red)",
+            price: 170,
+            image: "../uploads/product_675cb4bd7bb4c1.01469657.png",
+            category: "umbrella"
+        },
+
+       
+
        
 
         

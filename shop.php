@@ -196,7 +196,6 @@ $result = $con->query($query);
                                 <li><a href="#" data-category="pe">QCU P.E Uniformm</a></li>
                                 <li><a href="#" data-category="jackets">QCU Jackets</a></li>
                                 <li><a href="#" data-category="department">Department Shirts</a></li>
-                                <li><a href="#" data-category="shirts">QCU T-Shirts</a></li>
                                 <li><a href="#" data-category="holder">QCU ID Holder</a></li>
                             </ul>
                         </li>

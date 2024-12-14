@@ -283,4 +283,3 @@ document.getElementById('editProductPicture').addEventListener('change', functio
         reader.readAsDataURL(this.files[0]);
     }
 });
-

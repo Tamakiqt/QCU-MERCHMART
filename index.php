@@ -244,6 +244,7 @@
             <ul class="list-unstyled">
                 <li>
                  <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
+                 <img src="assets/images/mayaa.png" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>

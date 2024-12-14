@@ -245,7 +245,6 @@ if(!isset($_SESSION['user_id'])) {
                                 <li><a href="#" data-category="pe">QCU P.E Uniformm</a></li>
                                 <li><a href="#" data-category="jackets">QCU Jackets</a></li>
                                 <li><a href="#" data-category="department">Department Shirts</a></li>
-                                <li><a href="#" data-category="shirts">QCU T-Shirts</a></li>
                                 <li><a href="#" data-category="holder">QCU ID Holder</a></li>
                             </ul>
                         </li>
@@ -478,6 +477,7 @@ if(!isset($_SESSION['user_id'])) {
             <ul class="list-unstyled">
                 <li>
                  <img src="assets/images/gkash.jpg" alt="Payment Icon" class="img-fluid" style="text-align: center;">
+                 <img src="assets/images/mayaa.png" alt="Payment Icon" class="img-fluid" style="text-align: center;">
                 </li>
             </ul>   
         </div>
